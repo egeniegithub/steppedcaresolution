@@ -19,6 +19,7 @@ class CreateStreamsTable extends Migration
             $table->bigInteger('form_id')->unsigned();
             $table->foreign('form_id')->references('id')->on('forms')->onDelete('cascade');
             $table->enum('status', ['Draft', 'Published']);
+            $table->longText('form_data')->nullable();
             $table->timestamps();
         });
     }
