@@ -22,6 +22,7 @@
                                 @csrf
                                 <div class="container">
                                     <div class="row mb-5">
+                                        <input type="hidden" id="pre_selected_stream" value="{{$prefilled_data['project_id']}}">
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-12">
                                             <div class="mb-3">
                                                 <label for="FormGroup" class="form-label">Select Period *</label>
@@ -43,7 +44,7 @@
                                                     <select class="form-control form-select" id="project_id" name="project_id" aria-label="Default select example" required>
                                                         <option value="">Select Project</option>
                                                         @foreach($projects as $project)
-                                                            <option value="{{$project->id}}" {{old('project_id') == $project->id ? "selected" : ""}}>{{$project->name}}</option>
+                                                            <option value="{{$project->id}}" {{$prefilled_data['project_id'] == $project->id ? "selected" : ""}}>{{$project->name}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -51,12 +52,19 @@
                                         @endif
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-12">
                                             <div class="mb-4">
+
+                                                @if($prefilled_data['form_id'])
+                                                    <input type="hidden" id="selected_form_id" value="{{$prefilled_data['form_id']}}">
+                                                    <input type="hidden" id="selected_form_name" value="{{$prefilled_data['form_name']}}">
+                                                @endif
+
                                                 <label for="FormGroup" class="form-label">Select Form *</label>
                                                 <select class="form-control form-select" id="form_id" name="form_id" required aria-label="Default select example">
                                                     <option value="">Select Form</option>
+
                                                     @if(!empty($forms))
                                                         @foreach($forms as $form)
-                                                            <option value="{{$form->id}}">{{$form->name}}</option>
+                                                            <option value="{{$form->id}}" {{$prefilled_data['form_id'] == $project->id ? "selected" : ""}} >{{$form->name}}</option>
                                                         @endforeach
                                                     @endif
                                                 </select>
@@ -64,9 +72,18 @@
                                         </div>
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-12">
                                             <div class="mb-4">
+
+                                                @if($prefilled_data['stream_id'])
+                                                    <input type="hidden" id="selected_stream_id" value="{{$prefilled_data['stream_id']}}">
+                                                    <input type="hidden" id="selected_stream_name" value="{{$prefilled_data['stream_name']}}">
+                                                @endif
+
                                                 <label for="Stream" class="form-label">Select Stream *</label>
                                                 <select class="form-control form-elect" id="stream_id" name="stream_id" required aria-label="Default select example">
                                                     <option value="">Select Stream</option>
+                                                    @if($prefilled_data['stream_id'])
+                                                        <option value="{{$prefilled_data['stream_id']}}" selected>{{$prefilled_data['stream_name']}}</option>
+                                                    @endif
                                                 </select>
                                             </div>
                                         </div>
@@ -93,12 +110,6 @@
                                             <div class="card mb-0">
                                                 <ul class="list-group" id="unassign_user_section" data-draggable="target">
                                                     <span id="all_users"></span>
-
-                                                    {{--@foreach($users as $user)
-                                                        <li class="list-group-item" data-draggable="item">
-                                                            <input type="hidden" name="all_users[]" value="{{$user->id}}">{{$user->name}}
-                                                        </li>
-                                                    @endforeach--}}
                                                 </ul>
                                             </div>
                                         </div>
@@ -108,7 +119,7 @@
                                     <div class="row mt-4">
                                         <div class="col-12">
                                             <button class="btn btn-primary">Save</button>
-                                            <a href="{{route('dashboard.permissions')}}" class="btn btn-light text-white">Cancel</a>
+                                            <a href="{{route('dashboard.permissions', [0])}}" class="btn btn-light text-white">Cancel</a>
                                         </div>
                                     </div>
                                 </div>

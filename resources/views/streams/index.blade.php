@@ -52,7 +52,7 @@
                                                     <div class="btn-group" role="group" aria-label="Basic example">
                                                         <button type="button" class="btn table_btn  update_btn text-white">Update</button>
                                                         <button type="button" class="btn  table_btn delete_btn text-white">Delete</button>
-                                                        <a type="button" class="btn  table_btn permission_btn text-white" href="{{route('dashboard.permissions')}}" >Permissions</a>
+                                                        <a type="button" class="btn table_btn permission_btn text-white" href="{{route('dashboard.permissions', [$stream->stream_id])}}" >Permissions</a>
                                                     </div>
                                                 </td>
                                             </tr>
