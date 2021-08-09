@@ -198,174 +198,173 @@
                                                 </li>
                                             </ul>
                                             <div class="card-padding">
-                                                    <div class="row row_adjusted li_dark_border">
-                                                        <div class="col-sm-12 col-lg-6 ">
-                                                            <div class="form-group">
-                                                                <label for="exampleInputEmail1">Name</label>
-                                                                <input type="text" class="form-control white_input"
-                                                                       id="exampleInputEmail1"
-                                                                       aria-describedby="emailHelp">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-12 col-lg-6 cumulative_table">
-                                                            <table class="radio_table" style="width:75%">
-                                                                <tr>
-                                                                    <th> Cumulative Value</th>
-                                                                    <td>
-                                                                        <label class="radio_container">
-                                                                            <input type="radio" checked="checked"
-                                                                                   name="cumulative_value">
-                                                                            <span class="checkmark"></span>
-                                                                            Yes
-                                                                        </label>
-                                                                    </td>
-                                                                    <td>
-                                                                        <label class="radio_container">No
-                                                                            <input type="radio" checked="checked"
-                                                                                   name="cumulative_value">
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </div>
-                                                        <div class="col-sm-12 col-lg-6 add_tables_margin">
-                                                            <b class=""><a class="add_icon" href=""><span><i
-                                                                            class="fas fa-plus-circle"></i></span><span> Build Table</span></a></b>
+                                                <div class="row row_adjusted li_dark_border">
+                                                    <div class="col-sm-12 col-lg-6 ">
+                                                        <div class="form-group">
+                                                            <label for="exampleInputEmail1">Name</label>
+                                                            <input type="text" class="form-control white_input"
+                                                                   id="exampleInputEmail1"
+                                                                   aria-describedby="emailHelp">
                                                         </div>
                                                     </div>
-                                                    <div class="row row_adjusted">
-                                                        <div class="col-sm-12 col-lg-6 cumulative_table pt-3">
-                                                            <table class="radio_table" style="width:50%">
-                                                                <tr>
+                                                    <div class="col-sm-12 col-lg-6 cumulative_table">
+                                                        <table class="radio_table" style="width:75%">
+                                                            <tr>
+                                                                <th> Cumulative Value</th>
+                                                                <td>
+                                                                    <label class="radio_container">
+                                                                        <input type="radio" checked="checked"
+                                                                               name="cumulative_value">
+                                                                        <span class="checkmark"></span>
+                                                                        Yes
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="radio_container">No
+                                                                        <input type="radio" checked="checked"
+                                                                               name="cumulative_value">
+                                                                        <span class="checkmark"></span>
+                                                                    </label>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                    <div class="col-sm-12 col-lg-6 add_tables_margin">
+                                                        <b class=""><a class="add_icon" href=""><span><i
+                                                                        class="fas fa-plus-circle"></i></span><span> Build Table</span></a></b>
+                                                    </div>
+                                                </div>
+                                                <div class="row row_adjusted">
+                                                    <div class="col-sm-12 col-lg-6 cumulative_table pt-3">
+                                                        <table class="radio_table" style="width:50%">
+                                                            <tr>
 
-                                                                    <td>
-                                                                        <label class="radio_container">
-                                                                            <input type="radio" checked="checked"
-                                                                                   name="cumulative_value">
-                                                                            <span class="checkmark"></span>
-                                                                            Row
-                                                                        </label>
-                                                                    </td>
-                                                                    <td>
-                                                                        <label class="radio_container">Column
-                                                                            <input type="radio" checked="checked"
-                                                                                   name="cumulative_value">
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </div>
+                                                                <td>
+                                                                    <label class="radio_container">
+                                                                        <input type="radio" checked="checked"
+                                                                               name="cumulative_value">
+                                                                        <span class="checkmark"></span>
+                                                                        Row
+                                                                    </label>
+                                                                </td>
+                                                                <td>
+                                                                    <label class="radio_container">Column
+                                                                        <input type="radio" checked="checked"
+                                                                               name="cumulative_value">
+                                                                        <span class="checkmark"></span>
+                                                                    </label>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
                                                     </div>
-                                                    <div class="row row_adjusted pt-3">
-                                                        <div class="col-xl-6 col-lg-6 col-md-6 col-12">
-                                                            <div class="mb-3">
-                                                                <label for="Project" class="form-label">Row Name</label>
-                                                                <input type="text" class="form-control white_input"/>
-                                                                <div class="btn-group btn_group_padding pt-4">
-                                                                    <button
-                                                                        type="button"
-                                                                        class="btn table_btn del_modal_btn text-white">
-                                                                        Add to Table
-                                                                    </button>
-                                                                    <button
-                                                                        type="button"
-                                                                        class="btn table_btn cancel_modal_btn text-white">
-                                                                        Cancel
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row row_adjusted">
-                                                        <div class="col-sm-12">
-                                                            <div class="card mb-0">
-                                                                <div class="table-responsive">
-                                                                    <table
-                                                                        class="table  table-bordered stream_data_table table_margin_adj">
-                                                                        <thead>
-                                                                        <tr>
-                                                                            <td> Name</td>
-                                                                            <td> Type</td>
-                                                                            <td> Order</td>
-                                                                            <td class="add_stream_table_one"> Actions
-                                                                            </td>
-                                                                        </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                        <tr>
-                                                                            <td scope="row"> Registered User</td>
-                                                                            <td> Row</td>
-                                                                            <td> 1</td>
-                                                                            <td>
-                                                                                <div class="btn-group" role="group"
-                                                                                     aria-label="Basic example">
-                                                                                    <button type="button"
-                                                                                            class="btn table_btn  update_btn text-white">
-                                                                                        Update
-                                                                                    </button>
-                                                                                    <button type="button"
-                                                                                            class="btn  table_btn delete_btn text-white">
-                                                                                        Delete
-                                                                                    </button>
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td scope="row"> Logged in User</td>
-                                                                            <td> Row</td>
-                                                                            <td> 1</td>
-                                                                            <td>
-                                                                                <div class="btn-group" role="group"
-                                                                                     aria-label="Basic example">
-                                                                                    <button type="button"
-                                                                                            class="btn table_btn  update_btn text-white">
-                                                                                        Update
-                                                                                    </button>
-                                                                                    <button type="button"
-                                                                                            class="btn  table_btn delete_btn text-white">
-                                                                                        Delete
-                                                                                    </button>
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td scope="row"> View</td>
-                                                                            <td> Column</td>
-                                                                            <td> 1</td>
-                                                                            <td>
-                                                                                <div class="btn-group" role="group"
-                                                                                     aria-label="Basic example">
-                                                                                    <button type="button"
-                                                                                            class="btn table_btn  update_btn text-white">
-                                                                                        Update
-                                                                                    </button>
-                                                                                    <button type="button"
-                                                                                            class="btn  table_btn delete_btn text-white">
-                                                                                        Delete
-                                                                                    </button>
-
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row row_adjusted mt-2">
-                                                        <div class="col-sm-12">
-                                                            <div class="btn-group btn_group_padding">
-                                                                <button class="btn stream_btn del_modal_btn text-white" type="button">
-                                                                    Add Table to Stream
+                                                </div>
+                                                <div class="row row_adjusted pt-3">
+                                                    <div class="col-xl-6 col-lg-6 col-md-6 col-12">
+                                                        <div class="mb-3">
+                                                            <label for="Project" class="form-label">Row Name</label>
+                                                            <input type="text" class="form-control white_input"/>
+                                                            <div class="btn-group btn_group_padding pt-4">
+                                                                <button
+                                                                    type="button"
+                                                                    class="btn table_btn del_modal_btn text-white">
+                                                                    Add to Table
+                                                                </button>
+                                                                <button
+                                                                    type="button"
+                                                                    class="btn table_btn cancel_modal_btn text-white">
+                                                                    Cancel
                                                                 </button>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                {{--</form>--}}
+                                                </div>
+
+                                                <div class="row row_adjusted">
+                                                    <div class="col-sm-12">
+                                                        <div class="card mb-0">
+                                                            <div class="table-responsive">
+                                                                <table
+                                                                    class="table  table-bordered stream_data_table table_margin_adj">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <td> Name</td>
+                                                                        <td> Type</td>
+                                                                        <td> Order</td>
+                                                                        <td class="add_stream_table_one"> Actions
+                                                                        </td>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        <td scope="row"> Registered User</td>
+                                                                        <td> Row</td>
+                                                                        <td> 1</td>
+                                                                        <td>
+                                                                            <div class="btn-group" role="group"
+                                                                                 aria-label="Basic example">
+                                                                                <button type="button"
+                                                                                        class="btn table_btn  update_btn text-white">
+                                                                                    Update
+                                                                                </button>
+                                                                                <button type="button"
+                                                                                        class="btn  table_btn delete_btn text-white">
+                                                                                    Delete
+                                                                                </button>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td scope="row"> Logged in User</td>
+                                                                        <td> Row</td>
+                                                                        <td> 1</td>
+                                                                        <td>
+                                                                            <div class="btn-group" role="group"
+                                                                                 aria-label="Basic example">
+                                                                                <button type="button"
+                                                                                        class="btn table_btn  update_btn text-white">
+                                                                                    Update
+                                                                                </button>
+                                                                                <button type="button"
+                                                                                        class="btn  table_btn delete_btn text-white">
+                                                                                    Delete
+                                                                                </button>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td scope="row"> View</td>
+                                                                        <td> Column</td>
+                                                                        <td> 1</td>
+                                                                        <td>
+                                                                            <div class="btn-group" role="group"
+                                                                                 aria-label="Basic example">
+                                                                                <button type="button"
+                                                                                        class="btn table_btn  update_btn text-white">
+                                                                                    Update
+                                                                                </button>
+                                                                                <button type="button"
+                                                                                        class="btn  table_btn delete_btn text-white">
+                                                                                    Delete
+                                                                                </button>
+
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row row_adjusted mt-2">
+                                                    <div class="col-sm-12">
+                                                        <div class="btn-group btn_group_padding">
+                                                            <button class="btn stream_btn del_modal_btn text-white" type="button">
+                                                                Add Table to Stream
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -380,7 +379,7 @@
                                                 <div class="row row_adjusted">
                                                     <div class="col-sm-12 col-lg-6">
                                                         <div class="form-group">
-                                                            <label for="exampleInputEmail1">Name</label>
+                                                            <label for="exampleInputEmail1">Name *</label>
                                                             <input type="text" class="form-control white_input"
                                                                    id="exampleInputEmail1"
                                                                    aria-describedby="emailHelp">

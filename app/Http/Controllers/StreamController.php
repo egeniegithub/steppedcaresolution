@@ -59,9 +59,14 @@ class StreamController extends Controller
         }
 
         try {
-            $input = $request->except('_token');
-            $input['status'] = 'Draft';
-            Stream::create($input);
+            $input = $request->input();
+            $data = array(
+                'name' => $input['name'],
+                'form_id' => $input['form_id'],
+                'fields' => json_encode($input['fields']),
+                'status' => 'Draft',
+            );
+            Stream::create($data);
 
         } catch (\Exception $e) {
 

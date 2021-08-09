@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Period;
+use App\Models\Permission;
 use App\Models\Stream;
+use App\Models\StreamAccess;
 use Illuminate\Http\Request;
 use Auth;
 use App\Models\Form;
@@ -28,40 +31,29 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-
-
         if(Auth::user()->role=="User"){
-            $search_keyword = $request->input('keyword') ?? null;
             $active_user = User::where('id', auth()->user()->id)->first();
             $perPage = $request->show_rows ?? 10;
+            $period_id = $request->period_id ?? '';
 
-            $forms = Form::when($search_keyword, function ($query, $value) {
-                $query->where('forms.name', 'like', '%' . $value . '%')
-                    ->orWhere('p.name', 'like', '%' . $value . '%');
-            })
-                ->leftjoin('projects as p', 'p.id', '=', 'forms.project_id')
-                ->where(function ($q) use($active_user) {
-                    if ($active_user->role == 'Admin') {
+            $permission_ids = StreamAccess::where('assigned_user_id', $active_user->id)->pluck('permission_id')->toArray();
 
-                    }else{
-                        $q->where('forms.created_by', $active_user->id);
-                    }
-                })
-                ->select('forms.id AS form_id', 'forms.name as form_name', 'p.name as project_name', 'p.id as project_id')
-                ->orderBy('form_id', 'DESC')
-                ->paginate($perPage);
-
-
+            $stream_ids = Permission::when($period_id, function ($query, $value) {
+                $query->where('period_id', $value);
+            })->whereIn('id', $permission_ids)->pluck('stream_id')->toArray();
 
             $streams = Stream::leftjoin('forms as f', 'streams.form_id', '=', 'f.id')
-                ->select('streams.id AS stream_id', 'streams.name as stream_name', 'f.name as form_name', 'f.project_id as project_id', 'streams.status as stream_status')
+                ->where('f.project_id', $active_user->project_id)
+                ->whereIn('streams.id', $stream_ids)
+                ->select('streams.id AS stream_id', 'streams.name as stream_name', 'f.name as form_name', 'f.project_id as project_id',
+                    'streams.status as stream_status')
                 ->orderBy('stream_id', 'DESC')
                 ->paginate($perPage);
 
-            $projects = project::all();
             $row_show = $perPage;
+            $periods = Period::all();
 
-            return view('dashboard')->with(compact('projects', 'forms', 'active_user', 'row_show', 'streams'));
+            return view('dashboard')->with(compact('active_user', 'row_show', 'streams', 'periods'));
         }else{
             return view('dashboard');
         }
