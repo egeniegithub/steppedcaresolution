@@ -36,9 +36,10 @@ class StreamController extends Controller
      * @return \Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
 
-    public function create($form_id)
+    public function create($form_id, $stream_id = null)
     {
-        return view('streams.create')->with(compact('form_id'));
+        $stream = !empty($stream_id) ? Stream::find($stream_id) : null;
+        return view('streams.create')->with(compact('form_id', 'stream'));
     }
 
     /**
@@ -120,8 +121,16 @@ class StreamController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function destroy(Stream $stream)
+    public function destroy(Request $request)
     {
         //
+        $id = $request->id;
+        try {
+            Stream::find($id)->delete();
+            return back()->with('success', "Stream has been successfully deleted");
+        }catch (\Exception $exception){
+            //dd($exception);
+            return back()->with('error', "Something went wrong");
+        }
     }
 }

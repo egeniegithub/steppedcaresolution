@@ -29,7 +29,7 @@
                                         <div class="mb-3">
                                             <label for="stream-name" class="form-label">Stream Name</label>
                                             <input type="text" id="stream-name" class="form-control white_input" name="name"
-                                                   value="{{old('name')}}" required />
+                                                   value="{{old('name') ?? $stream->name ?? null}}" required />
                                             <input type="hidden" name="form_id" value="{{$form_id}}">
                                         </div>
                                     </div>
@@ -242,7 +242,7 @@
                                                                     <td>
                                                                         <label class="radio_container">
                                                                             <input type="radio" checked="checked"
-                                                                                   name="cumulative_value">
+                                                                                   name="tableFieldType" value="row">
                                                                             <span class="checkmark"></span>
                                                                             Row
                                                                         </label>
@@ -250,7 +250,7 @@
                                                                     <td>
                                                                         <label class="radio_container">Column
                                                                             <input type="radio" checked="checked"
-                                                                                   name="cumulative_value">
+                                                                                   name="tableFieldType" value="column">
                                                                             <span class="checkmark"></span>
                                                                         </label>
                                                                     </td>
@@ -261,12 +261,12 @@
                                                     <div class="row row_adjusted pt-3">
                                                         <div class="col-xl-6 col-lg-6 col-md-6 col-12">
                                                             <div class="mb-3">
-                                                                <label for="Project" class="form-label">Row Name</label>
-                                                                <input type="text" class="form-control white_input"/>
+                                                                <label for="table-field-name" class="form-label">Name</label>
+                                                                <input type="text" id="table-field-name" class="form-control white_input"/>
                                                                 <div class="btn-group btn_group_padding pt-4">
                                                                     <button
                                                                         type="button"
-                                                                        class="btn table_btn del_modal_btn text-white">
+                                                                        class="btn table_btn del_modal_btn text-white" onclick="addTableField()">
                                                                         Add to Table
                                                                     </button>
                                                                     <button
@@ -294,62 +294,8 @@
                                                                             </td>
                                                                         </tr>
                                                                         </thead>
-                                                                        <tbody>
-                                                                        <tr>
-                                                                            <td scope="row"> Registered User</td>
-                                                                            <td> Row</td>
-                                                                            <td> 1</td>
-                                                                            <td>
-                                                                                <div class="btn-group" role="group"
-                                                                                     aria-label="Basic example">
-                                                                                    <button type="button"
-                                                                                            class="btn table_btn  update_btn text-white">
-                                                                                        Update
-                                                                                    </button>
-                                                                                    <button type="button"
-                                                                                            class="btn  table_btn delete_btn text-white">
-                                                                                        Delete
-                                                                                    </button>
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td scope="row"> Logged in User</td>
-                                                                            <td> Row</td>
-                                                                            <td> 1</td>
-                                                                            <td>
-                                                                                <div class="btn-group" role="group"
-                                                                                     aria-label="Basic example">
-                                                                                    <button type="button"
-                                                                                            class="btn table_btn  update_btn text-white">
-                                                                                        Update
-                                                                                    </button>
-                                                                                    <button type="button"
-                                                                                            class="btn  table_btn delete_btn text-white">
-                                                                                        Delete
-                                                                                    </button>
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td scope="row"> View</td>
-                                                                            <td> Column</td>
-                                                                            <td> 1</td>
-                                                                            <td>
-                                                                                <div class="btn-group" role="group"
-                                                                                     aria-label="Basic example">
-                                                                                    <button type="button"
-                                                                                            class="btn table_btn  update_btn text-white">
-                                                                                        Update
-                                                                                    </button>
-                                                                                    <button type="button"
-                                                                                            class="btn  table_btn delete_btn text-white">
-                                                                                        Delete
-                                                                                    </button>
+                                                                        <tbody id="table-field-rows">
 
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
                                                                         </tbody>
                                                                     </table>
                                                                 </div>
@@ -480,7 +426,9 @@
             integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
             integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
-    <script>
+
+    <script type="text/javascript">
+
         function openCity(evt, cityName) {
             let headingText = '';
             let cardId = cityName === 'table' ? "table" : 'long_text';
@@ -519,8 +467,8 @@
 
         // Get the element with id="defaultOpen" and click on it
         document.getElementById("defaultOpen").click();
-    </script>
-    <script type="text/javascript">
+
+
         var fixHelperModified = function (e, tr) {
                 var $originals = tr.children();
                 var $helper = tr.clone();
@@ -551,9 +499,8 @@
             update: function () {
             }
         });
-    </script>
 
-    <script type="text/javascript">
+
         window.alert = function () {
         };
         var defaultCSS = document.getElementById('bootstrap-css');
@@ -577,7 +524,12 @@
             let orderCount = $(".fields_table")
             orderCount = orderCount.length + 1
 
-            let newRow = '<tr id="2" class="ui-sortable-handle fields_table">'
+            if (!fieldName){
+                toastr.error('Field name is required')
+                return false
+            }
+
+            let newRow = '<tr id="'+orderCount+'" class="ui-sortable-handle fields_table">'
             newRow += '<td scope="row"> ' + fieldName + '</td>'
             newRow += '<td> ' + fieldType + ' </td>'
             newRow += '<td> ' + isRequired + ' </td>'
@@ -587,10 +539,9 @@
             newRow += '<td>'
             newRow += '<div class="btn-group" role="group" aria-label="Basic example">'
             newRow += '<button type="button" class="btn table_btn  update_btn text-white">Update</button>'
-            newRow += '<button type="button" class="btn  table_btn delete_btn text-white">Delete</button>'
+            newRow += '<button type="button" class="btn  table_btn delete_btn text-white" onclick="removeFieldFromList('+orderCount+')">Delete</button>'
             newRow += '</div>'
             newRow += '</td>'
-            newRow += '</tr>'
 
             newRow += '<input type="hidden" name="fields[' + orderCount + '][fieldName]"  value="' + fieldName + '" >'
             newRow += '<input type="hidden" name="fields[' + orderCount + '][fieldType]"  value="' + fieldType + '" >'
@@ -599,8 +550,53 @@
             newRow += '<input type="hidden" name="fields[' + orderCount + '][isCumulative]"  value="' + isCumulative + '" >'
             newRow += '<input type="hidden" name="fields[' + orderCount + '][orderCount]"  value="' + orderCount + '" >'
 
+            newRow += '</tr>'
+
             $("#fields_table").append(newRow)
+            $("#field_name").val('')
         }
+
+        const addTableField = () => {
+
+            let fieldName = $("#table-field-name").val();
+            let type = $('input[name=tableFieldType]:checked').val()
+
+            if (!fieldName){
+                toastr.error('Field name is required')
+                return false
+            }
+            let orderCount = $(".table_rows_count")
+            orderCount = orderCount.length + 1
+            let rowId = 'table'+orderCount;
+
+            let html = '<tr class="table_rows_count" id="'+rowId+'">'
+            html += '<td scope="row"> '+fieldName+'</td>'
+            html += '<td> '+type+'</td>'
+            html += '<td> '+orderCount+'</td>'
+            html += '<td>'
+            html += '<div class="btn-group" role="group" aria-label="Basic example">'
+            html += '<button type="button" class="btn table_btn  update_btn text-white" > Update </button>'
+            html += '<button type="button" class="btn  table_btn delete_btn text-white" onclick="removeFieldFromTableList('+orderCount+')">Delete</button>'
+            html += '</div>'
+            html += '</td>'
+            html += '</tr>';
+
+            $("#table-field-rows").append(html)
+            $("#table-field-name").val('')
+        }
+
+        const removeFieldFromList = (id) => {
+            $('#'+id).remove()
+        }
+
+        const removeFieldFromTableList = (id) => {
+            $('#table'+id).remove()
+        }
+
+        const updateFieldFromList = () => {
+
+        }
+
     </script>
 
 
