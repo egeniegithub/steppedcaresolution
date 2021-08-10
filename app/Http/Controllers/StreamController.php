@@ -163,4 +163,15 @@ class StreamController extends Controller
         }
         return back()->with('success', 'Summary saved successfully!');
     }
+
+    public function render($id)
+    {
+        $stream = Stream::where('id', $id)->first();
+        return view('streams.render')->with(compact('stream'));
+    }
+
+    public function streamPost(Request $request)
+    {
+        dd($request);
+    }
 }

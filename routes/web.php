@@ -61,6 +61,8 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
         Route::post('/add-update-stream-summary', [App\Http\Controllers\StreamController::class,'addUpdateStreamSummary'])->name('dashboard.form.add_update_stream_summary');
         Route::get('/stream_update', [App\Http\Controllers\StreamController::class,'stream_update'])->name('dashboard.stream.stream_update');
         Route::get('/stream_update_two', [App\Http\Controllers\StreamController::class,'stream_update_two'])->name('dashboard.stream.stream_update_two');
+        Route::get('/render/{id}', [App\Http\Controllers\StreamController::class,'render'])->name('dashboard.stream.render');
+        Route::post('/stream-post', [App\Http\Controllers\StreamController::class,'streamPost'])->name('dashboard.stream.stream_post');
     });
 
     Route::group(['prefix' => 'project',  'middleware' => 'auth'], function(){

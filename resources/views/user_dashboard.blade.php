@@ -59,7 +59,8 @@
                                                 <td>{{$stream->stream_status}}</td>
                                                 <td>
                                                     <div class="btn-group" role="group" aria-label="Basic example">
-                                                        <a type="button" class="btn table_btn update_btn text-white" href="{{route('dashboard.stream.stream_update')}}">Update</a>
+                                                        {{--<a type="button" class="btn table_btn update_btn text-white" href="{{route('dashboard.stream.stream_update')}}">Update</a>--}}
+                                                        <a href="{{route('dashboard.stream.render', [$stream->stream_id])}}" type="button" class="btn table_btn update_btn text-white">Update</a>
                                                     </div>
                                                 </td>
                                             </tr>
