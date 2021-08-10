@@ -22,6 +22,7 @@
     <!-- vendor css -->
     <link rel="stylesheet" href="{{asset('assets/css/style.css')}}" />
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body class="">
@@ -43,17 +44,17 @@
     @endif
 
     <!-- [ Main Content ] start -->
-    <div class=" @if(request()->segment(1) == "login" || request()->segment(1) =="reset-password" || request()->segment(1) =="forget-password"  ) @else pcoded-main-container @endif 
+    <div class=" @if(request()->segment(1) == "login" || request()->segment(1) =="reset-password" || request()->segment(1) =="forget-password"  ) @else pcoded-main-container @endif
         @if(Auth::check())
             @if(Auth::user()->role=="User")
-                new-pcoded-header 
+                new-pcoded-header
             @endif
         @endif"
 
         id="maindiv">
         @yield('content')
     </div>
-    
+
     @include('layouts.footer')
 
 </body>

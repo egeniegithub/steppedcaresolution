@@ -36,9 +36,11 @@ class StreamController extends Controller
      * @return \Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
 
-    public function create($form_id)
+    public function create($form_id, $stream_id = null)
     {
-        return view('streams.create')->with(compact('form_id'));
+        $stream = !empty($stream_id) ? Stream::find($stream_id) : null;
+        $fields = isset($stream->fields) ? json_decode($stream->fields, true) : [];
+        return view('streams.create')->with(compact('form_id', 'stream', 'fields'));
     }
 
     /**
@@ -60,20 +62,19 @@ class StreamController extends Controller
 
         try {
             $input = $request->input();
-            $data = array(
-                'name' => $input['name'],
-                'form_id' => $input['form_id'],
-                'fields' => json_encode($input['fields']),
-                'status' => 'Draft',
-            );
-            Stream::create($data);
+            $streamObj = !empty($input['stream_id']) ? Stream::find($input['stream_id']) : new Stream();
+            $streamObj->name = $input['name'];
+            $streamObj->form_id = $input['form_id'];
+            $streamObj->fields = json_encode($input['fields']);
+            $streamObj->status = 'Draft';
+            $streamObj->save();
 
         } catch (\Exception $e) {
 
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             return back()->with('error', $e->getMessage());
         }
-        return redirect()->route('dashboard.streams', [$request->form_id])->with('success', 'Stream created successfully!');
+        return redirect()->route('dashboard.streams', [$request->form_id])->with('success', 'Stream saved successfully!');
     }
 
     /**
@@ -125,9 +126,17 @@ class StreamController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function destroy(Stream $stream)
+    public function destroy(Request $request)
     {
         //
+        $id = $request->id;
+        try {
+            Stream::find($id)->delete();
+            return back()->with('success', "Stream has been successfully deleted");
+        }catch (\Exception $exception){
+            //dd($exception);
+            return back()->with('error', "Something went wrong");
+        }
     }
 
     public function addUpdateStreamSummary(Request $request){
