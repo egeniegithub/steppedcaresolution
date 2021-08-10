@@ -244,7 +244,8 @@
                                                         <div class="form-group">
                                                             <label for="field_name">Options</label>
                                                             <textarea type="text" class="form-control white_input"
-                                                                      id="field_options" aria-describedby="emailHelp"></textarea>
+                                                                      id="field_options"
+                                                                      aria-describedby="emailHelp"></textarea>
                                                             <p class="dropdown_small_text"> Enter comma separated
                                                                 values</p>
                                                         </div>
@@ -307,7 +308,8 @@
                                                         </table>
                                                     </div>
                                                     <div class="col-sm-12 col-lg-6 add_tables_margin">
-                                                        <b class=""><a class="add_icon" href=""><span> Build Table</span></a></b>
+                                                        <b class=""><a class="add_icon"
+                                                                       href=""><span> Build Table</span></a></b>
                                                     </div>
                                                 </div>
                                                 <div class="row row_adjusted">
@@ -331,13 +333,15 @@
                                                                 </td>
                                                             </tr>
                                                             <tr class="mb-2">
-                                                                <td colspan="2"><span style="font-weight: bold">Dropdown</span></td>
+                                                                <td colspan="2"><span
+                                                                        style="font-weight: bold">Dropdown</span></td>
                                                             </tr>
                                                             <tr>
                                                                 <td>
                                                                     <label class="radio_container">
                                                                         <input type="radio" checked="checked"
-                                                                               name="tableDropdown" value="yes" onclick="tableDropDown('yes')">
+                                                                               name="tableDropdown" value="yes"
+                                                                               onclick="tableDropDown('yes')">
                                                                         <span class="checkmark"></span>
                                                                         Yes
                                                                     </label>
@@ -345,7 +349,8 @@
                                                                 <td>
                                                                     <label class="radio_container">No
                                                                         <input type="radio" checked="checked"
-                                                                               name="tableDropdown" value="no" onclick="tableDropDown('no')">
+                                                                               name="tableDropdown" value="no"
+                                                                               onclick="tableDropDown('no')">
                                                                         <span class="checkmark"></span>
                                                                     </label>
                                                                 </td>
@@ -363,17 +368,23 @@
                                                                         <label for="table-field-name"
                                                                                class="form-label">Name</label>
                                                                         <input type="text" id="table-field-name"
-                                                                               class="form-control white_input" />
+                                                                               class="form-control white_input"/>
+                                                                        <input type="hidden" name=""
+                                                                               id="table_hidden_id">
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="row row_adjusted table-dropdown-switch" style="display: none">
+                                                            <div class="row row_adjusted table-dropdown-switch"
+                                                                 style="display: none">
                                                                 <div class="col-sm-12 col-lg-12">
                                                                     <div class="form-group">
                                                                         <label for="field_name">Options</label>
-                                                                        <textarea type="text" class="form-control white_input"
-                                                                                  id="table_field_options" aria-describedby="emailHelp"></textarea>
-                                                                        <p class="dropdown_small_text"> Enter comma separated
+                                                                        <textarea type="text"
+                                                                                  class="form-control white_input"
+                                                                                  id="table_field_options"
+                                                                                  aria-describedby="emailHelp"></textarea>
+                                                                        <p class="dropdown_small_text"> Enter comma
+                                                                            separated
                                                                             values</p>
                                                                     </div>
                                                                 </div>
@@ -450,7 +461,8 @@
                                             <tbody class="ui-sortable" id="fields_table">
                                             @if(count($fields))
                                                 @foreach($fields as $field)
-                                                    <tr id="{{$field['orderCount']}}" class="ui-sortable-handle fields_table">
+                                                    <tr id="{{$field['orderCount']}}"
+                                                        class="ui-sortable-handle fields_table">
                                                         <td scope="row"> {{$field['fieldName']}}</td>
                                                         <td> {{$field['fieldType']}} </td>
                                                         <td> {{$field['isRequired']}} </td>
@@ -458,17 +470,37 @@
                                                         <td> {{$field['isCumulative']}} </td>
                                                         <td class="index">{{$field['orderCount']}}</td>
                                                         <td>
-                                                            <div class="btn-group" role="group" aria-label="Basic example">
-                                                                <button type="button" class="btn table_btn  update_btn text-white">Update</button>
-                                                                <button type="button" class="btn  table_btn delete_btn text-white" onclick="removeFieldFromList('{{$field['orderCount']}}')">Delete</button>
+                                                            <div class="btn-group" role="group"
+                                                                 aria-label="Basic example">
+                                                                <button type="button"
+                                                                        class="btn table_btn  update_btn text-white">
+                                                                    Update
+                                                                </button>
+                                                                <button type="button"
+                                                                        class="btn  table_btn delete_btn text-white"
+                                                                        onclick="removeFieldFromList('{{$field['orderCount']}}')">
+                                                                    Delete
+                                                                </button>
                                                             </div>
                                                         </td>
-                                                        <input type="hidden" name="fields[{{$field['orderCount']}}][fieldName]"  value="{{$field['fieldName']}}" >
-                                                        <input type="hidden" name="fields[{{$field['orderCount']}}][fieldType]"  value="{{$field['fieldType']}}" >
-                                                        <input type="hidden" name="fields[{{$field['orderCount']}}][isRequired]"  value="{{$field['isRequired']}}" >
-                                                        <input type="hidden" name="fields[{{$field['orderCount']}}][isDuplicate]"  value="{{$field['isDuplicate']}}" >
-                                                        <input type="hidden" name="fields[{{$field['orderCount']}}][isCumulative]"  value="{{$field['isCumulative']}}" >
-                                                        <input type="hidden" name="fields[{{$field['orderCount']}}][orderCount]"  value="{{$field['orderCount']}}" >
+                                                        <input type="hidden"
+                                                               name="fields[{{$field['orderCount']}}][fieldName]"
+                                                               value="{{$field['fieldName']}}">
+                                                        <input type="hidden"
+                                                               name="fields[{{$field['orderCount']}}][fieldType]"
+                                                               value="{{$field['fieldType']}}">
+                                                        <input type="hidden"
+                                                               name="fields[{{$field['orderCount']}}][isRequired]"
+                                                               value="{{$field['isRequired']}}">
+                                                        <input type="hidden"
+                                                               name="fields[{{$field['orderCount']}}][isDuplicate]"
+                                                               value="{{$field['isDuplicate']}}">
+                                                        <input type="hidden"
+                                                               name="fields[{{$field['orderCount']}}][isCumulative]"
+                                                               value="{{$field['isCumulative']}}">
+                                                        <input type="hidden"
+                                                               name="fields[{{$field['orderCount']}}][orderCount]"
+                                                               value="{{$field['orderCount']}}">
                                                     </tr>
                                                 @endforeach
                                             @endif
@@ -505,11 +537,11 @@
                 function openCity(evt, cityName) {
                     let headingText = '';
                     let cardId = cityName === 'table' ? "table" : 'long_text';
-                    if (cityName === 'table'){
+                    if (cityName === 'table') {
                         cardId = 'table'
-                    }else if (cityName === 'dropdown'){
+                    } else if (cityName === 'dropdown') {
                         cardId = 'dropdown'
-                    }else{
+                    } else {
                         cardId = 'long_text';
                     }
                     switch (cityName) {
@@ -615,8 +647,8 @@
                         return false
                     }
 
-                    if (fieldType == 'dropdown'){
-                        if (!fieldOptions){
+                    if (fieldType == 'dropdown') {
+                        if (!fieldOptions) {
                             toastr.error("Select options are required.")
                             return false
                         }
@@ -631,7 +663,7 @@
                     newRow += '<td class="index">' + orderCount + '</td>'
                     newRow += '<td>'
                     newRow += '<div class="btn-group" role="group" aria-label="Basic example">'
-                    newRow += '<button type="button" class="btn table_btn  update_btn text-white">Update</button>'
+                    newRow += '<button type="button" class="btn table_btn  update_btn text-white" onclick="updateFieldFromList(' + orderCount + ')">Update</button>'
                     newRow += '<button type="button" class="btn  table_btn delete_btn text-white" onclick="removeFieldFromList(' + orderCount + ')">Delete</button>'
                     newRow += '</div>'
                     newRow += '</td>'
@@ -642,24 +674,24 @@
                     newRow += '<input type="hidden" name="fields[' + orderCount + '][isDuplicate]"  value="' + isDuplicate + '" >'
                     newRow += '<input type="hidden" name="fields[' + orderCount + '][isCumulative]"  value="' + isCumulative + '" >'
                     newRow += '<input type="hidden" name="fields[' + orderCount + '][orderCount]"  value="' + orderCount + '" >'
-                    if (fieldType == 'dropdown'){
+                    if (fieldType == 'dropdown') {
                         newRow += '<input type="hidden" name="fields[' + orderCount + '][fieldOptions]"  value="' + fieldOptions + '" >'
                     }
 
-                    if (fieldType == 'table'){
+                    if (fieldType == 'table') {
                         let tableFieldData = JSON.stringify(tableData)
                         tableFieldData = encodeURIComponent(tableFieldData)
                         newRow += '<input type="hidden" name="fields[' + orderCount + '][tableData]"  value="' + tableFieldData + '" >'
                     }
-
                     newRow += '</tr>'
-
                     $("#fields_table").append(newRow)
                     $(selector).val('')
                     $("#field_options").val('')
+                    for (let i = 0; i < tableData.length; i++) {
+                        $('#table' + tableData[i].orderCount).remove();
+                    }
                     tableData = []
                 }
-
 
                 const addTableField = () => {
 
@@ -667,6 +699,7 @@
                     let fieldName = $("#table-field-name").val();
                     let tableDropdown = $('input[name=tableDropdown]:checked').val()
                     let tableFieldOptions = $("#table_field_options").val();
+                    let tableHiddenId = $("#table_hidden_id").val()
 
                     if (!fieldName) {
                         toastr.error('Field name is required')
@@ -675,31 +708,43 @@
                     let orderCount = $(".table_rows_count")
                     orderCount = orderCount.length + 1
                     let rowId = 'table' + orderCount;
-
                     let data = {
-                        orderCount,
+                        orderCount: tableHiddenId?.length > 0 ? tableHiddenId : orderCount,
                         fieldName,
                         type,
                         tableDropdown,
                         tableFieldOptions
                     }
-                    tableData.push(data)
-
-                    let html = '<tr class="table_rows_count" id="' + rowId + '">'
-                    html += '<td scope="row"> ' + fieldName + '</td>'
-                    html += '<td> ' + type + '</td>'
-                    html += '<td> ' + orderCount + '</td>'
-                    html += '<td>'
-                    html += '<div class="btn-group" role="group" aria-label="Basic example">'
-                    html += '<button type="button" class="btn table_btn  update_btn text-white" > Update </button>'
-                    html += '<button type="button" class="btn  table_btn delete_btn text-white" onclick="removeFieldFromTableList(' + orderCount + ')">Delete</button>'
-                    html += '</div>'
-                    html += '</td>'
-                    html += '</tr>';
-
-                    $("#table-field-rows").append(html)
+                    if (tableHiddenId) {
+                        let html = '<td scope="row"> ' + fieldName + '</td>'
+                        html += '<td> ' + type + '</td>'
+                        html += '<td> ' + tableHiddenId + '</td>'
+                        html += '<td>'
+                        html += '<div class="btn-group" role="group" aria-label="Basic example">'
+                        html += '<button type="button" class="btn table_btn  update_btn text-white" onclick="updateTableField(' + tableHiddenId + ')" > Update </button>'
+                        html += '<button type="button" class="btn  table_btn delete_btn text-white" onclick="removeFieldFromTableList(' + tableHiddenId + ')">Delete</button>'
+                        html += '</div>'
+                        html += '</td>'
+                        $("#table" + tableHiddenId).html(html)
+                        tableData[tableHiddenId - 1] = data
+                    } else {
+                        let html = '<tr class="table_rows_count" id="' + rowId + '">'
+                        html += '<td scope="row"> ' + fieldName + '</td>'
+                        html += '<td> ' + type + '</td>'
+                        html += '<td> ' + orderCount + '</td>'
+                        html += '<td>'
+                        html += '<div class="btn-group" role="group" aria-label="Basic example">'
+                        html += '<button type="button" class="btn table_btn  update_btn text-white" onclick="updateTableField(' + orderCount + ')" > Update </button>'
+                        html += '<button type="button" class="btn  table_btn delete_btn text-white" onclick="removeFieldFromTableList(' + orderCount + ')">Delete</button>'
+                        html += '</div>'
+                        html += '</td>'
+                        html += '</tr>';
+                        $("#table-field-rows").append(html)
+                        tableData.push(data)
+                    }
                     $("#table-field-name").val('')
                     $("#table_field_options").val('')
+                    $("#table_hidden_id").val('')
                 }
 
                 const removeFieldFromList = (id) => {
@@ -707,18 +752,43 @@
                 }
 
                 const removeFieldFromTableList = (id) => {
+                    for (let i = 0; i < tableData.length; i++) {
+                        if (tableData[i].orderCount == id) {
+                            tableData.splice(i, 1)
+                        }
+                    }
                     $('#table' + id).remove()
                 }
 
-                const updateFieldFromList = () => {
+                const updateFieldFromList = (orderCount) => {
+                    console.log('orderCount ', orderCount)
+                }
 
+                const updateTableField = (orderCount) => {
+                    let selector = parseInt(orderCount) - 1
+                    let data = tableData[selector]
+                    $("#table-field-name").val(data.fieldName);
+                    $("#table_field_options").val(data.tableFieldOptions);
+                    $("#table_hidden_id").val(orderCount)
+                    let tableDropdown = data.tableDropdown
+                    let tableFieldType = data.tableFieldType
+                    if (data.tableDropdown == 'yes') {
+                        $("input[name=tableDropdown][value='yes']").prop("checked", true);
+                    } else {
+                        $("input[name=tableDropdown][value='yes']").prop("checked", true);
+                    }
+                    if (data.tableFieldType == 'row') {
+                        $("input[name=tableFieldType][value='row']").prop("checked", true);
+                    } else {
+                        $("input[name=tableFieldType][value='column']").prop("checked", true);
+                    }
                 }
 
                 const tableDropDown = (type) => {
-                    if (type == 'yes'){
-                        $(".table-dropdown-switch").css('display','block')
-                    }else{
-                        $(".table-dropdown-switch").css('display','none')
+                    if (type == 'yes') {
+                        $(".table-dropdown-switch").css('display', 'block')
+                    } else {
+                        $(".table-dropdown-switch").css('display', 'none')
                     }
                 }
 
