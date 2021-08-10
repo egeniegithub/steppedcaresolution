@@ -13,7 +13,6 @@ $(document).ready(function(){
     $(".delete_modal").click(function(){
        $("#target_row").val($(this).attr('data-deleteMember'));
         $("#delete_modal").modal('show');
-
     })
 
     $(".delete_form_modal").click(function(){
