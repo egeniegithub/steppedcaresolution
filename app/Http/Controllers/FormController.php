@@ -95,4 +95,29 @@ class FormController extends Controller
             return back()->with('error', $e->getMessage());
         }
     }
+
+    public function addUpdateFormSummary(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'summary' => ['required', 'string', 'max:255'],
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        try {
+            $input = $request->only('summary');
+            $input['updated_by'] = auth()->user()->id;
+
+            $stream = Form::find($request->id);
+            $stream->update($input);
+
+        } catch (\Exception $e) {
+
+            \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
+            return back()->with('error', $e->getMessage());
+        }
+        return back()->with('success', 'Summary saved successfully!');
+    }
 }

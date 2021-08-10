@@ -68,10 +68,11 @@
                                                 <td><img class="forward_icon" src="{{asset('assets/images/forward_icon.PNG')}}"/></td>
                                                 <td><a href="#" class="form_anchor_text">{{$form->name}}</a></td>
                                                 <td>Completed</td>
-                                                <td>
+                                                <td class="no-open">
                                                     <div class="btn-group" role="group" aria-label="Basic example">
                                                         <button type="button" class="btn update_status_btn table_btn text-white">Update Status</button>
-                                                        <button type="button" class="btn table_btn  update_btn text-white">Add Sumary</button>
+                                                        <button type="button" data-toggle="modal" data-target="#addFormSummary{{$form->id}}" class="btn table_btn update_btn text-white">Add Summary</button>
+                                                        @include('Reports.partials.add_form_summary')
                                                         <button type="button" class="btn  table_btn view_report_btn text-white" data-toggle="modal" data-target="#exampleModal">View Report</button>
                                                     </div>
                                                 </td>
@@ -96,7 +97,8 @@
                                                                     <td>
                                                                         <div class="btn-group" role="group" aria-label="Basic example">
                                                                             <button type="button" class="btn update_status_btn table_btn text-white">Update Status</button>
-                                                                            <button type="button" class="btn table_btn  update_btn text-white">Add Sumary</button>
+                                                                            <button type="button" data-toggle="modal" data-target="#addStreamSummary{{$stream->id}}" class="btn table_btn update_btn text-white">Add Summary</button>
+                                                                            @include('Reports.partials.add_stream_summary')
                                                                         </div>
                                                                     </td>
                                                                 </tr>
@@ -243,6 +245,7 @@
 
     <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
     <script>
+        var table = $('.report_table');
         $(".clickable").click(function () {
             setTimeout(() => {
                 if ($(this).hasClass('collapsed')) {
@@ -252,12 +255,16 @@
                 }
             }, 100);
         })
-jQuery('.report_table tbody tr.clickable').each(function(){
-    if( jQuery(this).next('tr').length != 0)
-    {
-        jQuery(this).find('td').css('border-bottom','0');
-        
-    } 
-});
+        $('.report_table tbody tr.clickable').each(function(){
+            if( $(this).next('tr').length != 0)
+            {
+                $(this).find('td').css('border-bottom','0');
+            }
+        });
+
+        /*table.find(".no-open").click(function(e) {
+            e.stopPropagation();
+            return false;
+        })*/
     </script>
 @endsection

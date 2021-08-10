@@ -13,21 +13,23 @@
                         </div>
                     </div>
                 </div>
-                {{--<div class="row report_row_top blue-border-bottom">
-                    <div class="col-xl-5 col-lg-5 col-md-6 col-12">
-                        <div>
-                            <label for="Project" class="form-label">Select Period</label>
-                            <select
-                                class="form-control form-select white_input"
-                                aria-label="Default select example"
-                            >
-                                <option selected>Month 1</option>
-                                <option value="1">Month 2</option>
-                                <option value="2">Month 3</option>
-                            </select>
+                <form method="get" action="">
+                    <div class="row  blue-border-bottom">
+                        <div class="col-sm-12 col-md-3 px-0">
+                            <p class="pl-4 mt-2 mb-0"> Select Period </p>
+                            <div class="form-group pl-4 pt-1 d-flex search_bar_adj">
+                                <select class="form-control form-select white_input" name="period_id" aria-label="Default select example">
+                                    <option value="" selected>All</option>
+                                    @foreach($periods as $period)
+                                        <option value="{{$period->id}}" {{request()->get('period_id') == $period->id?"selected":""}}>{{$period->name}}</option>
+                                    @endforeach
+                                </select>
+                                <button class="span_search span_mid"><i class="fas fa-search search_icon"></i></button>
+                            </div>
                         </div>
                     </div>
-                </div>--}}
+                </form>
+
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="table_div_padding">
@@ -62,8 +64,8 @@
                                                 </td>
                                             </tr>
                                         @empty
-                                            <tr>
-                                                <td colspan="5"></td>
+                                            <tr class="text-center">
+                                                <td colspan="5">No Stream Assigned</td>
                                             </tr>
                                         @endforelse
                                         </tbody>

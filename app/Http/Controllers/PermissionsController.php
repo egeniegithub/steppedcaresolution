@@ -7,8 +7,11 @@ use App\Models\Period;
 use App\Models\Permission;
 use App\Models\project;
 use App\Models\Stream;
+use App\Models\StreamAccess;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class PermissionsController extends Controller
@@ -39,6 +42,7 @@ class PermissionsController extends Controller
      */
     public function store(Request $request)
     {
+        //dd(Carbon::now());
         $validator = Validator::make($request->all(), [
             'period_id' => ['required'],
             'project_id' => ['required'],
@@ -51,15 +55,57 @@ class PermissionsController extends Controller
         }
 
         try {
+
+            DB::beginTransaction();
             $input = $request->except('_token');
             $input['created_by'] = auth()->user()->id;
-            
-            $input['unassigned_user'] = $request->unassigned_user??0;
-            $input['assigned_user'] = $request->assigned_user??0;
-            
-            Permission::create($input);
+
+            // create permissions
+            $permission = Permission::create($input);
+
+            $assigned_users = explode(',', $request->assigned_user);
+            $unassigned_users = explode(',', $request->unassigned_user);
+
+            // declare arrays
+            $assigned_user_data = array();
+            $unassigned_user_data = array();
+
+            // Construct array of assigned users
+            if (!empty($request->assigned_user)){
+                foreach ($assigned_users as $assigned_user) {
+                    $assigned_data = array(
+                        'permission_id' => $permission->id,
+                        'assigned_user_id' => $assigned_user,
+                        'unassigned_user_id' => NULL,
+                        'created_by' => auth()->user()->id,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now()
+                    );
+                    array_push($assigned_user_data, $assigned_data);
+                }
+            }
+
+            // Construct array of unassigned users
+            if (!empty($request->unassigned_user)){
+                foreach ($unassigned_users as $unassigned_user) {
+                    $unassigned_data = array(
+                        'permission_id' => $permission->id,
+                        'assigned_user_id' => NULL,
+                        'unassigned_user_id' => $unassigned_user,
+                        'created_by' => auth()->user()->id,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now()
+                    );
+                    array_push($unassigned_user_data, $unassigned_data);
+                }
+            }
+            $final_data = array_merge($unassigned_user_data, $assigned_user_data);
+            StreamAccess::insert($final_data);
+
+            DB::commit();
 
         } catch (\Exception $e) {
+            DB::rollBack();
 
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             return back()->with('error', $e->getMessage());

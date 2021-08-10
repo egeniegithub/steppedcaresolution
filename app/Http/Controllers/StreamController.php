@@ -39,7 +39,8 @@ class StreamController extends Controller
     public function create($form_id, $stream_id = null)
     {
         $stream = !empty($stream_id) ? Stream::find($stream_id) : null;
-        return view('streams.create')->with(compact('form_id', 'stream'));
+        $fields = isset($stream->fields) ? json_decode($stream->fields, true) : [];
+        return view('streams.create')->with(compact('form_id', 'stream', 'fields'));
     }
 
     /**
@@ -60,16 +61,20 @@ class StreamController extends Controller
         }
 
         try {
-            $input = $request->except('_token');
-            $input['status'] = 'Draft';
-            Stream::create($input);
+            $input = $request->input();
+            $streamObj = !empty($input['stream_id']) ? Stream::find($input['stream_id']) : new Stream();
+            $streamObj->name = $input['name'];
+            $streamObj->form_id = $input['form_id'];
+            $streamObj->fields = json_encode($input['fields']);
+            $streamObj->status = 'Draft';
+            $streamObj->save();
 
         } catch (\Exception $e) {
 
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             return back()->with('error', $e->getMessage());
         }
-        return redirect()->route('dashboard.streams', [$request->form_id])->with('success', 'Stream created successfully!');
+        return redirect()->route('dashboard.streams', [$request->form_id])->with('success', 'Stream saved successfully!');
     }
 
     /**
@@ -132,5 +137,30 @@ class StreamController extends Controller
             //dd($exception);
             return back()->with('error', "Something went wrong");
         }
+    }
+
+    public function addUpdateStreamSummary(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'summary' => ['required', 'string', 'max:255'],
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        try {
+            $input = $request->only('summary');
+            $input['updated_by'] = auth()->user()->id;
+
+            $stream = Stream::find($request->id);
+            $stream->update($input);
+
+        } catch (\Exception $e) {
+
+            \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
+            return back()->with('error', $e->getMessage());
+        }
+        return back()->with('success', 'Summary saved successfully!');
     }
 }

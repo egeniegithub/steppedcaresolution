@@ -48,6 +48,7 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
         Route::get('/', [App\Http\Controllers\FormController::class,'index'])->name('dashboard.forms');
         Route::post('/store', [App\Http\Controllers\FormController::class,'store'])->name('dashboard.form.store');
         Route::post('/update', [App\Http\Controllers\FormController::class,'update'])->name('dashboard.form.update');
+        Route::post('/add-update-form-summary', [App\Http\Controllers\FormController::class,'addUpdateFormSummary'])->name('dashboard.form.add_update_form_summary');
         Route::get('/form/{id?}', [App\Http\Controllers\FormController::class,'delete'])->name('dashboard.form.delete');
     });
 
@@ -57,6 +58,7 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
         Route::post('/store', [App\Http\Controllers\StreamController::class,'store'])->name('dashboard.stream.store');
         Route::post('/update', [App\Http\Controllers\StreamController::class,'update'])->name('dashboard.stream.update');
         Route::get('/stream/{id?}', [App\Http\Controllers\StreamController::class,'destroy'])->name('dashboard.stream.delete');
+        Route::post('/add-update-stream-summary', [App\Http\Controllers\StreamController::class,'addUpdateStreamSummary'])->name('dashboard.form.add_update_stream_summary');
         Route::get('/stream_update', [App\Http\Controllers\StreamController::class,'stream_update'])->name('dashboard.stream.stream_update');
         Route::get('/stream_update_two', [App\Http\Controllers\StreamController::class,'stream_update_two'])->name('dashboard.stream.stream_update_two');
     });
