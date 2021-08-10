@@ -88,7 +88,7 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
     });
 
     Route::group(['prefix' => 'permissions',  'middleware' => 'auth'], function(){
-        Route::get('/create', [App\Http\Controllers\PermissionsController::class,'create'])->name('dashboard.permissions');
+        Route::get('/create/{id}', [App\Http\Controllers\PermissionsController::class,'create'])->name('dashboard.permissions');
         Route::post('/store', [App\Http\Controllers\PermissionsController::class,'store'])->name('dashboard.permission.store');
     });
 

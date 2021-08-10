@@ -38,7 +38,7 @@
                     @endif
                     @if(Auth::user()->role=="Admin" || Auth::user()->role=="Manager")
                         <li class="nav-item pcoded-hasmenu" >
-                            <a href="{{route('dashboard.permissions')}}"  class="nav-link"><span class="pcoded-micon">   <img class="nav-icons nav-icons-new" src="{{asset('assets/images/permission.png')}}"> <span class="nav_tooltip" data-toggle="tooltip" data-placement="right" title="Permissions"><img class="nav-icons" src="{{asset('assets/images/permission.png')}}"> </span></span>  <span class="pcoded-mtext"> Permissions </span></a>
+                            <a href="{{route('dashboard.permissions', [0])}}"  class="nav-link"><span class="pcoded-micon">   <img class="nav-icons nav-icons-new" src="{{asset('assets/images/permission.png')}}"> <span class="nav_tooltip" data-toggle="tooltip" data-placement="right" title="Permissions"><img class="nav-icons" src="{{asset('assets/images/permission.png')}}"> </span></span>  <span class="pcoded-mtext"> Permissions </span></a>
                         </li>
                     @endif
                     <!-- <li class="nav-item pcoded-hasmenu">

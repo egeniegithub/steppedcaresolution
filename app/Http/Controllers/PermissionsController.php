@@ -17,20 +17,37 @@ use Illuminate\Support\Facades\Validator;
 class PermissionsController extends Controller
 {
 
-    public function create()
+    public function create($stream_id)
     {
+        $stream = Stream::where('id', $stream_id)->first();
+        if ($stream){
+            $form = Form::where('id', $stream->form_id)->first();
+        }else{
+            $form = NULL;
+        }
+
         $active_user = User::where('id', auth()->user()->id)->first();
+
         if ($active_user->role != 'Admin'){
             $forms = Form::where('project_id', $active_user->project_id)->get();
         }else{
             $forms = (object) array();
         }
 
+        $prefilled_data = array(
+            'project_id' => $form ? $form->project_id : null,
+            'stream_id' => $stream_id ?? null,
+            'stream_name' => $stream->name ?? null,
+            'form_id' => $stream->form_id ?? null,
+            'form_name' => $form->name ?? null,
+        );
+
         $periods = Period::all();
         $projects = project::all();
         $users = User::whereNotIn('role', ['Admin'])->get();
 
-        return view("Permissions.create")->with(compact('projects','active_user', 'forms', 'users', 'periods'));
+        return view("Permissions.create")
+            ->with(compact('projects','active_user', 'forms', 'users', 'periods', 'prefilled_data'));
 
     }
 
@@ -42,7 +59,6 @@ class PermissionsController extends Controller
      */
     public function store(Request $request)
     {
-        //dd(Carbon::now());
         $validator = Validator::make($request->all(), [
             'period_id' => ['required'],
             'project_id' => ['required'],
@@ -110,7 +126,7 @@ class PermissionsController extends Controller
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             return back()->with('error', $e->getMessage());
         }
-        return redirect()->route('dashboard.permissions', [$request->form_id])->with('success', 'permissions created successfully!');
+        return redirect()->route('dashboard.permissions', [0])->with('success', 'permissions created successfully!');
     }
 
     public function getUsers($project_id)

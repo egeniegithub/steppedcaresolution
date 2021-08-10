@@ -5,6 +5,10 @@
     $('select#project_id').change(function(){
         $(this).find("option:selected").each(function(){
             var selected_option = $(this).attr("value");
+            var pre_selected_stream = $("#pre_selected_stream").val();
+            var selected_form_id = $("#selected_form_id").val();
+            var selected_form_name = $("#selected_form_name").val();
+
             if(selected_option){
                 $.ajax({
                     type:"get",
@@ -13,11 +17,16 @@
                     {
                         if(response)
                         {
-                            $('#form_id').empty();
-                            $('#form_id').append('<option value="">Select Form</option>');
-                            $.each(response,function(key,value){
-                                $('#form_id').append('<option value="'+key+'">'+value+'</option>');
-                            });
+                            if (pre_selected_stream){
+                                $("#pre_selected_stream").val('');
+                                $('#form_id').append('<option value="'+selected_form_id+'" selected>'+selected_form_name+'</option>');
+                            }else {
+                                $('#form_id').empty();
+                                $('#form_id').append('<option value="">Select Form</option>');
+                                $.each(response,function(key,value){
+                                    $('#form_id').append('<option value="'+key+'">'+value+'</option>');
+                                });
+                            }
                         }
                     }
                 });
@@ -56,6 +65,10 @@
     $('select#form_id').change(function(){
         $(this).find("option:selected").each(function(){
             var selected_option = $(this).attr("value");
+            var pre_selected_stream = $("#pre_selected_stream").val();
+            /*var selected_stream_id = $("#selected_stream_id").val();
+            var selected_stream_name = $("#selected_stream_name").val();*/
+
             if(selected_option){
                 $.ajax({
                     type:"get",
@@ -64,11 +77,16 @@
                     {
                         if(response)
                         {
-                            $('#stream_id').empty();
-                            $('#stream_id').append('<option value="">Select Stream</option>');
-                            $.each(response,function(key,value){
-                                $('#stream_id').append('<option value="'+key+'">'+value+'</option>');
-                            });
+                            if (pre_selected_stream){
+                                $("#pre_selected_stream").val('');
+                                /*$('#stream_id').append('<option value="'+selected_stream_id+'" selected>'+selected_stream_name+'</option>');*/
+                            }else {
+                                $('#stream_id').empty();
+                                $('#stream_id').append('<option value="">Select Stream</option>');
+                                $.each(response,function(key,value){
+                                    $('#stream_id').append('<option value="'+key+'">'+value+'</option>');
+                                });
+                            }
                         }
                     }
                 });
