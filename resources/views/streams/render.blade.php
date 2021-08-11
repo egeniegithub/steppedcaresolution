@@ -74,8 +74,11 @@
 
                                                             @case('img')
                                                                 <input type="file" class="form-control white_input" src="" alt="" name="image" {{$required}}>
+                                                                <br>
                                                                 @if (array_key_exists('image', $answer_array))
-                                                                    <img src="{{asset('stream_answer_image')}}/{{$answer_array['image']}}" height="300px" width="500px" alt="No Img">
+                                                                    <div class="text-center">
+                                                                        <img src="{{asset('stream_answer_image')}}/{{$answer_array['image']}}" height="300px" width="500px" alt="No Img">
+                                                                    </div>
                                                                 @endif
                                                             @break
 
