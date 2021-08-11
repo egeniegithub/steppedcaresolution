@@ -6,6 +6,7 @@
     <div class="pcoded-wrapper">
         <div class="pcoded-content">
             <div class="container">
+                @include('layouts.flash-message')
                 <div class="row blue-border-bottom">
                     <div class="col-sm-6 col-md-9 col-lg-10 px-0">
                         <div class="top-header pt-2">

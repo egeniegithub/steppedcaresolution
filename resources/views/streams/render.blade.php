@@ -32,8 +32,11 @@
                                 <div class="card_header">
                                     <h5 class="header_padding_adj">{{$stream->name}}</h5>
                                 </div>
-                                <form  method="POST" action="{{ route('dashboard.stream.stream_post') }}" class="update_stream_form">
+                                <form method="POST" action="{{ route('dashboard.stream.stream_post') }}" class="update_stream_form" enctype="multipart/form-data">
                                     @csrf
+
+                                    <input type="hidden" name="stream_id" value="{{$stream->id}}">
+                                    <input type="hidden" name="stream_answer_id" value="{{$stream_answer_id}}">
 
                                     @if($stream->fields)
                                         @foreach(json_decode($stream->fields) as $field)
@@ -42,36 +45,48 @@
                                             <div class="row">
                                                 <div class="col-sm-12">
                                                     <div class="form-group">
-                                                        <label for="exampleFormControlTextarea1">{{$field->fieldName}}</label>
+                                                        <label for="exampleFormControlTextarea1">{{$field->fieldName}} {{$field->isRequired == 'no' ? '' : "*"}}</label>
+                                                        @php
+                                                            $name = preg_replace('/\s+/', '_', strtolower($field->fieldName));
+                                                            if (array_key_exists($name, $answer_array)){
+                                                                $value = $answer_array[$name];
+                                                            }else{
+                                                                $value = '';
+                                                            }
+                                                            $required = $field->isRequired == 'no' ? '' : "required";
+                                                        @endphp
                                                         @switch($field->fieldType)
                                                             @case('text')
-                                                            <input type="text" class="form-control white_input" name="{{preg_replace('/\s+/', '_', strtolower($field->fieldName))}}" value="" {{$field->isRequired == 'no' ? '' : "required"}}>
+                                                            <input type="text" class="form-control white_input" name="{{$name}}" value="{{$value}}" {{$required}}>
                                                             @break
 
                                                             @case('textarea')
-                                                            <textarea class="form-control white_input" name="" rows="5" ></textarea>
+                                                            <textarea class="form-control white_input" name="{{$name}}" {{$required}} rows="5" >{{$value}}</textarea>
                                                             @break
 
                                                             @case('number')
-                                                            <input type="number" class="form-control white_input" name="{{preg_replace('/\s+/', '_', strtolower($field->fieldName))}}" value="" {{$field->isRequired == 'no' ? '' : "required"}}>
+                                                            <input type="number" class="form-control white_input" name="{{$name}}" value="{{$value}}" {{$required}}>
                                                             @break
 
                                                             @case('date')
-                                                            <input type="date" class="form-control white_input" name="{{preg_replace('/\s+/', '_', strtolower($field->fieldName))}}" value="" {{$field->isRequired == 'no' ? '' : "required"}}>
+                                                            <input type="date" class="form-control white_input" name="{{$name}}" value="{{$value}}" {{$required}}>
                                                             @break
 
-                                                            @case('date')
-                                                            <img class="form-control white_input" src="" alt="" id="{{preg_replace('/\s+/', '_', strtolower($field->fieldName))}}" value="" {{$field->isRequired == 'no' ? '' : "required"}}>
+                                                            @case('img')
+                                                                <input type="file" class="form-control white_input" src="" alt="" name="image" {{$required}}>
+                                                                @if (array_key_exists('image', $answer_array))
+                                                                    <img src="{{asset('stream_answer_image')}}/{{$answer_array['image']}}" height="300px" width="500px" alt="No Img">
+                                                                @endif
                                                             @break
 
                                                             @case('select')
                                                             @php
                                                                 $options = explode(',', $field->fieldOptions);
                                                             @endphp
-                                                            <select class="form-control white_input" name="{{preg_replace('/\s+/', '_', strtolower($field->fieldName))}}" {{$field->isRequired == 'no' ? '' : "required"}}>
+                                                            <select class="form-control white_input" name="{{$name}}" {{$required}}>
                                                                 <option value="">Please Select</option>
                                                                 @foreach($options as $option)
-                                                                    <option value="{{$option}}">{{$option}}</option>
+                                                                    <option value="{{$option}}" {{($option == $value) ? 'selected' : ''}}>{{$option}}</option>
                                                                 @endforeach
                                                             </select>
                                                             @break
@@ -93,7 +108,7 @@
                                         <div class="col-sm-12">
                                             <button type="button" class="btn update_status_btn normal_btn text-white">Save Only</button>
                                             <button type="submit" class="btn normal_btn save_and_submit text-white">Save and Submit</button>
-                                            <button type="button" class="btn normal_btn cancel_modal_btn text-white" data-toggle="modal" data-target="#exampleModal">Cancel</button>
+                                            <a type="button" href="{{route('dashboard')}}" class="btn normal_btn cancel_modal_btn text-white" >Cancel</a>
                                         </div>
                                     </div>
                                 </form>

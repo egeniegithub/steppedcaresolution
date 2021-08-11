@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Form;
 use App\Models\Stream;
+use App\Models\StreamAnswer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -167,11 +168,41 @@ class StreamController extends Controller
     public function render($id)
     {
         $stream = Stream::where('id', $id)->first();
-        return view('streams.render')->with(compact('stream'));
+        $stream_answer = StreamAnswer::where('stream_id', $id)->first();
+        if ($stream_answer){
+            $stream_answer_id = $stream_answer->id;
+            $answer_array = (array)json_decode($stream_answer->answers);
+        }else{
+            $stream_answer_id = null;
+            $answer_array = array();
+        }
+
+        return view('streams.render')->with(compact('stream', 'answer_array', 'stream_answer_id'));
     }
 
     public function streamPost(Request $request)
     {
-        dd($request);
+        $stream_id = $request->stream_id;
+        $stream_answer_id = $request->stream_answer_id;
+
+        $inputs = $request->except('_token', 'stream_id', 'stream_answer_id');
+        if ($request->image){
+            $imageName = time().'.'.$request->image->extension();
+            $request->image->move(public_path('stream_answer_image'), $imageName);
+            $inputs['image'] = $imageName;
+        }
+
+        $data_array = array(
+            'stream_id' => $stream_id,
+            'answers' => json_encode($inputs),
+            'created_by' => auth()->user()->id,
+        );
+
+        if (empty($stream_answer_id)){
+            StreamAnswer::create($data_array);
+        }else{
+            StreamAnswer::where('id', $stream_answer_id)->update($data_array);
+        }
+        return redirect()->route('dashboard')->with('success', 'Data saved successfully!');
     }
 }
