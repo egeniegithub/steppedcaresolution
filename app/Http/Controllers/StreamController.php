@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Form;
 use App\Models\Stream;
+use App\Models\StreamAnswer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -36,9 +37,11 @@ class StreamController extends Controller
      * @return \Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
 
-    public function create($form_id)
+    public function create($form_id, $stream_id = null)
     {
-        return view('streams.create')->with(compact('form_id'));
+        $stream = !empty($stream_id) ? Stream::find($stream_id) : null;
+        $fields = isset($stream->fields) ? json_decode($stream->fields, true) : [];
+        return view('streams.create')->with(compact('form_id', 'stream', 'fields'));
     }
 
     /**
@@ -60,20 +63,19 @@ class StreamController extends Controller
 
         try {
             $input = $request->input();
-            $data = array(
-                'name' => $input['name'],
-                'form_id' => $input['form_id'],
-                'fields' => json_encode($input['fields']),
-                'status' => 'Draft',
-            );
-            Stream::create($data);
+            $streamObj = !empty($input['stream_id']) ? Stream::find($input['stream_id']) : new Stream();
+            $streamObj->name = $input['name'];
+            $streamObj->form_id = $input['form_id'];
+            $streamObj->fields = json_encode($input['fields']);
+            $streamObj->status = 'Draft';
+            $streamObj->save();
 
         } catch (\Exception $e) {
 
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             return back()->with('error', $e->getMessage());
         }
-        return redirect()->route('dashboard.streams', [$request->form_id])->with('success', 'Stream created successfully!');
+        return redirect()->route('dashboard.streams', [$request->form_id])->with('success', 'Stream saved successfully!');
     }
 
     /**
@@ -125,9 +127,17 @@ class StreamController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function destroy(Stream $stream)
+    public function destroy(Request $request)
     {
         //
+        $id = $request->id;
+        try {
+            Stream::find($id)->delete();
+            return back()->with('success', "Stream has been successfully deleted");
+        }catch (\Exception $exception){
+            //dd($exception);
+            return back()->with('error', "Something went wrong");
+        }
     }
 
     public function addUpdateStreamSummary(Request $request){
@@ -153,5 +163,46 @@ class StreamController extends Controller
             return back()->with('error', $e->getMessage());
         }
         return back()->with('success', 'Summary saved successfully!');
+    }
+
+    public function render($id)
+    {
+        $stream = Stream::where('id', $id)->first();
+        $stream_answer = StreamAnswer::where('stream_id', $id)->first();
+        if ($stream_answer){
+            $stream_answer_id = $stream_answer->id;
+            $answer_array = (array)json_decode($stream_answer->answers);
+        }else{
+            $stream_answer_id = null;
+            $answer_array = array();
+        }
+
+        return view('streams.render')->with(compact('stream', 'answer_array', 'stream_answer_id'));
+    }
+
+    public function streamPost(Request $request)
+    {
+        $stream_id = $request->stream_id;
+        $stream_answer_id = $request->stream_answer_id;
+
+        $inputs = $request->except('_token', 'stream_id', 'stream_answer_id');
+        if ($request->image){
+            $imageName = time().'.'.$request->image->extension();
+            $request->image->move(public_path('stream_answer_image'), $imageName);
+            $inputs['image'] = $imageName;
+        }
+
+        $data_array = array(
+            'stream_id' => $stream_id,
+            'answers' => json_encode($inputs),
+            'created_by' => auth()->user()->id,
+        );
+
+        if (empty($stream_answer_id)){
+            StreamAnswer::create($data_array);
+        }else{
+            StreamAnswer::where('id', $stream_answer_id)->update($data_array);
+        }
+        return redirect()->route('dashboard')->with('success', 'Data saved successfully!');
     }
 }

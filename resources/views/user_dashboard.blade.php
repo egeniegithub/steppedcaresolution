@@ -6,6 +6,7 @@
     <div class="pcoded-wrapper">
         <div class="pcoded-content">
             <div class="container">
+                @include('layouts.flash-message')
                 <div class="row blue-border-bottom">
                     <div class="col-sm-6 col-md-9 col-lg-10 px-0">
                         <div class="top-header pt-2">
@@ -21,7 +22,7 @@
                                 <select class="form-control form-select white_input" name="period_id" aria-label="Default select example">
                                     <option value="" selected>All</option>
                                     @foreach($periods as $period)
-                                        <option value="{{$period->id}}" {{request()->get('period_id') == $period->id?"selected":""}}>{{$period->name}}</option>
+                                        <option value="{{$period->id}}" {{($current_period_id ? $current_period_id : request()->get('period_id')) == $period->id?"selected":""}}>{{$period->name}}</option>
                                     @endforeach
                                 </select>
                                 <button class="span_search span_mid"><i class="fas fa-search search_icon"></i></button>
@@ -59,7 +60,8 @@
                                                 <td>{{$stream->stream_status}}</td>
                                                 <td>
                                                     <div class="btn-group" role="group" aria-label="Basic example">
-                                                        <a type="button" class="btn table_btn update_btn text-white" href="{{route('dashboard.stream.stream_update')}}">Update</a>
+                                                        {{--<a type="button" class="btn table_btn update_btn text-white" href="{{route('dashboard.stream.stream_update')}}">Update</a>--}}
+                                                        <a href="{{route('dashboard.stream.render', [$stream->stream_id])}}" type="button" class="btn table_btn update_btn text-white">Update</a>
                                                     </div>
                                                 </td>
                                             </tr>

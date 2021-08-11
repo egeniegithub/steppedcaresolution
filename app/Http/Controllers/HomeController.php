@@ -6,6 +6,7 @@ use App\Models\Period;
 use App\Models\Permission;
 use App\Models\Stream;
 use App\Models\StreamAccess;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Auth;
 use App\Models\Form;
@@ -36,9 +37,21 @@ class HomeController extends Controller
             $perPage = $request->show_rows ?? 10;
             $period_id = $request->period_id ?? '';
 
+            if (!$period_id){
+                $current_period_id = Period::all()->filter(function($item) {
+                    if (Carbon::now()->between($item->start_date, $item->to)) {
+                        return $item;
+                    }
+                })->first()->value('id');
+            }else{
+                $current_period_id = null;
+            }
+
             $permission_ids = StreamAccess::where('assigned_user_id', $active_user->id)->pluck('permission_id')->toArray();
 
             $stream_ids = Permission::when($period_id, function ($query, $value) {
+                $query->where('period_id', $value);
+            })->when($current_period_id, function ($query, $value) {
                 $query->where('period_id', $value);
             })->whereIn('id', $permission_ids)->pluck('stream_id')->toArray();
 
@@ -53,13 +66,9 @@ class HomeController extends Controller
             $row_show = $perPage;
             $periods = Period::all();
 
-            return view('dashboard')->with(compact('active_user', 'row_show', 'streams', 'periods'));
+            return view('dashboard')->with(compact('active_user', 'row_show', 'streams', 'periods', 'current_period_id'));
         }else{
             return view('dashboard');
         }
-
-
-
-
     }
 }
