@@ -57,12 +57,21 @@
                                     <div class="container">
                                         <div class="row report_row_top ">
                                             <div class="col-xl-5 col-lg-5 col-md-6 col-12">
-                                                <div >
+                                                <div>
                                                     <label for="Project" class="form-label">Search</label>
                                                     <input type="text" class="form-control" id="keyword" name="keyword" placeholder="Search Here" value="{{request()->get('keyword')}}">
                                                 </div>
                                             </div>
-                                            <div class="col-xl-5 col-lg-5 col-md-6 col-12 pl-0 report_flex_row">
+                                            <div class="col-xl-5 col-lg-5 col-md-6 col-12">
+                                                <label for="FormGroup" class="form-label">Select Period</label>
+                                                <select class="form-control form-select" name="period_id" id="period_id" aria-label="Default select example" >
+                                                    <option value="">Select Period</option>
+                                                    @foreach($periods as $period)
+                                                        <option value="{{$period->id}}" {{request()->get('period_id') == $period->id ? "selected" : ""}}>{{$period->name}} ({{$period->start_date}} - {{$period->end_date}})</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-12 pl-0 report_flex_row">
                                                 <div class="span_search_div">
                                                     <button class="report_search_icon span_mid"><i class="fas fa-search "></i></button>
                                                 </div>

@@ -205,4 +205,29 @@ class StreamController extends Controller
         }
         return redirect()->route('dashboard')->with('success', 'Data saved successfully!');
     }
+
+    public function UpdateStatus(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'status' => ['required'],
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        try {
+            $input = $request->only('status');
+            $input['updated_by'] = auth()->user()->id;
+
+            $stream = Stream::find($request->id);
+            $stream->update($input);
+
+        } catch (\Exception $e) {
+
+            \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
+            return back()->with('error', $e->getMessage());
+        }
+        return back()->with('success', 'Status updated successfully!');
+    }
 }

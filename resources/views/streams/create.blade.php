@@ -78,17 +78,17 @@
                                                         class="light_grey_text"> Image</span></button>
                                                 <button type="button" class="tablinks li_light_border"
                                                         onclick="openCity(event, 'dropdown')" id="defaultOpen"><img
-                                                        class="image_black"
-                                                        src="{{url('/assets/images/table_black.png')}}"/> <img
-                                                        class="image_white"
-                                                        src="{{url('/assets/images/image_white.png')}}"/> <span
+                                                        class="image_black dropdownfiield_icon"
+                                                        src="{{url('/assets/images/dropdown-black.png')}}"/> <img
+                                                        class="image_white dropdownfiield_icon"
+                                                        src="{{url('/assets/images/dropdown-white.png')}}"/> <span
                                                         class="light_grey_text">Drop Down</span></button>
                                                 <button type="button" class="tablinks li_light_border"
                                                         onclick="openCity(event, 'table')" id="defaultOpen"><img
                                                         class="image_black"
                                                         src="{{url('/assets/images/table_black.png')}}"/> <img
                                                         class="image_white"
-                                                        src="{{url('/assets/images/image_white.png')}}"/> <span
+                                                        src="{{url('/assets/images/icon-table-white.png')}}"/> <span
                                                         class="light_grey_text">Data Table</span></button>
                                             </div>
                                         </div>
