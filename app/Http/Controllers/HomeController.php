@@ -72,11 +72,17 @@ class HomeController extends Controller
             if (!empty($request->period_id)){
                 $period_id = $request->period_id;
             }else{
-                $period_id = Period::all()->filter(function($item) {
-                    if (Carbon::now()->between($item->start_date, $item->to)) {
-                        return $item;
-                    }
-                })->first()->value('id');
+                $is_period_exist = Period::all();
+                if ($is_period_exist){
+                    $period_id = Period::all()->filter(function($item) {
+                        if (Carbon::now()->between($item->start_date, $item->to)) {
+                            return $item;
+                        }
+                    })->first()->value('id');
+                }else{
+                    $period_id = null;
+                }
+
             }
 
             $forms = Form::where('period_id', $period_id)->orderBy('id', 'DESC')->paginate(5);
