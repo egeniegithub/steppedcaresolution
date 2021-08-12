@@ -73,7 +73,7 @@ class HomeController extends Controller
                 $period_id = $request->period_id;
             }else{
                 $is_period_exist = Period::all();
-                if ($is_period_exist){
+                if ($is_period_exist->count() > 0){
                     $period_id = Period::all()->filter(function($item) {
                         if (Carbon::now()->between($item->start_date, $item->to)) {
                             return $item;
