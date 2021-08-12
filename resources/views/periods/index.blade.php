@@ -69,8 +69,8 @@
                                 </div>
                             </div>
 
-                            {{--Delete Form Modal--}}
-                            @include('Periods.partials.delete_modal')
+                            {{-- Delete Form Modal--}}
+                            @include('periods.partials.delete_modal')
 
                             <div class=" flex-columns flex-setting mob_margin_pagination">
                                 <form>
@@ -90,5 +90,6 @@
             </div>
         </div>
     </div>
+
     @include('layouts.pagination')
 @endsection

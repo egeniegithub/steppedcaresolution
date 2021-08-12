@@ -21,24 +21,27 @@
                         </div>
                     </div>
                 </div>
+                <form method="get" action="">
                 <div class="row report_row_top blue-border-bottom">
                     <div class="col-xl-5 col-lg-5 col-md-6 col-12">
                         <div class="select_project_width">
-                            <label for="Project" class="form-label">Select Period</label>
-                            <select class="form-control form-select white_input" aria-label="Default select example">
-                                <option selected> Month 1</option>
-                                <option value="1">Active</option>
-                                <option value="2">Disable</option>
+                            <label for="FormGroup" class="form-label">Select Period</label>
+                            <select class="form-control form-select" name="period_id" id="period_id" aria-label="Default select example" >
+                                <option value="">Select Period</option>
+                                @foreach($periods as $period)
+                                    <option value="{{$period->id}}" {{request()->get('period_id') == $period->id ? "selected" : ""}}>{{$period->name}} ({{$period->start_date}} - {{$period->end_date}})</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
                     <div class="col-xl-5 col-lg-5 col-md-6 col-12 report_flex_row">
                         <div class=" select_project_width">
                             <label for="FormGroup" class="form-label">Select Project</label>
-                            <select class="form-control form-select white_input" aria-label="Default select example">
-                                <option selected>Child Health Care</option>
-                                <option value="1">Active</option>
-                                <option value="2">Disable</option>
+                            <select class="form-control form-select" id="project_id" name="project_id" aria-label="Default select example">
+                                <option value="all" selected>All</option>
+                                @foreach($projects as $project)
+                                    <option value="{{$project->id}}" {{request()->get('project_id') == $project->id ? "selected" : ""}}>{{$project->name}}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="span_search_div">
@@ -46,6 +49,7 @@
                         </div>
                     </div>
                 </div>
+                </form>
 
                 <div class="row">
                     <div class="col-sm-12">
@@ -64,13 +68,13 @@
                                         </thead>
                                         <tbody>
                                         @forelse($form_streams as $form)
-                                            <tr data-toggle="collapse" data-target="#accordion_{{$loop->iteration}}" class="clickable collapsed">
-                                                <td><img class="forward_icon" src="{{asset('assets/images/forward_icon.PNG')}}"/></td>
-                                                <td><a href="#" class="form_anchor_text">{{$form->name}}</a></td>
-                                                <td>Completed</td>
+                                            <tr class="clickable collapsed">
+                                                <td data-toggle="collapse" data-target="#accordion_{{$loop->iteration}}"><img class="forward_icon" src="{{asset('assets/images/forward_icon.PNG')}}"/></td>
+                                                <td data-toggle="collapse" data-target="#accordion_{{$loop->iteration}}"><a href="#" class="form_anchor_text">{{$form->name}}</a></td>
+                                                <td data-toggle="collapse" data-target="#accordion_{{$loop->iteration}}">{{formStatus($form->id)}}</td>
                                                 <td class="no-open">
                                                     <div class="btn-group" role="group" aria-label="Basic example">
-                                                        <button type="button" class="btn update_status_btn table_btn text-white">Update Status</button>
+                                                        {{--<button type="button" class="btn update_status_btn table_btn text-white">Update Status</button>--}}
                                                         <button type="button" data-toggle="modal" data-target="#addFormSummary{{$form->id}}" class="btn table_btn update_btn text-white">Add Summary</button>
                                                         @include('Reports.partials.add_form_summary')
                                                         <button type="button" class="btn  table_btn view_report_btn text-white" data-toggle="modal" data-target="#exampleModal">View Report</button>
@@ -96,9 +100,10 @@
                                                                     <td>{{$stream->status}}</td>
                                                                     <td>
                                                                         <div class="btn-group" role="group" aria-label="Basic example">
-                                                                            <button type="button" class="btn update_status_btn table_btn text-white">Update Status</button>
+                                                                            <button type="button" data-toggle="modal" data-target="#changeStatus{{$stream->id}}" class="btn update_status_btn table_btn text-white">Update Status</button>
                                                                             <button type="button" data-toggle="modal" data-target="#addStreamSummary{{$stream->id}}" class="btn table_btn update_btn text-white">Add Summary</button>
                                                                             @include('Reports.partials.add_stream_summary')
+                                                                            @include('Reports.partials.change_status')
                                                                         </div>
                                                                     </td>
                                                                 </tr>
@@ -243,7 +248,7 @@
 
     @include('layouts.pagination')
 
-    <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+    {{--<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>--}}
     <script>
         var table = $('.report_table');
         $(".clickable").click(function () {
@@ -262,9 +267,5 @@
             }
         });
 
-        /*table.find(".no-open").click(function(e) {
-            e.stopPropagation();
-            return false;
-        })*/
     </script>
 @endsection

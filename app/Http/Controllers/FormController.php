@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Form;
+use App\Models\Period;
 use App\Models\project;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,6 +17,16 @@ class FormController extends Controller
         $search_keyword = $request->input('keyword') ?? null;
         $active_user = User::where('id', auth()->user()->id)->first();
         $perPage = $request->show_rows ?? 10;
+
+        if (!empty($request->period_id)){
+            $period_id = $request->period_id;
+        }else{
+            $period_id = Period::all()->filter(function($item) {
+                if (Carbon::now()->between($item->start_date, $item->to)) {
+                    return $item;
+                }
+            })->first()->value('id');
+        }
 
         $forms = Form::when($search_keyword, function ($query, $value) {
             $query->where('forms.name', 'like', '%' . $value . '%')
@@ -28,13 +40,15 @@ class FormController extends Controller
                     $q->where('forms.created_by', $active_user->id);
                 }
             })
+            ->where('period_id', $period_id)
             ->select('forms.id AS form_id', 'forms.name as form_name', 'p.name as project_name', 'p.id as project_id')
             ->orderBy('form_id', 'DESC')
             ->paginate($perPage);
 
         $projects = project::all();
         $row_show = $perPage;
-        return view('forms.index')->with(compact('projects', 'forms', 'active_user', 'row_show'));
+        $periods = Period::all();
+        return view('forms.index')->with(compact('projects', 'forms', 'active_user', 'row_show', 'periods'));
     }
 
 
@@ -49,7 +63,15 @@ class FormController extends Controller
         }
 
         try {
+            $current_period_id = Period::all()->filter(function($item) {
+                if (Carbon::now()->between($item->start_date, $item->to)) {
+                    return $item;
+                }
+            })->first()->value('id');
+
+
             $input = $request->except('_token');
+            $input['period_id'] = $current_period_id;
             $input['created_by'] = auth()->user()->id;
 
             Form::create($input);

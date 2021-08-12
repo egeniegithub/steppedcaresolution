@@ -10152,12 +10152,19 @@ table.table_margin_adj thead tr td:last-child{
 .auth_name_span{
     margin-right: 10px;
 }
+.m-header .mobile-menu{
+    background-color:  #4a90cb;
+}
 .new-pcoded-header {
     width: calc(100%) !important;
     margin-left: 0px !important;
 }
 .user_table thead tr td:nth-child(2){
     width:22%;
+}
+
+.dropdownfiield_icon{
+    width:24px
 }
 .navbar-collapsed .b-brand{
     width:20px;
