@@ -84,6 +84,7 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
         Route::get('/edit/{id}', [App\Http\Controllers\PeriodController::class,'edit'])->name('dashboard.period.edit');
         Route::post('/update{id}', [App\Http\Controllers\PeriodController::class,'update'])->name('dashboard.period.update');
         Route::get('/period/{id?}', [App\Http\Controllers\PeriodController::class,'delete'])->name('dashboard.period.delete');
+        Route::post('/sync', [App\Http\Controllers\PeriodController::class,'syncData'])->name('dashboard.period.sync_data');
     });
 
     Route::group(['prefix' => 'reports',  'middleware' => 'auth'], function(){
