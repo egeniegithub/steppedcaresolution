@@ -28,11 +28,16 @@ class ReportController extends Controller
         if (!empty($request->period_id)){
             $period_id = $request->period_id;
         }else{
-            $period_id = Period::all()->filter(function($item) {
-                if (Carbon::now()->between($item->start_date, $item->to)) {
-                    return $item;
-                }
-            })->first()->value('id');
+            $is_period_exist = Period::all();
+            if ($is_period_exist->count() > 0){
+                $period_id = Period::all()->filter(function($item) {
+                    if (Carbon::now()->between($item->start_date, $item->to)) {
+                        return $item;
+                    }
+                })->first()->value('id');
+            }else{
+                $period_id = null;
+            }
         }
 
         $form_streams = Form::when($projects, function ($query, $index) {
