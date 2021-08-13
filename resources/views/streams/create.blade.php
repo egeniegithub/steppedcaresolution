@@ -46,44 +46,44 @@
                                                 </li>
                                             </ul>
                                             <div class="tab">
-                                                <button type="button" class="tablinks li_light_border"
+                                                <button type="button" class="tablinks li_light_border tab-text"
                                                         onclick="openCity(event, 'text')"><img class="image_black "
                                                                                                src="{{url('/assets/images/text_black.png')}}"/>
                                                     <img class="image_white "
                                                          src="{{url('/assets/images/text_white.png')}}"/> <span
                                                         class="light_grey_text">Text</span></button>
-                                                <button type="button" class="tablinks li_light_border"
-                                                        onclick="openCity(event, 'long_text')"><img class="image_black"
+                                                <button type="button" class="tablinks li_light_border tab-textarea"
+                                                        onclick="openCity(event, 'textarea')"><img class="image_black"
                                                                                                     src="{{url('/assets/images/long_text_black.png')}}"/>
                                                     <img class="image_white"
                                                          src="{{url('/assets/images/long_text_white.png')}}"/> <span
                                                         class="light_grey_text">Long Text</span></button>
-                                                <button type="button" class="tablinks li_light_border numeric_white"
-                                                        onclick="openCity(event, 'numeric')"><img class="image_black"
+                                                <button type="button" class="tablinks li_light_border numeric_white tab-numeric"
+                                                        onclick="openCity(event, 'number')"><img class="image_black"
                                                                                                   src="{{url('/assets/images/numeric_black.png')}}"/>
                                                     <img class="image_white"
                                                          src="{{url('/assets/images/numeric_white.png')}}"/> <span
                                                         class="light_grey_text">Numeric</span></button>
-                                                <button type="button" class="tablinks li_light_border"
+                                                <button type="button" class="tablinks li_light_border tab-date"
                                                         onclick="openCity(event, 'date')"><img class="image_black"
                                                                                                src="{{url('/assets/images/date_black.png')}}"/>
                                                     <img class="image_white"
                                                          src="{{url('/assets/images/date_white.png')}}"/> <span
                                                         class="light_grey_text">Date</span></button>
-                                                <button type="button" class="tablinks li_light_border"
-                                                        onclick="openCity(event, 'image')"><img class="image_black"
+                                                <button type="button" class="tablinks li_light_border tab-img"
+                                                        onclick="openCity(event, 'file')"><img class="image_black"
                                                                                                 src="{{url('/assets/images/image_black.png')}}"/>
                                                     <img class="image_white"
                                                          src="{{url('/assets/images/image_white.png')}}"/> <span
                                                         class="light_grey_text"> Image</span></button>
-                                                <button type="button" class="tablinks li_light_border"
-                                                        onclick="openCity(event, 'dropdown')" id="defaultOpen"><img
+                                                <button type="button" class="tablinks li_light_border tab-dropdown"
+                                                        onclick="openCity(event, 'dropdown')" ><img
                                                         class="image_black"
                                                         src="{{url('/assets/images/table_black.png')}}"/> <img
                                                         class="image_white"
                                                         src="{{url('/assets/images/image_white.png')}}"/> <span
                                                         class="light_grey_text">Drop Down</span></button>
-                                                <button type="button" class="tablinks li_light_border"
+                                                <button type="button" class="tablinks li_light_border  tab-table"
                                                         onclick="openCity(event, 'table')" id="defaultOpen"><img
                                                         class="image_black"
                                                         src="{{url('/assets/images/table_black.png')}}"/> <img
@@ -93,7 +93,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-xl-8 col-lg-8 col-md-8 col-12 tabcontent " id="long_text">
+                                    <div class="col-xl-8 col-lg-8 col-md-8 col-12 tabcontent " id="textarea">
                                         <div class="card ">
                                             <ul class="vertical_nav">
                                                 <li class="first_vertical_nav font-weight-bold li_dark_border"
@@ -533,31 +533,32 @@
             <script type="text/javascript">
 
                 var tableData = []
+                var recordData = []
 
                 function openCity(evt, cityName) {
                     let headingText = '';
-                    let cardId = cityName === 'table' ? "table" : 'long_text';
+                    let cardId = cityName === 'table' ? "table" : 'textarea';
                     if (cityName === 'table') {
                         cardId = 'table'
                     } else if (cityName === 'dropdown') {
                         cardId = 'dropdown'
                     } else {
-                        cardId = 'long_text';
+                        cardId = 'textarea';
                     }
                     switch (cityName) {
                         case 'text':
                             headingText = "Text Field";
                             break;
-                        case 'long_text':
+                        case 'textarea':
                             headingText = "Long Text Field";
                             break;
                         case 'date':
                             headingText = "Date Field";
                             break;
-                        case 'image':
+                        case 'file':
                             headingText = "Image Field";
                             break;
-                        case 'numeric':
+                        case 'number':
                             headingText = "Numeric Field";
                             break;
                     }
@@ -574,7 +575,11 @@
                         tablinks[i].className = tablinks[i].className.replace(" active", "");
                     }
                     document.getElementById(cardId).style.display = "block";
-                    evt.currentTarget.className += " active";
+                    if (evt) {
+                        evt.currentTarget.className += " active";
+                    }else{
+                        $('.tab-'+cityName).addClass('active')
+                    }
                 }
 
                 // Get the element with id="defaultOpen" and click on it
@@ -629,9 +634,7 @@
 
                 const addField = () => {
                     let fieldType = $("#field_type").val();
-
                     let selector = (fieldType == 'dropdown') ? '#drop_field_name' : (fieldType == 'table') ? '#table_name' : '#field_name'
-
                     let fieldName = $(selector).val();
                     let fieldOptions = $("#field_options").val()
                     let isRequired = $('input[name=field_required]:checked').val()
@@ -641,16 +644,25 @@
                     isCumulative = fieldType == 'table' ? isTableCumulative : isCumulative
                     let orderCount = $(".fields_table")
                     orderCount = orderCount.length + 1
+                    let tableFieldData = ''
 
                     if (!fieldName) {
                         toastr.error('Field name is required')
                         return false
                     }
 
+
                     if (fieldType == 'dropdown') {
                         if (!fieldOptions) {
                             toastr.error("Select options are required.")
                             return false
+                        }
+                    }
+
+                    for (let i = 0; i < recordData.length; i++) {
+                        if (recordData[i].fieldName == fieldName){
+                            toastr.error("This field is already exist!")
+                            return false;
                         }
                     }
 
@@ -679,11 +691,23 @@
                     }
 
                     if (fieldType == 'table') {
-                        let tableFieldData = JSON.stringify(tableData)
+                        tableFieldData = JSON.stringify(tableData)
                         tableFieldData = encodeURIComponent(tableFieldData)
                         newRow += '<input type="hidden" name="fields[' + orderCount + '][tableData]"  value="' + tableFieldData + '" >'
                     }
                     newRow += '</tr>'
+
+                    recordData.push({
+                        fieldType,
+                        fieldName,
+                        fieldOptions,
+                        isRequired,
+                        isDuplicate,
+                        isCumulative,
+                        orderCount,
+                        tableFieldData
+                    });
+
                     $("#fields_table").append(newRow)
                     $(selector).val('')
                     $("#field_options").val('')
@@ -705,6 +729,14 @@
                         toastr.error('Field name is required')
                         return false
                     }
+
+                    for (let i = 0; i < tableData.length; i++) {
+                        if (tableData[i]?.fieldName == fieldName){
+                            toastr.error('This field is already exist');
+                            return false
+                        }
+                    }
+
                     let orderCount = $(".table_rows_count")
                     orderCount = orderCount.length + 1
                     let rowId = 'table' + orderCount;
@@ -760,8 +792,10 @@
                     $('#table' + id).remove()
                 }
 
-                const updateFieldFromList = (orderCount) => {
-                    console.log('orderCount ', orderCount)
+                const updateFieldFromList = (record) => {
+                    let selected = recordData[record - 1]
+
+                    openCity(null,selected.fieldType)
                 }
 
                 const updateTableField = (orderCount) => {
@@ -775,7 +809,7 @@
                     if (data.tableDropdown == 'yes') {
                         $("input[name=tableDropdown][value='yes']").prop("checked", true);
                     } else {
-                        $("input[name=tableDropdown][value='yes']").prop("checked", true);
+                        $("input[name=tableDropdown][value='no']").prop("checked", true);
                     }
                     if (data.tableFieldType == 'row') {
                         $("input[name=tableFieldType][value='row']").prop("checked", true);
