@@ -21,13 +21,15 @@ class FormController extends Controller
         if (!empty($request->period_id)){
             $period_id = $request->period_id;
         }else{
-            $is_period_exist = Period::all();
-            if ($is_period_exist->count() > 0){
-                $period_id = Period::all()->filter(function($item) {
-                    if (Carbon::now()->between($item->start_date, $item->to)) {
-                        return $item;
-                    }
-                })->first()->value('id');
+
+            $current_period = Period::all()->filter(function($item) {
+                if (Carbon::now()->between($item->start_date, $item->end_date)) {
+                    return $item;
+                }
+            })->first();
+
+            if (!empty($current_period)){
+                $period_id = $current_period->id;
             }else{
                 $period_id = null;
             }
@@ -68,19 +70,21 @@ class FormController extends Controller
         }
 
         try {
-            $is_period_exist = Period::all();
-            if ($is_period_exist->count() > 0){
-                $current_period_id = Period::all()->filter(function($item) {
-                    if (Carbon::now()->between($item->start_date, $item->to)) {
-                        return $item;
-                    }
-                })->first()->value('id');
+
+            $current_period = Period::all()->filter(function($item) {
+                if (Carbon::now()->between($item->start_date, $item->end_date)) {
+                    return $item;
+                }
+            })->first();
+
+            if (!empty($current_period)){
+                $period_id = $current_period->id;
             }else{
-                return back()->with('error', 'Add period before adding form!');
+                return back()->with('error', 'Add period which contains current date before adding form!');
             }
 
             $input = $request->except('_token');
-            $input['period_id'] = $current_period_id;
+            $input['period_id'] = $period_id;
             $input['created_by'] = auth()->user()->id;
 
             Form::create($input);
