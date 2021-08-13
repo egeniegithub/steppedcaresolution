@@ -41,7 +41,7 @@ if (!function_exists('created_BY')) {
     {
         //
         $user = \DB::table("users")->select(DB::raw("CONCAT(firstname,lastname) as username"))->where("id", $id)->get()->first();
-       
+
         if (!empty($user)) {
             return $user->username;
         } else {
@@ -67,3 +67,21 @@ if (!function_exists('updated_BY')) {
     }
 }
 //
+
+// check status if form is completed
+if (!function_exists('formStatus')) {
+    function formStatus($form_id)
+    {
+        $streams = \App\Models\Stream::where('form_id', $form_id)->groupBy('status')->get();
+
+        if ($streams->count() == 1){
+            if ($streams[0]->status == 'Published'){
+                return 'Completed';
+            }else{
+                return 'In-progress';
+            }
+        }else{
+            return 'In-progress';
+        }
+    }
+}

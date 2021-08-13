@@ -33,15 +33,20 @@
                                         <img class="cross_imgae_width" src="../assets/images/cross_new.png" />
                                     </div>
                                 </div>
-                                <div class="row new_row_adjusted li_dark_border">
-                                    <div class="col-sm-12 sumary_select_list ">
-                                        <select class="form-control form-select white_input" aria-label="Default select example">
-                                            <option selected=""> Month 13 (Period Apr 15 - May 14,2021)</option>
-                                            <option value="1">Month 12 (Period Apr 15 - May 14,2021)</option>
-                                            <option value="2">Month 11 (Period Apr 15 - May 14,2021)</option>
-                                        </select>
+                                <form method="get" action="">
+                                    <div class="row new_row_adjusted li_dark_border">
+                                        <div class="col-sm-10 sumary_select_list ">
+                                            <select class="form-control form-select white_input" name="period_id" aria-label="Default select example">
+                                                @foreach($periods as $period)
+                                                    <option value="{{$period->id}}" {{request()->get('period_id') == $period->id ? "selected" : ""}}>{{$period->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-2 sumary_select_list ">
+                                            <button class="span_search span_mid"><i class="fas fa-search search_icon"></i></button>
+                                        </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                             <div class="table-responsive">
                                 <table class="table  period_summary_table  table_margin_adj">
@@ -52,36 +57,18 @@
                                         </tr>
                                     </thead>
                                     <tbody class="summary_period_body">
+                                    @forelse($forms as $form)
                                         <tr>
-                                            <td><a class="form_anchor_text">eMH Vendors - Health Canada Monthly
-                                                </a></td>
-                                            <td> Completed </td>
+                                            <td><a class="form_anchor_text">{{$form->name}}</a></td>
+                                            <td>
+                                                {{formStatus($form->id)}}
+                                            </td>
                                         </tr>
-                                        <tr>
-                                            <td><a class="form_anchor_text">eMH Vendors - Health Canada Monthly
-                                                </a></td>
-                                            <td> Completed </td>
+                                    @empty
+                                        <tr class="text-center">
+                                            <td colspan="2">No Data exist</td>
                                         </tr>
-                                        <tr>
-                                            <td><a class="form_anchor_text">eMH Vendors - Health Canada Monthly
-                                                </a></td>
-                                            <td> Completed </td>
-                                        </tr>
-                                        <tr>
-                                            <td><a class="form_anchor_text">eMH Vendors - Health Canada Monthly
-                                                </a></td>
-                                            <td> Completed </td>
-                                        </tr>
-                                        <tr>
-                                            <td><a class="form_anchor_text">eMH Vendors - Health Canada Monthly
-                                                </a></td>
-                                            <td> Completed </td>
-                                        </tr>
-                                        <tr>
-                                            <td><a class="form_anchor_text">eMH Vendors - Health Canada Monthly
-                                                </a></td>
-                                            <td> Completed </td>
-                                        </tr>
+                                    @endforelse
                                     </tbody>
                                 </table>
                             </div>
@@ -312,9 +299,9 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-   
+
     <script>
-        
+
         Highcharts.chart('container', {
             chart: {
                 type: 'column'

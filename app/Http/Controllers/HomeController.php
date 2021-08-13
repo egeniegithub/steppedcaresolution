@@ -39,7 +39,7 @@ class HomeController extends Controller
 
             if (!$period_id){
                 $current_period_id = Period::all()->filter(function($item) {
-                    if (Carbon::now()->between($item->start_date, $item->to)) {
+                    if (Carbon::now()->between($item->start_date, $item->end_date)) {
                         return $item;
                     }
                 })->first()->value('id');
@@ -68,7 +68,28 @@ class HomeController extends Controller
 
             return view('dashboard')->with(compact('active_user', 'row_show', 'streams', 'periods', 'current_period_id'));
         }else{
-            return view('dashboard');
+
+            if (!empty($request->period_id)){
+                $period_id = $request->period_id;
+            }else{
+
+                $current_period = Period::all()->filter(function($item) {
+                    if (Carbon::now()->between($item->start_date, $item->end_date)) {
+                        return $item;
+                    }
+                })->first();
+
+                if (!empty($current_period)){
+                    $period_id = $current_period->id;
+                }else{
+                    $period_id = null;
+                }
+            }
+
+            $forms = Form::where('period_id', $period_id)->orderBy('id', 'DESC')->paginate(5);
+            $periods = Period::all();
+
+            return view('dashboard')->with(compact('forms', 'periods'));
         }
     }
 }

@@ -32,9 +32,9 @@ $(document).ready(function(){
     })
 
 
-    // $(".del_modal_btn").click(function(){
-    //     window.location.href=$("#target_row").val();
-    // })
+    $(".del_modal_btn").click(function(){
+        window.location.href=$("#target_row").val();
+    })
 
     //
     $("#js_add_project_btn").click(function(){
