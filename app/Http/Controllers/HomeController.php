@@ -82,7 +82,6 @@ class HomeController extends Controller
                 }else{
                     $period_id = null;
                 }
-
             }
 
             $forms = Form::where('period_id', $period_id)->orderBy('id', 'DESC')->paginate(5);
