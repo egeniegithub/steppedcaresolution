@@ -146,4 +146,29 @@ class PermissionsController extends Controller
         $streams = Stream::where('form_id', $form_id)->pluck("name","id");
         return response()->json($streams);
     }
+
+    public function getPermissionedUsers($project_id, $form_id, $stream_id)
+    {
+        $permissioned_users = StreamAccess::leftjoin('permissions as p', 'p.id', '=', 'stream_accesses.permission_id')
+            ->where('p.project_id', $project_id)
+            ->where('p.form_id', $form_id)
+            ->where('p.stream_id', $stream_id)
+            ->select(
+                DB::raw('GROUP_CONCAT(assigned_user_id) as assigned_users'),
+                DB::raw('GROUP_CONCAT(unassigned_user_id) as unassigned_users')
+            )
+            ->first();
+
+        $assigned = User::where('project_id', 1)
+            ->whereNotIn('id', explode(',', $permissioned_users->unassigned_users))
+            ->whereNotIn('role', ['Admin'])
+            ->pluck("name","id");
+        $unassigned = User::whereIn('id', explode(',', $permissioned_users->unassigned_users))->pluck("name","id");
+
+        $users = array(
+            'assigned_users' => ($assigned->count() > 0) ? $assigned : null,
+            'unassigned_users' => ($unassigned->count() > 0) ? $unassigned : null
+        );
+        return response()->json($users);
+    }
 }

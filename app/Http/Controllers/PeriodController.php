@@ -131,12 +131,8 @@ class PeriodController extends Controller
             $current_period_id = $request->input('period_id');
             $current_period_start_date = Period::where('id', $current_period_id)->value('start_date');
             $currentDateTime = Carbon::createFromDate($current_period_start_date)->subDay(30);
-
-            $previous_period_id = Period:: whereMonth('end_date', $currentDateTime->month)
-                ->whereYear('end_date', $currentDateTime->year)
-                ->value('id');
-
-            $previous_period_forms = Form::with(['streams'])->where('period_id', $previous_period_id)->get();
+            $previous_period_id = Period:: whereMonth('end_date', $currentDateTime->month)->whereYear('end_date', $currentDateTime->year)->value('id');
+            $previous_period_forms = Form::with(['streams'])->where('period_id', $previous_period_id)->orderBy('id', 'ASC')->get();
 
             $check_forms = Form::where('period_id', $current_period_id)->get();
             DB::beginTransaction();
@@ -144,27 +140,34 @@ class PeriodController extends Controller
 
             if ($check_forms->count() > 0){
 
-                Form::where('period_id', $current_period_id)->delete();
+                if (!empty($previous_period_id)){
+                    Form::where('period_id', $current_period_id)->delete();
 
-                foreach ($previous_period_forms as $form) {
-                    $form_data = array(
-                        'name' => $form->name,
-                        'project_id' => $form->project_id,
-                        'period_id' => $current_period_id,
-                    );
-                    $stored_form = Form::create($form_data);
-
-                    foreach ($form->streams as $stream) {
-
-                        $stream_data = array(
-                            'name' => $stream->name,
-                            'form_id' => $stored_form->id,
-                            'fields' => $stream->fields,
-                            'status' => 'Draft',
+                    foreach ($previous_period_forms as $form) {
+                        $form_data = array(
+                            'name' => $form->name,
+                            'project_id' => $form->project_id,
+                            'period_id' => $current_period_id,
+                            'created_by' => auth()->user()->id,
+                            'updated_by' => auth()->user()->id
                         );
-                        Stream::create($stream_data);
+                        $stored_form = Form::create($form_data);
+
+                        foreach ($form->streams as $stream) {
+
+                            $stream_data = array(
+                                'name' => $stream->name,
+                                'form_id' => $stored_form->id,
+                                'fields' => $stream->fields,
+                                'status' => 'Draft',
+                            );
+                            Stream::create($stream_data);
+                        }
                     }
+                }else{
+                    return redirect()->route('dashboard.periods')->with('warning', 'This is first Period it cannot be synced!');
                 }
+
             }else{
 
                 if ($previous_period_forms->count() == 0){
@@ -176,7 +179,7 @@ class PeriodController extends Controller
                             'name' => $form->name,
                             'project_id' => $form->project_id,
                             'period_id' => $current_period_id,
-                            'created_by' => auth()->user()->id,
+                            'created_by' => auth()->user()->id
                         );
                         $stored_form = Form::create($form_data);
 
@@ -185,7 +188,7 @@ class PeriodController extends Controller
                             $stream_data = array(
                                 'name' => $stream->name,
                                 'form_id' => $stored_form->id,
-                                'period_id' => $stream->fields,
+                                'fields' => $stream->fields,
                                 'status' => 'Draft',
                             );
                             Stream::create($stream_data);
@@ -195,13 +198,12 @@ class PeriodController extends Controller
             }
             DB::commit();
 
-
         } catch (\Exception $e) {
             DB::rollBack();
 
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             return back()->with('error', $e->getMessage());
         }
-        return redirect()->route('dashboard.periods', [$request->form_id])->with('success', 'Period Synced successfully!');
+        return redirect()->route('dashboard.periods')->with('success', 'Period data Synced successfully!');
     }
 }

@@ -89,7 +89,7 @@ class HomeController extends Controller
             $forms = Form::where('period_id', $period_id)->orderBy('id', 'DESC')->paginate(5);
             $periods = Period::all();
 
-            return view('dashboard')->with(compact('forms', 'periods'));
+            return view('dashboard')->with(compact('forms', 'periods', 'period_id'));
         }
     }
 }

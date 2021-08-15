@@ -38,7 +38,7 @@
                                         </div>
                                         <div class="col-lg-6 col-x-6 col-md-6 col-12">
                                             <div class="mb-4">
-                                                <label for="lastname" class="form-label">Last Name</label>
+                                                <label for="lastname" class="form-label">Last Name *</label>
                                                 <input type="text" class="form-control" name="lastname" id="lastname" placeholder="lastname" aria-describedby="lastname" value="{{ old('lastname') }}" required>
                                             </div>
                                         </div>
@@ -56,7 +56,7 @@
                                         </div>
                                         <div class="col-lg-6 col-x-6 col-md-6 col-12">
                                             <div class="mb-4">
-                                                <label for="phone" class="form-label">Phone</label>
+                                                <label for="phone" class="form-label">Phone *</label>
                                                 <input type="tel" class="form-control" name="phone" id="phone" placeholder="Phone" aria-describedby="phone" value="{{ old('phone') }}" required>
                                             </div>
                                         </div>
@@ -105,7 +105,7 @@
                                     <div class="row pt-4">
                                         <div class="col-lg-6 col-x-6 col-md-6 col-12">
                                             <div class="mb-4">
-                                                <label for="Type" class="form-label">Project</label>
+                                                <label for="Type" class="form-label">Project *</label>
                                                 <select class="form-control form-select" name="project_id" id="project_id" aria-label="Default select example">
                                                     <option selected disabled>Select Project</option>
                                                     @foreach($projects as $key=>$data)
@@ -121,7 +121,7 @@
                                         </div>
                                         <div class="col-lg-6 col-x-6 col-md-6 col-12">
                                             <div class="mb-4">
-                                                <label for="Type" class="form-label">Type</label>
+                                                <label for="Type" class="form-label">Type *</label>
                                                 <select class="form-control form-select" id="role" name="role" aria-label="Default select example" required>
                                                     <option selected disabled>Select Type</option>
                                                     @foreach(users_roles() as $data)
@@ -133,7 +133,7 @@
                                         </div>
                                         <div class="col-lg-6 col-x-6 col-md-6 col-12">
                                             <div class="mb-4">
-                                                <label for="Status" class="form-label">Status</label>
+                                                <label for="Status" class="form-label">Status *</label>
                                                 <select class="form-control form-select" name="status" id="status" aria-label="Default select example" required>
                                                     <option selected disabled>Select Status</option>
                                                     @foreach(user_status() as $data)
