@@ -51,11 +51,13 @@
                                                 <td>{{$period->name}}</td>
                                                 <td>{{date('d, M Y', strtotime($period->start_date))}}</td>
                                                 <td>{{date('d, M Y', strtotime($period->end_date))}}</td>
-                                                <td>{{$period->status == 1 ? 'Active' : 'Disabled'}}</td>
+                                                <td>{{$period->status == 1 ? 'Active' : 'In-active'}}</td>
                                                 <td>
                                                     <div class="btn-group" role="group" aria-label="Basic example">
                                                         <a href="{{route('dashboard.period.edit', [encrypt($period->id)])}}" type="button" class="btn table_btn update_btn text-white">Update</a>
                                                         <button type="button" class="btn table_btn delete_btn text-white delete_period_modal" data-toggle="modal" data-deleteForm="{{route('dashboard.period.delete')}}{{'?ref='.encrypt($period->id)}}">Delete</button>
+                                                        <button type="button" data-toggle="modal" data-target="#syncData{{$period->id}}" class="btn table_btn permission_btn text-white">Sync Data</button>
+                                                        @include('Periods.partials.sync_data')
                                                     </div>
                                                 </td>
                                             </tr>

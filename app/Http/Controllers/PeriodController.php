@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Form;
 use App\Models\Period;
+use App\Models\Stream;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class PeriodController extends Controller
@@ -113,5 +117,93 @@ class PeriodController extends Controller
         } catch (Exception $e) {
             return back()->with('error', $e->getMessage());
         }
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function syncData(Request $request)
+    {
+        try {
+            $current_period_id = $request->input('period_id');
+            $current_period_start_date = Period::where('id', $current_period_id)->value('start_date');
+            $currentDateTime = Carbon::createFromDate($current_period_start_date)->subDay(30);
+            $previous_period_id = Period:: whereMonth('end_date', $currentDateTime->month)->whereYear('end_date', $currentDateTime->year)->value('id');
+            $previous_period_forms = Form::with(['streams'])->where('period_id', $previous_period_id)->orderBy('id', 'ASC')->get();
+
+            $check_forms = Form::where('period_id', $current_period_id)->get();
+            DB::beginTransaction();
+
+
+            if ($check_forms->count() > 0){
+
+                if (!empty($previous_period_id)){
+                    Form::where('period_id', $current_period_id)->delete();
+
+                    foreach ($previous_period_forms as $form) {
+                        $form_data = array(
+                            'name' => $form->name,
+                            'project_id' => $form->project_id,
+                            'period_id' => $current_period_id,
+                            'created_by' => auth()->user()->id,
+                            'updated_by' => auth()->user()->id
+                        );
+                        $stored_form = Form::create($form_data);
+
+                        foreach ($form->streams as $stream) {
+
+                            $stream_data = array(
+                                'name' => $stream->name,
+                                'form_id' => $stored_form->id,
+                                'fields' => $stream->fields,
+                                'status' => 'Draft',
+                            );
+                            Stream::create($stream_data);
+                        }
+                    }
+                }else{
+                    return redirect()->route('dashboard.periods')->with('warning', 'This is first Period it cannot be synced!');
+                }
+
+            }else{
+
+                if ($previous_period_forms->count() == 0){
+                    return back()->with('error', 'No Forms added in Previous Period');
+                }else{
+
+                    foreach ($previous_period_forms as $form) {
+                        $form_data = array(
+                            'name' => $form->name,
+                            'project_id' => $form->project_id,
+                            'period_id' => $current_period_id,
+                            'created_by' => auth()->user()->id
+                        );
+                        $stored_form = Form::create($form_data);
+
+                        foreach ($form->streams as $stream) {
+
+                            $stream_data = array(
+                                'name' => $stream->name,
+                                'form_id' => $stored_form->id,
+                                'fields' => $stream->fields,
+                                'status' => 'Draft',
+                            );
+                            Stream::create($stream_data);
+                        }
+                    }
+                }
+            }
+            DB::commit();
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
+            return back()->with('error', $e->getMessage());
+        }
+        return redirect()->route('dashboard.periods')->with('success', 'Period data Synced successfully!');
     }
 }

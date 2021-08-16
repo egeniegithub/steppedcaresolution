@@ -1,4 +1,7 @@
 @extends('layouts.app')
+
+@section('title', 'Dashboard')
+
 @section('content')
 <div class="pcoded-wrapper">
     <div class="pcoded-content">
@@ -24,9 +27,10 @@
                                     <div class="summary_text_center">
                                         <h5>Summary of Period</h5>
                                         <div class="summary_view_more ml-2">
-                                            <button class="btn update_status_btn text-white">
-                                                View More
-                                            </button>
+                                            <form method="get" action="{{route('dashboard.forms')}}">
+                                                <input type="hidden" name="period_id" value="{{$period_id}}">
+                                                <button type="submit" class="btn update_status_btn text-white">View More</button>
+                                            </form>
                                         </div>
                                     </div>
                                     <div class="cross_image">
@@ -38,7 +42,7 @@
                                         <div class="col-sm-10 sumary_select_list ">
                                             <select class="form-control form-select white_input" name="period_id" aria-label="Default select example">
                                                 @foreach($periods as $period)
-                                                    <option value="{{$period->id}}" {{request()->get('period_id') == $period->id ? "selected" : ""}}>{{$period->name}}</option>
+                                                    <option value="{{$period->id}}" {{$period_id == $period->id ? "selected" : ""}}>{{$period->name}} ({{$period->start_date}} - {{$period->end_date}})</option>
                                                 @endforeach
                                             </select>
                                         </div>

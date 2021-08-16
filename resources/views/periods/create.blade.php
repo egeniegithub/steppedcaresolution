@@ -34,7 +34,7 @@
                                                     <select class="form-control form-select" aria-label="Default select example" name="status" required>
                                                         <option selected>Select Status</option>
                                                         <option value="1">Active</option>
-                                                        <option value="0">Disable</option>
+                                                        <option value="0">In-active</option>
                                                     </select>
                                                 </div>
                                             </div>

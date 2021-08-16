@@ -93,7 +93,7 @@
                                             <h3 class="text-center">Assigned User</h3>
                                             <div class="card mb-0">
                                                 <ul class="list-group" id="assign_user_section" data-draggable="target">
-
+                                                    <span id="assigned_users"></span>
                                                 </ul>
                                             </div>
                                         </div>

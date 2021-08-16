@@ -93,4 +93,61 @@
             }
         });
     }).change();
+
+    // on stream change get assigned and unassigned users
+    $('select#stream_id').change(function(){
+        $(this).find("option:selected").each(function(){
+            var select_stream = $(this).attr("value");
+            var pre_selected_stream = $("#pre_selected_stream").val();
+            var selected_form_id = $("#selected_form_id").val();
+            var selected_form_name = $("#selected_form_name").val();
+
+            // variables (project_id, form_id) values on stream change
+            var project_id = $("#project_id").val();
+            var form_id = $("#form_id").val();
+
+            if(select_stream){
+
+                $.ajax({
+                    type:"get",
+                    url:"{{url('/get-permissioned-users')}}/"+project_id+'/'+form_id+'/'+select_stream,
+                    success:function(response)
+                    {
+                        if(response)
+                        {
+                            console.log(response.assigned_users, 'haha');
+                            $('#all_users').html('');
+
+                            var html = '';
+                            var assigned_html = '';
+                            const assign_array = [];
+                            const unassign_array = [];
+
+                            $.each(response.assigned_users,function(key,value){
+                                assigned_html += '<li class="list-group-item" data-draggable="item" draggable="true">'+
+                                    '<input type="hidden" name="assigned_users[]" value="'+key+'"><span>'+value+'</span>'
+                                    +'</li>';
+
+                                assign_array.push(key);
+                            });
+
+                            $.each(response.unassigned_users,function(key,value){
+                                html += '<li class="list-group-item" data-draggable="item" draggable="true">'+
+                                    '<input type="hidden" name="all_users[]" value="'+key+'"><span>'+value+'</span>'
+                                    +'</li>';
+
+                                unassign_array.push(key);
+                            });
+
+                            console.log(unassign_array);
+                            $("#assigned_users").html(assigned_html)
+                            $("#all_users").html(html)
+                            $("#assign_user").val(assign_array)
+                            $("#unassign_user").val(unassign_array)
+                        }
+                    }
+                });
+            }
+        });
+    }).change();
 </script>
