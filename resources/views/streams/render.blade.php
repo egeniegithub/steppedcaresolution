@@ -38,7 +38,7 @@
                                     @csrf
 
                                     <input type="hidden" name="stream_id" value="{{$stream->id}}">
-                                    <input type="hidden" name="stream_answer_id" value="{{$stream_answer_id}}">
+                                    <input type="hidden" name="stream_answer_id" value="{{count($values)}}">
 
                                     @if($stream->getFields)
                                         @foreach($stream->getFields as $fieldKey => $field)
@@ -81,13 +81,12 @@
                                                                    alt=""
                                                                    name="image[{{$values[$fieldKey]->id ?? $field->id}}]" {{$required}}>
                                                             <br>
-                                                            @if (array_key_exists('image', $answer_array))
-                                                                <div class="text-center">
-                                                                    <img
-                                                                        src="{{asset('stream_answer_image')}}/{{$answer_array['image']}}"
-                                                                        height="300px" width="500px" alt="No Img">
-                                                                </div>
-                                                            @endif
+                                                            <div class="text-center">
+                                                                <img
+                                                                    src="{{asset('stream_answer_image')}}/{{$values[$fieldKey]->value}}"
+                                                                    height="300px" width="500px" alt="No Img">
+                                                            </div>
+
                                                             @break
 
                                                             @case('select')
