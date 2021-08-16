@@ -221,6 +221,10 @@ class StreamController extends Controller
             $inputs['image'] = $imageName;
         }
 
+        Stream::whereId($stream_id)->update([
+            'status' => $request->submit == 'Save Only' ? 'In-progress' : 'Published'
+        ]);
+
         if (empty($stream_answer_id)) {
             foreach ($request->field as $key => $field) {
                 $data_array[] = [
