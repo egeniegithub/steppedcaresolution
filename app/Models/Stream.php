@@ -16,4 +16,9 @@ class Stream extends Model
      */
     protected $guarded = ['id'];
 
+    public function getFields()
+    {
+        return $this->hasMany(StreamField::class, 'stream_id');
+    }
+
 }

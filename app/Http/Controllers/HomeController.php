@@ -42,7 +42,8 @@ class HomeController extends Controller
                     if (Carbon::now()->between($item->start_date, $item->end_date)) {
                         return $item;
                     }
-                })->first()->value('id');
+                })->first();
+                $current_period_id = $current_period_id ? $current_period_id->value('id') : null;
             }else{
                 $current_period_id = null;
             }

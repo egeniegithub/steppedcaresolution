@@ -33,7 +33,7 @@ $(document).ready(function(){
 
 
     $(".del_modal_btn").click(function(){
-        window.location.href=$("#target_row").val();
+        //window.location.href=$("#target_row").val();
     })
 
     //
