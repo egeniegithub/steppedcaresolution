@@ -12,57 +12,53 @@
 
             if(selected_option){
 
-                if (period_id){
-                    $.ajax({
-                        type:"get",
-                        url:"{{url('/get-forms')}}/"+selected_option+"/"+period_id,
-                        success:function(response)
+                $.ajax({
+                    type:"get",
+                    url:"{{url('/get-forms')}}/"+selected_option+"/"+period_id,
+                    success:function(response)
+                    {
+                        if(response)
                         {
-                            if(response)
-                            {
-                                if (pre_selected_stream){
-                                    $("#pre_selected_stream").val('');
-                                    $('#form_id').append('<option value="'+selected_form_id+'" selected>'+selected_form_name+'</option>');
-                                }else {
-                                    $('#form_id').empty();
-                                    $('#form_id').append('<option value="">Select Form</option>');
-                                    $.each(response,function(key,value){
-                                        $('#form_id').append('<option value="'+key+'">'+value+'</option>');
-                                    });
-                                }
-                            }
-                        }
-                    });
-
-                    $.ajax({
-                        type:"get",
-                        url:"{{url('/get-users')}}/"+selected_option,
-                        success:function(response)
-                        {
-                            if(response)
-                            {
-                                $('#all_users').html('');
-
-                                var html = '';
-                                const unassign_array = [];
-
+                            if (pre_selected_stream){
+                                $("#pre_selected_stream").val('');
+                                $('#form_id').append('<option value="'+selected_form_id+'" selected>'+selected_form_name+'</option>');
+                            }else {
+                                $('#form_id').empty();
+                                $('#form_id').append('<option value="">Select Form</option>');
                                 $.each(response,function(key,value){
-                                    html += '<li class="list-group-item" data-draggable="item" draggable="true">'+
-                                        '<input type="hidden" name="all_users[]" value="'+key+'"><span>'+value+'</span>'
-                                        +'</li>';
-
-                                    unassign_array.push(key);
+                                    $('#form_id').append('<option value="'+key+'">'+value+'</option>');
                                 });
-
-                                console.log(unassign_array);
-                                $("#all_users").html(html)
-                                $("#unassign_user").val(unassign_array)
                             }
                         }
-                    });
-                }else {
-                    alert('Select Period before selecting From');
-                }
+                    }
+                });
+
+                $.ajax({
+                    type:"get",
+                    url:"{{url('/get-users')}}/"+selected_option,
+                    success:function(response)
+                    {
+                        if(response)
+                        {
+                            $('#all_users').html('');
+
+                            var html = '';
+                            const unassign_array = [];
+
+                            $.each(response,function(key,value){
+                                html += '<li class="list-group-item" data-draggable="item" draggable="true">'+
+                                    '<input type="hidden" name="all_users[]" value="'+key+'"><span>'+value+'</span>'
+                                    +'</li>';
+
+                                unassign_array.push(key);
+                            });
+
+                            console.log(unassign_array);
+                            $("#all_users").html(html)
+                            $("#unassign_user").val(unassign_array)
+                        }
+                    }
+                });
             }
         });
     }).change();
