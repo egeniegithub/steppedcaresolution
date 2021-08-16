@@ -15,7 +15,6 @@ class CreateStreamFieldValuesTable extends Migration
     {
         Schema::create('stream_field_values', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('period_id');
             $table->unsignedBigInteger('form_id');
             $table->unsignedBigInteger('stream_id');
             $table->unsignedBigInteger('user_id');
@@ -23,8 +22,6 @@ class CreateStreamFieldValuesTable extends Migration
             $table->string('value');
             $table->timestamps();
 
-            $table->foreign('period_id')->references('id')->on('periods');
-            $table->foreign('form_id')->references('id')->on('forms');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('stream_id')->references('id')->on('streams');
             $table->foreign('stream_field_id')->references('id')->on('stream_fields');

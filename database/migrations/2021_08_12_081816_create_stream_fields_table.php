@@ -23,6 +23,8 @@ class CreateStreamFieldsTable extends Migration
             $table->string('fieldType');
             $table->string('isDuplicate')->nullable()->comment('1 = no, 2 = yes');
             $table->string('isCumulative')->nullable()->comment('1 = no, 2 = yes');
+            $table->string('fieldOptions')->nullable();
+            $table->text('tableData')->nullable();
             $table->integer('orderCount');
             $table->timestamps();
 

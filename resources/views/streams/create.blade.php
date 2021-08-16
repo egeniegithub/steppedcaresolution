@@ -77,7 +77,7 @@
                                                          src="{{url('/assets/images/image_white.png')}}"/> <span
                                                         class="light_grey_text"> Image</span></button>
                                                 <button type="button" class="tablinks li_light_border"
-                                                        onclick="openCity(event, 'dropdown')" id="defaultOpen"><img
+                                                        onclick="openCity(event, 'select')" id="defaultOpen"><img
                                                         class="image_black dropdownfiield_icon"
                                                         src="{{url('/assets/images/dropdown-black.png')}}"/> <img
                                                         class="image_white dropdownfiield_icon"
@@ -118,7 +118,7 @@
                                                                 <th> Required</th>
                                                                 <td>
                                                                     <label class="radio_container">
-                                                                        <input type="radio" checked="checked"
+                                                                        <input type="radio"
                                                                                name="field_required" value="yes"
                                                                                id="field_required">
                                                                         <span class="checkmark"></span>
@@ -127,7 +127,8 @@
                                                                 </td>
                                                                 <td>
                                                                     <label class="radio_container">No
-                                                                        <input type="radio" checked="checked"
+                                                                        <input type="radio"
+                                                                               checked="checked"
                                                                                name="field_required" value="no"
                                                                                id="field_required">
                                                                         <span class="checkmark"></span>
@@ -138,7 +139,7 @@
                                                                 <th> Allow Duplicate:</th>
                                                                 <td>
                                                                     <label class="radio_container">
-                                                                        <input type="radio" checked="checked"
+                                                                        <input type="radio"
                                                                                name="field_duplicate" value="yes"
                                                                                id="field_duplicate">
                                                                         <span class="checkmark"></span>
@@ -147,7 +148,8 @@
                                                                 </td>
                                                                 <td>
                                                                     <label class="radio_container">No
-                                                                        <input type="radio" checked="checked"
+                                                                        <input type="radio"
+                                                                               checked="checked"
                                                                                name="field_duplicate"
                                                                                id="field_duplicate" value="no">
                                                                         <span class="checkmark"></span>
@@ -158,7 +160,7 @@
                                                                 <th> Cumulative Value:</th>
                                                                 <td>
                                                                     <label class="radio_container">
-                                                                        <input type="radio" checked="checked"
+                                                                        <input type="radio"
                                                                                name="field_cumulative" value="yes"
                                                                                id="field_cumulative">
                                                                         <span class="checkmark"></span>
@@ -180,10 +182,7 @@
                                                 <div class="row row_adjusted">
                                                     <div class="col-sm-12">
                                                         <div class="btn-group btn_group_padding">
-                                                            <button class="btn table_btn del_modal_btn text-white"
-                                                                    type="button"
-                                                                    onclick="addField()"> Add
-                                                            </button>
+                                                            <button type="button" onclick="addField()" class="btn table_btn del_modal_btn text-white"> Add</button>
                                                             <button class="btn table_btn cancel_modal_btn text-white"
                                                                     type="button">
                                                                 Reset
@@ -195,7 +194,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-xl-8 col-lg-8 col-md-8 col-12 tabcontent " id="dropdown">
+                                    <div class="col-xl-8 col-lg-8 col-md-8 col-12 tabcontent " id="select">
                                         <div class="card ">
                                             <ul class="vertical_nav">
                                                 <li class="first_vertical_nav font-weight-bold li_dark_border"
@@ -540,8 +539,8 @@
                     let cardId = cityName === 'table' ? "table" : 'textarea';
                     if (cityName === 'table') {
                         cardId = 'table'
-                    } else if (cityName === 'dropdown') {
-                        cardId = 'dropdown'
+                    } else if (cityName === 'select') {
+                        cardId = 'select'
                     } else {
                         cardId = 'textarea';
                     }
@@ -634,7 +633,7 @@
 
                 const addField = () => {
                     let fieldType = $("#field_type").val();
-                    let selector = (fieldType == 'dropdown') ? '#drop_field_name' : (fieldType == 'table') ? '#table_name' : '#field_name'
+                    let selector = (fieldType == 'select') ? '#drop_field_name' : (fieldType == 'table') ? '#table_name' : '#field_name'
                     let fieldName = $(selector).val();
                     let fieldOptions = $("#field_options").val()
                     let isRequired = $('input[name=field_required]:checked').val()
@@ -652,7 +651,7 @@
                     }
 
 
-                    if (fieldType == 'dropdown') {
+                    if (fieldType == 'select') {
                         if (!fieldOptions) {
                             toastr.error("Select options are required.")
                             return false
@@ -686,7 +685,7 @@
                     newRow += '<input type="hidden" name="fields[' + orderCount + '][isDuplicate]"  value="' + isDuplicate + '" >'
                     newRow += '<input type="hidden" name="fields[' + orderCount + '][isCumulative]"  value="' + isCumulative + '" >'
                     newRow += '<input type="hidden" name="fields[' + orderCount + '][orderCount]"  value="' + orderCount + '" >'
-                    if (fieldType == 'dropdown') {
+                    if (fieldType == 'select') {
                         newRow += '<input type="hidden" name="fields[' + orderCount + '][fieldOptions]"  value="' + fieldOptions + '" >'
                     }
 

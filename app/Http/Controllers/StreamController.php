@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Form;
 use App\Models\Stream;
 use App\Models\StreamAnswer;
+use App\Models\StreamField;
+use App\Models\StreamFieldValue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -72,7 +74,11 @@ class StreamController extends Controller
             $streamObj->status = 'Draft';
             $streamObj->save();
             $fields = [];
+            $ids = [];
             foreach ($input['fields'] as $field) {
+                if (!empty($field['id'])) {
+                    $ids[] = $field['id'];
+                }
                 $fields[] = [
                     'stream_id' => $streamObj->id,
                     'form_id' => $input['form_id'],
@@ -82,10 +88,16 @@ class StreamController extends Controller
                     'fieldType' => $field['fieldType'],
                     'isDuplicate' => $field['isDuplicate'],
                     'isCumulative' => $field['isCumulative'],
-                    'orderCount' => $field['orderCount']
+                    'orderCount' => $field['orderCount'],
+                    'fieldOptions' => $field['fieldOptions'] ?? '',
+                    'tableData' => $field['tableData'] ?? ''
                 ];
             }
-            DB::table('stream_fields')->insert($fields);
+            if (count($ids)) {
+                StreamField::whereIn($ids)->update($fields);
+            } else {
+                DB::table('stream_fields')->insert($fields);
+            }
 
         } catch (\Exception $e) {
 
@@ -190,11 +202,11 @@ class StreamController extends Controller
 
     public function render($id)
     {
-        $stream = Stream::where('id', $id)->first();
+        $stream = Stream::where('id', $id)->with('getFields')->first();
         $stream_answer = StreamAnswer::where('stream_id', $id)->first();
         if ($stream_answer) {
             $stream_answer_id = $stream_answer->id;
-            $answer_array = (array)json_decode($stream_answer->answers);
+            $answer_array = json_decode($stream_answer->answers);
         } else {
             $stream_answer_id = null;
             $answer_array = array();
@@ -205,6 +217,7 @@ class StreamController extends Controller
 
     public function streamPost(Request $request)
     {
+        $user = auth()->user();
         $stream_id = $request->stream_id;
         $stream_answer_id = $request->stream_answer_id;
 
@@ -215,21 +228,26 @@ class StreamController extends Controller
             $inputs['image'] = $imageName;
         }
 
-        $data_array = array(
-            'stream_id' => $stream_id,
-            'answers' => json_encode($inputs),
-            'created_by' => auth()->user()->id,
-        );
+        foreach ($request->field as $key => $field) {
+            $data_array[] = [
+                'stream_id' => $stream_id,
+                'user_id' => $user->id,
+                'form_id' => $request->form_id ?? 0,
+                'stream_field_id' => $key,
+                'value' => $field,
+            ];
+        }
 
         if (empty($stream_answer_id)) {
-            StreamAnswer::create($data_array);
+            DB::table('stream_field_values')->insert($data_array);
         } else {
-            StreamAnswer::where('id', $stream_answer_id)->update($data_array);
+            StreamFieldValue::where('id', $stream_answer_id)->update($data_array);
         }
         return redirect()->route('dashboard')->with('success', 'Data saved successfully!');
     }
 
-    public function UpdateStatus(Request $request){
+    public function UpdateStatus(Request $request)
+    {
 
         $validator = Validator::make($request->all(), [
             'status' => ['required'],
@@ -248,7 +266,7 @@ class StreamController extends Controller
 
         } catch (\Exception $e) {
 
-            \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
+            \Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
             return back()->with('error', $e->getMessage());
         }
         return back()->with('success', 'Status updated successfully!');
