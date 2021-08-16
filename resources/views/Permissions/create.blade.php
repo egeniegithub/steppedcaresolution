@@ -23,13 +23,14 @@
                                 <div class="container">
                                     <div class="row mb-5">
                                         <input type="hidden" id="pre_selected_stream" value="{{$prefilled_data['project_id']}}">
+                                        <input type="hidden" id="stream_from_form" value="{{$prefilled_data['stream_id']}}">
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-12">
                                             <div class="mb-3">
                                                 <label for="FormGroup" class="form-label">Select Period *</label>
                                                 <select class="form-control form-select" name="period_id" id="period_id" aria-label="Default select example" required>
                                                     <option value="">Select Period</option>
                                                     @foreach($periods as $period)
-                                                        <option value="{{$period->id}}" {{old('period_id') == $period->id ? "selected" : ""}}>{{$period->name}} ({{$period->start_date}} - {{$period->end_date}})</option>
+                                                        <option value="{{$period->id}}" {{$prefilled_data['period_id'] == $period->id ? "selected" : ""}}>{{$period->name}} ({{$period->start_date}} - {{$period->end_date}})</option>
                                                     @endforeach
                                                 </select>
                                             </div>

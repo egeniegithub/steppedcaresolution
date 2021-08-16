@@ -34,7 +34,7 @@
                                         </div>
                                     </div>
                                     <div class="cross_image">
-                                        <img class="cross_imgae_width" src="../assets/images/cross_new.png" />
+                                        {{--<img class="cross_imgae_width" src="../assets/images/cross_new.png" />--}}
                                     </div>
                                 </div>
                                 <form method="get" action="">
@@ -52,7 +52,7 @@
                                     </div>
                                 </form>
                             </div>
-                            <div class="table-responsive">
+                            <div class="table-responsive summary_period_card">
                                 <table class="table  period_summary_table  table_margin_adj">
                                     <thead>
                                         <tr>
@@ -79,7 +79,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-6">
+                <div class="col-sm-12 col-md-6 parent_col">
                     <div class="table_div_padding">
                         <div class="card mb-0">
                             <div class="card_header grid_container li_dark_border">
@@ -112,9 +112,7 @@
                     </div>
                 </div>
 
-            </div>
-            <div class="row">
-                <div class="col-sm-12 col-md-6">
+                <div class="col-sm-12 col-md-6 parent_col">
                     <div class="table_div_padding">
                         <div class="card mb-0">
                             <div class="card_header grid_container li_dark_border">
@@ -144,7 +142,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-6">
+                <div class="col-sm-12 col-md-6 parent_col">
                     <div class="table_div_padding">
                         <div class="card mb-0">
                             <div class="card_header grid_container li_dark_border">
@@ -311,7 +309,7 @@
                 type: 'column'
             },
             exporting: {
-                enabled: false
+                enabled: true
             },
             credits: {
                 enabled: false
@@ -382,7 +380,7 @@
                 type: 'column'
             },
             exporting: {
-                enabled: false
+                enabled: true
             },
             credits: {
                 enabled: false
@@ -459,7 +457,7 @@
                 enabled: false,
             },
             exporting: {
-                enabled: false,
+                enabled: true,
             },
             title: {
                 // text: 'US and USSR nuclear stockpiles'
@@ -530,5 +528,9 @@
                 data: [1.6, 0.2, 1, 2.2, 2.8, 4],
             }]
         });
+
+        $(".cross_imgae_width").click(function(){
+            $(this).closest("div.parent_col").hide();
+        })
     </script>
 @endsection

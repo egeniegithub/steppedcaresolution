@@ -99,6 +99,6 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
 });
 
 Route::get('/get-users/{id}', [\App\Http\Controllers\PermissionsController::class, 'getUsers']);
-Route::get('/get-forms/{id}', [\App\Http\Controllers\PermissionsController::class, 'getForms']);
+Route::get('/get-forms/{project_id}/{period_id}', [\App\Http\Controllers\PermissionsController::class, 'getForms']);
 Route::get('/get-streams/{id}', [\App\Http\Controllers\PermissionsController::class, 'getStreams']);
 Route::get('/get-permissioned-users/{project_id}/{form_id}/{stream_id}', [\App\Http\Controllers\PermissionsController::class, 'getPermissionedUsers']);
