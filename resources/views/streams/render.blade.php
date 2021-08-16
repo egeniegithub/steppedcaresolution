@@ -41,7 +41,7 @@
                                     <input type="hidden" name="stream_answer_id" value="{{$stream_answer_id}}">
 
                                     @if($stream->getFields)
-                                        @foreach($stream->getFields as $field)
+                                        @foreach($stream->getFields as $fieldKey => $field)
 
 
                                             <div class="row">
@@ -62,25 +62,25 @@
                                                             @case('text')
                                                             <input type="text" class="form-control white_input"
                                                                    name="field[{{$field->id}}]"
-                                                                   value="{{$value}}" {{$required}}>
+                                                                   value="{{$values[$fieldKey]->value}}" {{$required}}>
                                                             @break
 
                                                             @case('textarea')
                                                             <textarea class="form-control white_input"
                                                                       name="field[{{$field->id}}]"
-                                                                      {{$required}} rows="5">{{$value}}</textarea>
+                                                                      {{$required}} rows="5">{{$values[$fieldKey]->value}}</textarea>
                                                             @break
 
                                                             @case('number')
                                                             <input type="number" class="form-control white_input"
                                                                    name="field[{{$field->id}}]"
-                                                                   value="{{$value}}" {{$required}}>
+                                                                   value="{{$values[$fieldKey]->value}}" {{$required}}>
                                                             @break
 
                                                             @case('date')
                                                             <input type="date" class="form-control white_input"
                                                                    name="field[{{$field->id}}]"
-                                                                   value="{{$value}}" {{$required}}>
+                                                                   value="{{$values[$fieldKey]->value}}" {{$required}}>
                                                             @break
 
                                                             @case('file')

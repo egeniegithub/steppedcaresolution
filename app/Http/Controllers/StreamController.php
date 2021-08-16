@@ -203,6 +203,7 @@ class StreamController extends Controller
     public function render($id)
     {
         $stream = Stream::where('id', $id)->with('getFields')->first();
+        $values = StreamFieldValue::whereStreamId($id)->get();
         $stream_answer = StreamAnswer::where('stream_id', $id)->first();
         if ($stream_answer) {
             $stream_answer_id = $stream_answer->id;
@@ -212,7 +213,7 @@ class StreamController extends Controller
             $answer_array = array();
         }
 
-        return view('streams.render')->with(compact('stream', 'answer_array', 'stream_answer_id'));
+        return view('streams.render')->with(compact('stream', 'answer_array', 'stream_answer_id', 'values'));
     }
 
     public function streamPost(Request $request)
