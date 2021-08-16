@@ -9,13 +9,13 @@
                 <div class="row blue-border-bottom">
                     <div class="col-sm-6 col-md-4 col-lg-4 px-0 stream_update_title">
                         <div class="top-header pt-2">
-                            <h3 class="margin-page-title">Streams 1.0</h3>
+                            <h3 class="margin-page-title">{{$stream->name}}</h3>
                         </div>
                     </div>
                     <div class="col-sm-6 col-md-4 col-lg-4 px-0 update_stream_mid">
                         <div class="top-header pt-2">
                             <h3 class="margin-page-title">
-                                status : <span class="blue_span">In Progress</span>
+                                status : <span class="blue_span">{{$stream->status}}</span>
                             </h3>
                         </div>
                     </div>
@@ -42,8 +42,6 @@
 
                                     @if($stream->getFields)
                                         @foreach($stream->getFields as $fieldKey => $field)
-
-
                                             <div class="row">
                                                 <div class="col-sm-12">
                                                     <div class="form-group">
@@ -51,41 +49,37 @@
                                                             for="exampleFormControlTextarea1">{{$field->fieldName}} {{$field->isRequired == 'no' ? '' : "*"}}</label>
                                                         @php
                                                             $name = preg_replace('/\s+/', '_', strtolower($field->fieldName));
-                                                            if (array_key_exists($name, $answer_array)){
-                                                                $value = $answer_array[$name];
-                                                            }else{
-                                                                $value = '';
-                                                            }
                                                             $required = $field->isRequired == 'no' ? '' : "required";
                                                         @endphp
                                                         @switch($field->fieldType)
                                                             @case('text')
                                                             <input type="text" class="form-control white_input"
-                                                                   name="field[{{$field->id}}]"
+                                                                   name="field[{{ $values[$fieldKey]->id ?? $field->id}}]"
                                                                    value="{{$values[$fieldKey]->value}}" {{$required}}>
                                                             @break
 
                                                             @case('textarea')
                                                             <textarea class="form-control white_input"
-                                                                      name="field[{{$field->id}}]"
+                                                                      name="field[{{$values[$fieldKey]->id ?? $field->id}}]"
                                                                       {{$required}} rows="5">{{$values[$fieldKey]->value}}</textarea>
                                                             @break
 
                                                             @case('number')
                                                             <input type="number" class="form-control white_input"
-                                                                   name="field[{{$field->id}}]"
+                                                                   name="field[{{$values[$fieldKey]->id ?? $field->id}}]"
                                                                    value="{{$values[$fieldKey]->value}}" {{$required}}>
                                                             @break
 
                                                             @case('date')
                                                             <input type="date" class="form-control white_input"
-                                                                   name="field[{{$field->id}}]"
+                                                                   name="field[{{$values[$fieldKey]->id ?? $field->id}}]"
                                                                    value="{{$values[$fieldKey]->value}}" {{$required}}>
                                                             @break
 
                                                             @case('file')
                                                             <input type="file" class="form-control white_input" src=""
-                                                                   alt="" name="image[{{$field->id}}]" {{$required}}>
+                                                                   alt=""
+                                                                   name="image[{{$values[$fieldKey]->id ?? $field->id}}]" {{$required}}>
                                                             <br>
                                                             @if (array_key_exists('image', $answer_array))
                                                                 <div class="text-center">
@@ -101,11 +95,11 @@
                                                                 $options = explode(',', $field->fieldOptions);
                                                             @endphp
                                                             <select class="form-control white_input"
-                                                                    name="field[{{$field->id}}]" {{$required}}>
+                                                                    name="field[{{$values[$fieldKey]->id ?? $field->id}}]" {{$required}}>
                                                                 <option value="">Please Select</option>
                                                                 @foreach($options as $option)
                                                                     <option
-                                                                        value="{{$option}}" {{($option == $value) ? 'selected' : ''}}>{{$option}}</option>
+                                                                        value="{{$option}}" {{($option == $values[$fieldKey]->value) ? 'selected' : ''}}>{{$option}}</option>
                                                                 @endforeach
                                                             </select>
                                                             @break
