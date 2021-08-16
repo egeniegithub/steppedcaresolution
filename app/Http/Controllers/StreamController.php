@@ -204,16 +204,8 @@ class StreamController extends Controller
     {
         $stream = Stream::where('id', $id)->with('getFields')->first();
         $values = StreamFieldValue::whereStreamId($id)->get();
-        $stream_answer = StreamAnswer::where('stream_id', $id)->first();
-        if ($stream_answer) {
-            $stream_answer_id = $stream_answer->id;
-            $answer_array = json_decode($stream_answer->answers);
-        } else {
-            $stream_answer_id = null;
-            $answer_array = array();
-        }
 
-        return view('streams.render')->with(compact('stream', 'answer_array', 'stream_answer_id', 'values'));
+        return view('streams.render')->with(compact('stream', 'values'));
     }
 
     public function streamPost(Request $request)
@@ -229,20 +221,27 @@ class StreamController extends Controller
             $inputs['image'] = $imageName;
         }
 
-        foreach ($request->field as $key => $field) {
-            $data_array[] = [
-                'stream_id' => $stream_id,
-                'user_id' => $user->id,
-                'form_id' => $request->form_id ?? 0,
-                'stream_field_id' => $key,
-                'value' => $field,
-            ];
-        }
+        Stream::whereId($stream_id)->update([
+            'status' => $request->submit == 'Save Only' ? 'In-progress' : 'Published'
+        ]);
 
         if (empty($stream_answer_id)) {
+            foreach ($request->field as $key => $field) {
+                $data_array[] = [
+                    'stream_id' => $stream_id,
+                    'user_id' => $user->id,
+                    'form_id' => $request->form_id ?? 0,
+                    'stream_field_id' => $key,
+                    'value' => $field,
+                ];
+            }
             DB::table('stream_field_values')->insert($data_array);
         } else {
-            StreamFieldValue::where('id', $stream_answer_id)->update($data_array);
+            foreach ($request->field as $key => $field) {
+                StreamFieldValue::where(['stream_id' => $stream_id, 'id' => $key])->update([
+                    'value' => $field
+                ]);
+            }
         }
         return redirect()->route('dashboard')->with('success', 'Data saved successfully!');
     }
