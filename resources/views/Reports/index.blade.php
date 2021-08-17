@@ -68,10 +68,10 @@
                                         </thead>
                                         <tbody>
                                         @forelse($form_streams as $form)
-                                            <tr class="clickable collapsed">
-                                                <td data-toggle="collapse" data-target="#accordion_{{$loop->iteration}}"><img class="forward_icon" src="{{asset('assets/images/forward_icon.PNG')}}"/></td>
-                                                <td data-toggle="collapse" data-target="#accordion_{{$loop->iteration}}"><a href="#" class="form_anchor_text">{{$form->name}}</a></td>
-                                                <td data-toggle="collapse" data-target="#accordion_{{$loop->iteration}}">{{formStatus($form->id)}}</td>
+                                            <tr class="clickable">
+                                                <td data-toggle="collapse" class="clickable" data-target="#accordion_{{$loop->iteration}}"><img class="forward_icon" src="{{asset('assets/images/forward_icon.PNG')}}"/></td>
+                                                <td data-toggle="collapse" class="clickable" data-target="#accordion_{{$loop->iteration}}"><a href="#" class="form_anchor_text">{{$form->name}}</a></td>
+                                                <td data-toggle="collapse" class="clickable" data-target="#accordion_{{$loop->iteration}}">{{formStatus($form->id)}}</td>
                                                 <td class="no-open">
                                                     <div class="btn-group" role="group" aria-label="Basic example">
                                                         {{--<button type="button" class="btn update_status_btn table_btn text-white">Update Status</button>--}}
@@ -251,7 +251,7 @@
     {{--<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>--}}
     <script>
         var table = $('.report_table');
-        $(".clickable").click(function () {
+        $("td.clickable").click(function () {
             setTimeout(() => {
                 if ($(this).hasClass('collapsed')) {
                     $(this).find(".forward_icon").css("transform", "rotate(0deg)");
@@ -266,6 +266,9 @@
                 $(this).find('td').css('border-bottom','0');
             }
         });
-
+        $(".no-open").click(function(e) {
+            e.preventDefault();
+            // return true;
+        });
     </script>
 @endsection
