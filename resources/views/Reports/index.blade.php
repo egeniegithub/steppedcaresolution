@@ -226,7 +226,7 @@
     {{--<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>--}}
     <script>
         var table = $('.report_table');
-        $(".clickable").click(function () {
+        $("td.clickable").click(function () {
             setTimeout(() => {
                 if ($(this).hasClass('collapsed')) {
                     $(this).find(".forward_icon").css("transform", "rotate(0deg)");
@@ -240,6 +240,7 @@
                 $(this).find('td').css('border-bottom', '0');
             }
         });
+
 
         function getReport(id) {
             console.log('id', id)
@@ -348,5 +349,10 @@
             })
         }
 
+
+        $(".no-open").click(function(e) {
+            e.preventDefault();
+            // return true;
+        });
     </script>
 @endsection

@@ -1,4 +1,7 @@
 @extends('layouts.app')
+
+@section('title', 'Dashboard')
+
 @section('content')
 <div class="pcoded-wrapper">
     <div class="pcoded-content">
@@ -24,13 +27,14 @@
                                     <div class="summary_text_center">
                                         <h5>Summary of Period</h5>
                                         <div class="summary_view_more ml-2">
-                                            <button class="btn update_status_btn text-white">
-                                                View More
-                                            </button>
+                                            <form method="get" action="{{route('dashboard.forms')}}">
+                                                <input type="hidden" name="period_id" value="{{$period_id}}">
+                                                <button type="submit" class="btn update_status_btn text-white">View More</button>
+                                            </form>
                                         </div>
                                     </div>
                                     <div class="cross_image">
-                                        <img class="cross_imgae_width" src="../assets/images/cross_new.png" />
+                                        {{--<img class="cross_imgae_width" src="../assets/images/cross_new.png" />--}}
                                     </div>
                                 </div>
                                 <form method="get" action="">
@@ -38,7 +42,7 @@
                                         <div class="col-sm-10 sumary_select_list ">
                                             <select class="form-control form-select white_input" name="period_id" aria-label="Default select example">
                                                 @foreach($periods as $period)
-                                                    <option value="{{$period->id}}" {{request()->get('period_id') == $period->id ? "selected" : ""}}>{{$period->name}}</option>
+                                                    <option value="{{$period->id}}" {{$period_id == $period->id ? "selected" : ""}}>{{$period->name}} ({{$period->start_date}} - {{$period->end_date}})</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -48,7 +52,7 @@
                                     </div>
                                 </form>
                             </div>
-                            <div class="table-responsive">
+                            <div class="table-responsive summary_period_card">
                                 <table class="table  period_summary_table  table_margin_adj">
                                     <thead>
                                         <tr>
@@ -75,7 +79,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-6">
+                <div class="col-sm-12 col-md-6 parent_col">
                     <div class="table_div_padding">
                         <div class="card mb-0">
                             <div class="card_header grid_container li_dark_border">
@@ -108,9 +112,7 @@
                     </div>
                 </div>
 
-            </div>
-            <div class="row">
-                <div class="col-sm-12 col-md-6">
+                <div class="col-sm-12 col-md-6 parent_col">
                     <div class="table_div_padding">
                         <div class="card mb-0">
                             <div class="card_header grid_container li_dark_border">
@@ -140,7 +142,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-6">
+                <div class="col-sm-12 col-md-6 parent_col">
                     <div class="table_div_padding">
                         <div class="card mb-0">
                             <div class="card_header grid_container li_dark_border">
@@ -307,7 +309,7 @@
                 type: 'column'
             },
             exporting: {
-                enabled: false
+                enabled: true
             },
             credits: {
                 enabled: false
@@ -378,7 +380,7 @@
                 type: 'column'
             },
             exporting: {
-                enabled: false
+                enabled: true
             },
             credits: {
                 enabled: false
@@ -455,7 +457,7 @@
                 enabled: false,
             },
             exporting: {
-                enabled: false,
+                enabled: true,
             },
             title: {
                 // text: 'US and USSR nuclear stockpiles'
@@ -526,5 +528,9 @@
                 data: [1.6, 0.2, 1, 2.2, 2.8, 4],
             }]
         });
+
+        $(".cross_imgae_width").click(function(){
+            $(this).closest("div.parent_col").hide();
+        })
     </script>
 @endsection

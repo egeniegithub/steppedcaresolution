@@ -92,7 +92,6 @@ class UserController extends Controller
             'lastname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
-            'phone' => 'required|digits:11',
             'role' => 'required',
             'status' => 'required',
             'project_id'=>'required'
@@ -139,7 +138,7 @@ class UserController extends Controller
                     $message->to($data['email'])->from('masif@egenienext.com', 'Stepped Care Solutions' )->subject($data['subject']);
                 });
 
-                return back()->with('success', 'Member created successfully!');
+                return redirect()->route('dashboard.users')->with('success', 'Member created successfully!');
                 //
             } catch (Exception $e) {
                 return back()->with('error', $e->getMessage());
@@ -164,8 +163,7 @@ class UserController extends Controller
         )
         ->leftjoin("users as creator", "creator.createdBy", "parent.id")
         ->leftjoin("users as updator", "updator.updatedBy",  "parent.id")
-        ->where("parent.id",decrypt($request->ref))
-            ->get();
+        ->where("parent.id",decrypt($request->ref))->get();
 
 
         return view('members.edit', $data);
@@ -178,8 +176,6 @@ class UserController extends Controller
             'firstname' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
             'role' => ['required'],
-            'phone' => 'required|digits:11',
-            'role' => 'required',
             'status' => 'required',
             'project_id'=>'required'
         ],
@@ -204,7 +200,8 @@ class UserController extends Controller
             $user = User::find($id);
             $user->update($params);
             //
-            return back()->with('success', 'Member updated successfully!');
+
+            return redirect()->route('dashboard.users')->with('success', 'Member updated successfully!');
         } catch (Exception $e) {
             return back()->with('success', 'Member updated successfully!');
         }

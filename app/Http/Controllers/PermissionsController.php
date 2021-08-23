@@ -36,6 +36,7 @@ class PermissionsController extends Controller
 
         $prefilled_data = array(
             'project_id' => $form ? $form->project_id : null,
+            'period_id' => $form ? $form->period_id : null,
             'stream_id' => $stream_id ?? null,
             'stream_name' => $stream->name ?? null,
             'form_id' => $stream->form_id ?? null,
@@ -135,9 +136,9 @@ class PermissionsController extends Controller
         return response()->json($users);
     }
 
-    public function getForms($project_id)
+    public function getForms($project_id, $period_id)
     {
-        $forms = Form::where('project_id', $project_id)->pluck("name","id");
+        $forms = Form::where('project_id', $project_id)->where('period_id', $period_id)->pluck("name","id");
         return response()->json($forms);
     }
 
@@ -145,5 +146,30 @@ class PermissionsController extends Controller
     {
         $streams = Stream::where('form_id', $form_id)->pluck("name","id");
         return response()->json($streams);
+    }
+
+    public function getPermissionedUsers($project_id, $form_id, $stream_id)
+    {
+        $permissioned_users = StreamAccess::leftjoin('permissions as p', 'p.id', '=', 'stream_accesses.permission_id')
+            ->where('p.project_id', $project_id)
+            ->where('p.form_id', $form_id)
+            ->where('p.stream_id', $stream_id)
+            ->select(
+                DB::raw('GROUP_CONCAT(assigned_user_id) as assigned_users'),
+                DB::raw('GROUP_CONCAT(unassigned_user_id) as unassigned_users')
+            )
+            ->first();
+
+        $unassigned = User::where('project_id', $project_id)
+            ->whereNotIn('id', explode(',', $permissioned_users->assigned_users))
+            ->whereNotIn('role', ['Admin'])
+            ->pluck("name","id");
+        $assigned = User::whereIn('id', explode(',', $permissioned_users->assigned_users))->pluck("name","id");
+
+        $users = array(
+            'assigned_users' => ($assigned->count() > 0) ? $assigned : null,
+            'unassigned_users' => ($unassigned->count() > 0) ? $unassigned : null
+        );
+        return response()->json($users);
     }
 }

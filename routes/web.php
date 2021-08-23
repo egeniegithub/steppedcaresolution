@@ -84,6 +84,7 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
         Route::get('/edit/{id}', [App\Http\Controllers\PeriodController::class,'edit'])->name('dashboard.period.edit');
         Route::post('/update{id}', [App\Http\Controllers\PeriodController::class,'update'])->name('dashboard.period.update');
         Route::get('/period/{id?}', [App\Http\Controllers\PeriodController::class,'delete'])->name('dashboard.period.delete');
+        Route::post('/sync', [App\Http\Controllers\PeriodController::class,'syncData'])->name('dashboard.period.sync_data');
     });
 
     Route::group(['prefix' => 'reports',  'middleware' => 'auth'], function(){
@@ -100,5 +101,6 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
 });
 
 Route::get('/get-users/{id}', [\App\Http\Controllers\PermissionsController::class, 'getUsers']);
-Route::get('/get-forms/{id}', [\App\Http\Controllers\PermissionsController::class, 'getForms']);
+Route::get('/get-forms/{project_id}/{period_id}', [\App\Http\Controllers\PermissionsController::class, 'getForms']);
 Route::get('/get-streams/{id}', [\App\Http\Controllers\PermissionsController::class, 'getStreams']);
+Route::get('/get-permissioned-users/{project_id}/{form_id}/{stream_id}', [\App\Http\Controllers\PermissionsController::class, 'getPermissionedUsers']);

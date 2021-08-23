@@ -34,7 +34,7 @@
                                                     <select class="form-control form-select" aria-label="Default select example" name="status" required>
                                                         <option selected>Select Status</option>
                                                         <option value="1" {{$period->status == 1 ? "selected" : ""}}>Active</option>
-                                                        <option value="0" {{$period->status == 0 ? "selected" : ""}}>Disable</option>
+                                                        <option value="0" {{$period->status == 0 ? "selected" : ""}}>In-active</option>
                                                     </select>
                                                 </div>
                                             </div>

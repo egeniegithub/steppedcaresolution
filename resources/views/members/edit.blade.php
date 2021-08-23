@@ -30,7 +30,7 @@
                                         </div>
                                         <div class="col-lg-6 col-x-6 col-md-6 col-12">
                                             <div class="mb-4">
-                                                <label for="lastname" class="form-label">Last Name</label>
+                                                <label for="lastname" class="form-label">Last Name *</label>
                                                 <input type="text"  class="form-control" id="lastname" name="lastname" placeholder="Month 1" aria-describedby="lastname" value="{{$user->lastname??null}}">
                                             </div>
                                         </div>
@@ -49,7 +49,7 @@
 
                                         <div class="col-lg-6 col-x-6 col-md-6 col-12">
                                             <div class="mb-4">
-                                                <label for="phone" class="form-label">Phone</label>
+                                                <label for="phone" class="form-label">Phone *</label>
                                                 <input type="tel"  class="form-control" id="phone" name="phone" placeholder="Month 1" aria-describedby="phone" value="{{$user->phone??null}}">
                                             </div>
                                         </div>
@@ -97,7 +97,7 @@
                                     <div class="row pt-4">
                                         <div class="col-lg-6 col-x-6 col-md-6 col-12">
                                             <div class="mb-4">
-                                                <label for="Type" class="form-label">Project</label>
+                                                <label for="Type" class="form-label">Project *</label>
                                                 <select  class="form-control form-select" name="project_id" aria-label="Default select example">
                                                     <option selected disabled>Select Project</option>
                                                     @foreach($projects as $key=>$data)
@@ -110,21 +110,21 @@
                                     <div class="row pt-4">
                                         <div class="col-lg-6 col-x-6 col-md-6 col-12">
                                         <div class="mb-4">
-                                                <label for="Type" class="form-label">Type</label>
+                                                <label for="Type" class="form-label">Type *</label>
                                                 <select class="form-control form-select" id="role" name="role" aria-label="Default select example">
                                                     <option selected disabled>Select Type</option>
                                                     @foreach(users_roles() as $data)
                                                     <option value="{{ $data}}" {{$user->role==$data?"selected":""}}>{{ $data}}</option>
                                                     @endforeach
-                                                    
+
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-x-6 col-md-6 col-12">
                                             <div class="mb-4">
-                                                <label for="Status" class="form-label">Status</label>
+                                                <label for="Status" class="form-label">Status *</label>
                                                 <select class="form-control form-select" name="status" id="status" aria-label="Default select example">
-                    
+
                                                     <option selected disabled>Select Status</option>
                                                     @foreach(user_status() as $data)
                                                     <option value="{{ $data}}"  {{$user->status==$data?"selected":""}}>{{ $data}}</option>
@@ -143,7 +143,7 @@
                                             <p class="user_details_font">Created On: {{\Carbon\Carbon::parse($user->created_at)->format("Y-m-d")}} </p>
                                         </div>
                                         <div class="col-lg-2 col-xl-2 col-md-4 col-sm-6 col-12">
-                            
+
                                             <p class="user_details_font">Created By: {{(created_BY($user->createdBy))}}</p>
                                         </div>
                                     </div>

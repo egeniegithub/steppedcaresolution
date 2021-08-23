@@ -271,6 +271,10 @@ p.text-muted {
     background-color: #888;
 }
 
+.summary_period_card{
+    max-height: 407px;
+}
+
 .card .card-header .card-header-right .nav-pills {
     padding: 0;
     box-shadow: none;
