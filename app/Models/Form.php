@@ -20,4 +20,14 @@ class Form extends Model
     {
         return $this->hasMany(Stream::class);
     }
+
+    public function project()
+    {
+        return $this->belongsTo(project::class, 'project_id');
+    }
+
+    public function streamFields()
+    {
+        return $this->hasMany(StreamFieldValue::class,'stream_id');
+    }
 }

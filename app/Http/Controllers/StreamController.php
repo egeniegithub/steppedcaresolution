@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Form;
 use App\Models\Stream;
 use App\Models\StreamAnswer;
+use App\Models\StreamChangeLog;
 use App\Models\StreamField;
 use App\Models\StreamFieldValue;
 use Illuminate\Http\Request;
@@ -178,7 +179,7 @@ class StreamController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'summary' => ['required', 'string', 'max:255'],
+            'summary' => ['required', 'string'],
         ]);
 
         if ($validator->fails()) {
@@ -213,12 +214,23 @@ class StreamController extends Controller
         $user = auth()->user();
         $stream_id = $request->stream_id;
         $stream_answer_id = $request->stream_answer_id;
+        $data_array = [];
 
         $inputs = $request->except('_token', 'stream_id', 'stream_answer_id');
         if ($request->image) {
-            $imageName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('stream_answer_image'), $imageName);
-            $inputs['image'] = $imageName;
+            foreach ($request->image as $key => $image) {
+                $imageName = time() . '.' . $image->extension();
+                $image->move(public_path('stream_answer_image'), $imageName);
+
+                $data_array[] = [
+                    'stream_id' => $stream_id,
+                    'user_id' => $user->id,
+                    'form_id' => $request->form_id ?? 0,
+                    'stream_field_id' => $key,
+                    'value' => $imageName,
+                ];
+
+            }
         }
 
         Stream::whereId($stream_id)->update([
@@ -235,13 +247,40 @@ class StreamController extends Controller
                     'value' => $field,
                 ];
             }
-            DB::table('stream_field_values')->insert($data_array);
+
+
+
+            if (count($data_array)){
+                DB::table('stream_field_values')->insert($data_array);
+            }
+            $changeLog = [
+                'stream_id' => $stream_id,
+                'user_id' => $user->id,
+                'new_data' => json_encode($data_array)
+            ];
+            StreamChangeLog::create($changeLog);
         } else {
+            $streamDataOld = StreamFieldValue::where(['stream_id' => $stream_id])->get();
             foreach ($request->field as $key => $field) {
                 StreamFieldValue::where(['stream_id' => $stream_id, 'id' => $key])->update([
                     'value' => $field
                 ]);
             }
+            if (count($data_array)){
+                foreach ($data_array as $key => $image) {
+                    StreamFieldValue::where(['stream_id' => $stream_id, 'id' => $key])->update([
+                        'value' => $image
+                    ]);
+                }
+            }
+            $streamData = StreamFieldValue::where(['stream_id' => $stream_id])->get();
+            $changeLog = [
+                'stream_id' => $stream_id,
+                'user_id' => $user->id,
+                'old_data' => json_encode($streamDataOld),
+                'new_data' => json_encode($streamData)
+            ];
+            StreamChangeLog::create($changeLog);
         }
         return redirect()->route('dashboard')->with('success', 'Data saved successfully!');
     }
@@ -272,3 +311,5 @@ class StreamController extends Controller
         return back()->with('success', 'Status updated successfully!');
     }
 }
+
+
