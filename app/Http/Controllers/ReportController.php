@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Form;
 use App\Models\Period;
 use App\Models\project;
+use App\Models\User;
 use Carbon\Carbon;
 use Dompdf\Dompdf;
 use Illuminate\Http\Request;
@@ -22,7 +23,8 @@ class ReportController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->show_rows ?? 10;
-        $project = $request->project ?? "all";
+        $active_user = User::where('id', auth()->user()->id)->first();
+        $project = $request->project_id ?? "all";
 
         $projects = $this->projects_model->search_Projects($project);
 
@@ -41,19 +43,25 @@ class ReportController extends Controller
                 $period_id = null;
             }
         }
-
-        $form_streams = Form::when($projects, function ($query, $index) {
+        if ($active_user->role != 'Admin'){
+            $form_streams = Form::where('project_id', $active_user->project_id)
+            ->where('period_id', $period_id)
+            ->with(['streams'])
+            ->paginate($perPage);
+        }else{
+            $form_streams = Form::when($projects, function ($query, $index) {
             $query->whereIn('project_id', $index);
         })
             ->where('period_id', $period_id)
             ->with(['streams'])
             ->paginate($perPage);
+        }
 
         $row_show = $perPage;
         $periods = Period::all();
         $projects = project::all();
 
-        return view("Reports.index")->with(compact('form_streams', 'row_show', 'projects', 'periods'));
+        return view("Reports.index")->with(compact('form_streams', 'row_show', 'projects', 'periods', 'active_user'));
     }
 
     public function getStreamReport(Request $request)

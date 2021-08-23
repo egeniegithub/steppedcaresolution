@@ -37,10 +37,12 @@
                     <div class="col-sm-12 col-md-3 px-0">
                         <p class="pl-4 mt-2 mb-0"> Project </p>
                         <div class="form-group pl-4 pt-1 d-flex search_bar_adj">
-                            <select class="form-control" id="exampleFormControlSelect1" name="project">
-                               <option value="all" selected>All</option>
-                                @foreach($projects as $key=>$data)
-                                <option value="{{$data->name}}" {{request()->get('project')==$data->name?"selected":""}}>{{$data->name}}</option>
+                            <select class="form-control form-select" id="project_id" name="project_id"
+                                    aria-label="Default select example">
+                                <option value="all" selected>All</option>
+                                @foreach($projects as $project)
+                                    <option
+                                        value="{{$project->id}}" {{request()->get('project_id') == $project->id ? "selected" : ""}}>{{$project->name}}</option>
                                 @endforeach
                             </select>
                             <button class="span_search span_mid"><i class="fas fa-search search_icon"></i></button>
@@ -59,11 +61,12 @@
                                 <table class="table   user_table table_margin_adj">
                                     <thead>
                                         <tr>
-                                            <td> Name </td>
-                                            <td> Email </td>
-                                            <td> Phone </td>
-                                            <td> Type </th>
-                                            <td class="three_btn_width"> Actions </td>
+                                            <th> Name </th>
+                                            <th> Email </th>
+                                            <th> Phone </th>
+                                            <th> Type </th>
+                                            <th> Project </th>
+                                            <th class="three_btn_width"> Actions </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -76,6 +79,7 @@
                                             <td> {{$data->email}} </td>
                                             <td> {{$data->phone}} </td>
                                             <td> {{$data->role}} </td>
+                                            <td> {{\App\Models\project::where('id', $data->project_id)->value('name')}} </td>
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Basic example">
                                                     <a href="{{route('dashboard.user.view','ref='.encrypt($data->id))}}" type="button" class="btn  table_btn  view_btn text-white">View</a>
