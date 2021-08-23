@@ -39,22 +39,26 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-xl-5 col-lg-5 col-md-6 col-12 report_flex_row">
-                            <div class=" select_project_width">
-                                <label for="FormGroup" class="form-label">Select Project</label>
-                                <select class="form-control form-select" id="project_id" name="project_id"
-                                        aria-label="Default select example">
-                                    <option value="all" selected>All</option>
-                                    @foreach($projects as $project)
-                                        <option
-                                            value="{{$project->id}}" {{request()->get('project_id') == $project->id ? "selected" : ""}}>{{$project->name}}</option>
-                                    @endforeach
-                                </select>
+                        @if($active_user->role != 'Admin')
+                            <input type="hidden" name="project_id" value="{{$active_user->project_id}}">
+                        @else
+                            <div class="col-xl-5 col-lg-5 col-md-6 col-12 report_flex_row">
+                                <div class=" select_project_width">
+                                    <label for="FormGroup" class="form-label">Select Project</label>
+                                    <select class="form-control form-select" id="project_id" name="project_id"
+                                            aria-label="Default select example">
+                                        <option value="all" selected>All</option>
+                                        @foreach($projects as $project)
+                                            <option
+                                                value="{{$project->id}}" {{request()->get('project_id') == $project->id ? "selected" : ""}}>{{$project->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="span_search_div">
+                                    <button class="report_search_icon span_mid"><i class="fas fa-search "></i></button>
+                                </div>
                             </div>
-                            <div class="span_search_div">
-                                <button class="report_search_icon span_mid"><i class="fas fa-search "></i></button>
-                            </div>
-                        </div>
+                        @endif
                     </div>
                 </form>
 

@@ -95,7 +95,7 @@
                                         @forelse($forms as $form)
                                             <tr>
                                                 <td>{{$loop->iteration}}</td>
-                                                <td><a href="#">{{$form->form_name}}</a></td>
+                                                <td><a type="button" href="{{ route('dashboard.streams', [$form->form_id]) }}" >{{$form->form_name}}</a></td>
                                                 <td>{{$form->project_name}}</td>
                                                 <td>
                                                     <div class="btn-group" role="group" aria-label="Basic example">

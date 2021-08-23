@@ -29,7 +29,7 @@ class UserController extends Controller
         # code...
         $searchQuery = $request->keyword ?? null;
         $type = $request->type ?? "all";
-        $project = $request->project ?? "all";
+        $project = $request->project_id ?? "all";
         $perPage = $request->show_rows ?? 10;
 
         //
@@ -135,7 +135,7 @@ class UserController extends Controller
 
             try {
                 Mail::send('emails.reset', $data, function($message) use ($data){
-                    $message->to($data['email'])->from('masif@egenienext.com', 'Stepped Care Solutions' )->subject($data['subject']);
+                    $message->to($data['email'])->from('ashakoor@egenienext.com', 'Stepped Care Solutions' )->subject($data['subject']);
                 });
 
                 return redirect()->route('dashboard.users')->with('success', 'Member created successfully!');

@@ -28,7 +28,7 @@ class project extends Model
             $projects = $this::all()
                 ->pluck('id');
         } else {
-            $projects = $this::where('name', 'like', '%' .  $project . '%')
+            $projects = $this::where('id', $project)
                 ->get()
                 ->pluck('id');
         }
