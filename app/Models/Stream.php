@@ -21,4 +21,9 @@ class Stream extends Model
         return $this->hasMany(StreamField::class, 'stream_id');
     }
 
+    public function getFieldValues()
+    {
+        return $this->hasMany(StreamFieldValue::class, 'stream_id');
+    }
+
 }

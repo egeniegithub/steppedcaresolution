@@ -134,7 +134,7 @@ class FormController extends Controller
     public function addUpdateFormSummary(Request $request){
 
         $validator = Validator::make($request->all(), [
-            'summary' => ['required', 'string', 'max:255'],
+            'summary' => ['required', 'string'],
         ]);
 
         if ($validator->fails()) {
@@ -147,9 +147,7 @@ class FormController extends Controller
 
             $stream = Form::find($request->id);
             $stream->update($input);
-
         } catch (\Exception $e) {
-
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             return back()->with('error', $e->getMessage());
         }

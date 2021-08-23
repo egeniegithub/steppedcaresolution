@@ -56,25 +56,25 @@
                                                                 @case('text')
                                                                 <input type="text" class="form-control white_input"
                                                                        name="field[{{ $values[$fieldKey]->id ?? $field->id}}]"
-                                                                       value="{{$values[$fieldKey]->value}}" {{$required}}>
+                                                                       value="{{$values[$fieldKey]->value ?? ''}}" {{$required}}>
                                                                 @break
 
                                                                 @case('textarea')
                                                                 <textarea class="form-control white_input"
                                                                           name="field[{{$values[$fieldKey]->id ?? $field->id}}]"
-                                                                          {{$required}} rows="5">{{$values[$fieldKey]->value}}</textarea>
+                                                                          {{$required}} rows="5">{{$values[$fieldKey]->value ?? ''}}</textarea>
                                                                 @break
 
                                                                 @case('number')
                                                                 <input type="number" class="form-control white_input"
                                                                        name="field[{{$values[$fieldKey]->id ?? $field->id}}]"
-                                                                       value="{{$values[$fieldKey]->value}}" {{$required}}>
+                                                                       value="{{$values[$fieldKey]->value ?? ''}}" {{$required}}>
                                                                 @break
 
                                                                 @case('date')
                                                                 <input type="date" class="form-control white_input"
                                                                        name="field[{{$values[$fieldKey]->id ?? $field->id}}]"
-                                                                       value="{{$values[$fieldKey]->value}}" {{$required}}>
+                                                                       value="{{$values[$fieldKey]->value ?? ''}}" {{$required}}>
                                                                 @break
 
                                                                 @case('file')
@@ -84,9 +84,11 @@
                                                                        name="image[{{$values[$fieldKey]->id ?? $field->id}}]" {{$required}}>
                                                                 <br>
                                                                 <div class="text-center">
-                                                                    <img
-                                                                        src="{{asset('stream_answer_image')}}/{{$values[$fieldKey]->value}}"
-                                                                        height="300px" width="500px" alt="No Img">
+                                                                    @if(isset($values[$fieldKey]->id))
+                                                                        <img
+                                                                            src="{{asset('stream_answer_image')}}/{{$values[$fieldKey]->value ?? ''}}"
+                                                                            height="300px" width="500px" alt="No Img">
+                                                                    @endif
                                                                 </div>
 
                                                                 @break
@@ -100,7 +102,7 @@
                                                                     <option value="">Please Select</option>
                                                                     @foreach($options as $option)
                                                                         <option
-                                                                            value="{{$option}}" {{($option == $values[$fieldKey]->value) ? 'selected' : ''}}>{{$option}}</option>
+                                                                            value="{{$option}}" {{( isset($values[$fieldKey]->value) && $option == $values[$fieldKey]->value) ? 'selected' : ''}}>{{$option}}</option>
                                                                     @endforeach
                                                                 </select>
                                                                 @break
@@ -165,10 +167,12 @@
 
                                     <div class="row three_btn_margin">
                                         <div class="col-sm-12">
-                                            <input type="submit" class="btn update_status_btn normal_btn text-white" name="submit"
-                                                    value="Save Only" />
-                                            <input type="submit" class="btn normal_btn save_and_submit text-white" name="submit"
-                                                    value="Save and Submit" />
+                                            <input type="submit" class="btn update_status_btn normal_btn text-white"
+                                                   name="submit"
+                                                   value="Save Only"/>
+                                            <input type="submit" class="btn normal_btn save_and_submit text-white"
+                                                   name="submit"
+                                                   value="Save and Submit"/>
                                             <a type="button" href="{{route('dashboard')}}"
                                                class="btn normal_btn cancel_modal_btn text-white">Cancel</a>
                                         </div>
