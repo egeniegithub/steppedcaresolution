@@ -31,6 +31,7 @@ class UserController extends Controller
         $type = $request->type ?? "all";
         $project = $request->project_id ?? "all";
         $perPage = $request->show_rows ?? 10;
+        $active_user = User::where('id', auth()->user()->id)->first();
 
         //
         if ($type == "all") {
@@ -56,6 +57,13 @@ class UserController extends Controller
             })
             ->when($projects, function ($x, $q) {
                 $x->whereIn('project_id', $q);
+            })
+            ->where(function ($q) use($active_user) {
+                if ($active_user->role == 'Admin') {
+
+                }else{
+                    $q->where('project_id', $active_user->project_id);
+                }
             })
             ->orderBy(
                 'id',
