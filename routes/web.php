@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 
@@ -34,6 +35,11 @@ Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])-
 
 Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
 
+    Route::get('get-streams/{id}',[HomeController::class,'getFormStreams'])->name('dashboard.get_streams');
+    Route::get('get-forms/{id}',[HomeController::class,'getProjectForms'])->name('dashboard.get_forms');
+    Route::get('get-fields/{id}',[HomeController::class,'getStreamFields'])->name('dashboard.get_fields');
+    Route::post('save_graph',[HomeController::class,'saveGraph'])->name('dashboard.save_graph');
+
     Route::group(['prefix' => 'users',  'middleware' => 'auth'], function(){
         Route::get('/', [App\Http\Controllers\UserController::class,'index'])->name('dashboard.users');
         Route::get('/create', [App\Http\Controllers\UserController::class,'create'])->name('dashboard.user.create');
@@ -64,6 +70,7 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
         Route::get('/stream_update_two', [App\Http\Controllers\StreamController::class,'stream_update_two'])->name('dashboard.stream.stream_update_two');
         Route::get('/render/{id}', [App\Http\Controllers\StreamController::class,'render'])->name('dashboard.stream.render');
         Route::post('/stream-post', [App\Http\Controllers\StreamController::class,'streamPost'])->name('dashboard.stream.stream_post');
+        Route::post('/delete-field', [App\Http\Controllers\StreamController::class,'streamField'])->name('dashboard.stream.delete_field');
     });
 
     Route::group(['prefix' => 'project',  'middleware' => 'auth'], function(){

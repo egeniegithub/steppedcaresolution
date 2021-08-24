@@ -47,7 +47,7 @@
                                             </ul>
                                             <div class="tab">
                                                 <button type="button" class="tablinks li_light_border tab-text"
-                                                        onclick="openCity(event, 'text')"><img class="image_black "
+                                                        onclick="openCity(event, 'text')" id="defaultOpen"><img class="image_black"
                                                                                                src="{{url('/assets/images/text_black.png')}}"/>
                                                     <img class="image_white "
                                                          src="{{url('/assets/images/text_white.png')}}"/> <span
@@ -77,14 +77,14 @@
                                                          src="{{url('/assets/images/image_white.png')}}"/> <span
                                                         class="light_grey_text"> Image</span></button>
                                                 <button type="button" class="tablinks li_light_border"
-                                                        onclick="openCity(event, 'select')" id="defaultOpen"><img
+                                                        onclick="openCity(event, 'select')"><img
                                                         class="image_black dropdownfiield_icon"
                                                         src="{{url('/assets/images/dropdown-black.png')}}"/> <img
                                                         class="image_white dropdownfiield_icon"
                                                         src="{{url('/assets/images/dropdown-white.png')}}"/> <span
                                                         class="light_grey_text">Drop Down</span></button>
                                                 <button type="button" class="tablinks li_light_border  tab-table"
-                                                        onclick="openCity(event, 'table')" id="defaultOpen"><img
+                                                        onclick="openCity(event, 'table')" ><img
                                                         class="image_black"
                                                         src="{{url('/assets/images/table_black.png')}}"/> <img
                                                         class="image_white"
@@ -156,7 +156,8 @@
                                                                     </label>
                                                                 </td>
                                                             </tr>
-                                                            <tr>
+
+                                                            <tr id="only-for-number" style="display: none">
                                                                 <th> Cumulative Value:</th>
                                                                 <td>
                                                                     <label class="radio_container">
@@ -176,6 +177,8 @@
                                                                     </label>
                                                                 </td>
                                                             </tr>
+
+
                                                         </table>
                                                     </div>
                                                 </div>
@@ -475,16 +478,22 @@
                                                                         class="btn table_btn  update_btn text-white">
                                                                     Update
                                                                 </button>
-                                                                <button type="button"
-                                                                        class="btn  table_btn delete_btn text-white"
-                                                                        onclick="removeFieldFromList('{{$field['orderCount']}}')">
-                                                                    Delete
-                                                                </button>
+                                                                <form action="{{route('dashboard.stream.delete_field')}}" method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id" value="{{$field['id']}}">
+                                                                    <button type="submit"
+                                                                            class="btn  table_btn delete_btn text-white">
+                                                                        Delete
+                                                                    </button>
+                                                                </form>
                                                             </div>
                                                         </td>
                                                         <input type="hidden"
                                                                name="fields[{{$field['orderCount']}}][fieldName]"
                                                                value="{{$field['fieldName']}}">
+                                                        <input type="hidden"
+                                                               name="fields[{{$field['orderCount']}}][id]"
+                                                               value="{{$field['id']}}">
                                                         <input type="hidden"
                                                                name="fields[{{$field['orderCount']}}][fieldType]"
                                                                value="{{$field['fieldType']}}">
@@ -512,9 +521,9 @@
                                         <div class="btn-group btn_group_padding">
                                             <button class="btn table_btn del_modal_btn text-white" type="submit"> Save
                                             </button>
-                                            <button class="btn table_btn cancel_modal_btn text-white" type="reset">
+                                            <a href="{{route('dashboard.streams',$form_id)}}" class="btn table_btn cancel_modal_btn text-white" >
                                                 Cancel
-                                            </button>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -543,6 +552,11 @@
                         cardId = 'select'
                     } else {
                         cardId = 'textarea';
+                    }
+                    if (cityName == 'number'){
+                        $('#only-for-number').css('display','block')
+                    }else{
+                        $('#only-for-number').css('display','none')
                     }
                     switch (cityName) {
                         case 'text':

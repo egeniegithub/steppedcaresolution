@@ -43,8 +43,12 @@ class StreamController extends Controller
 
     public function create($form_id, $stream_id = null)
     {
-        $stream = !empty($stream_id) ? Stream::find($stream_id) : null;
-        $fields = isset($stream->fields) ? json_decode($stream->fields, true) : [];
+        $stream = null;
+        $fields = [];
+        if (!empty($stream_id)) {
+            $stream = Stream::find($stream_id)->with(['getFields'])->first();
+            $fields = $stream->getFields;
+        }
         return view('streams.create')->with(compact('form_id', 'stream', 'fields'));
     }
 
@@ -95,7 +99,7 @@ class StreamController extends Controller
                 ];
             }
             if (count($ids)) {
-                StreamField::whereIn($ids)->update($fields);
+                StreamField::whereIn('id',$ids)->update($fields);
             } else {
                 DB::table('stream_fields')->insert($fields);
             }
@@ -249,8 +253,7 @@ class StreamController extends Controller
             }
 
 
-
-            if (count($data_array)){
+            if (count($data_array)) {
                 DB::table('stream_field_values')->insert($data_array);
             }
             $changeLog = [
@@ -266,7 +269,7 @@ class StreamController extends Controller
                     'value' => $field
                 ]);
             }
-            if (count($data_array)){
+            if (count($data_array)) {
                 foreach ($data_array as $key => $image) {
                     StreamFieldValue::where(['stream_id' => $stream_id, 'id' => $key])->update([
                         'value' => $image
@@ -309,6 +312,15 @@ class StreamController extends Controller
             return back()->with('error', $e->getMessage());
         }
         return back()->with('success', 'Status updated successfully!');
+    }
+
+    public function streamField(Request $request)
+    {
+        $id = $request->id;
+
+        StreamField::where('id',$id)->delete();
+
+        return back()->with('success','Field has been successfully saved.');
     }
 }
 

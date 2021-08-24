@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Graph;
 use App\Models\Period;
 use App\Models\Permission;
 use App\Models\Stream;
 use App\Models\StreamAccess;
+use App\Models\StreamField;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Auth;
@@ -69,7 +71,6 @@ class HomeController extends Controller
 
             return view('dashboard')->with(compact('active_user', 'row_show', 'streams', 'periods', 'current_period_id'));
         }else{
-
             if (!empty($request->period_id)){
                 $period_id = $request->period_id;
             }else{
@@ -87,10 +88,53 @@ class HomeController extends Controller
                 }
             }
 
-            $forms = Form::where('period_id', $period_id)->orderBy('id', 'DESC')->get();
+            $forms = Form::where('period_id', $period_id)->with('streams')->orderBy('id', 'DESC')->get();
             $periods = Period::all();
-
-            return view('dashboard')->with(compact('forms', 'periods', 'period_id'));
+            $projects = project::all();
+            $graphs = Graph::with(['stream','project','form','period','field'])->get();
+            return view('dashboard')->with(compact('forms', 'periods', 'period_id','projects','graphs'));
         }
     }
+
+    public function getFormStreams(Request $request)
+    {
+        $id = $request->id ?? null;
+        $streams = [];
+        if ($id){
+            $streams = Stream::where('form_id',$id)->get();
+        }
+        return response()->json(['data' => $streams]);
+    }
+
+    public function getProjectForms(Request $request)
+    {
+        $id = $request->id;
+        $forms = Form::where('project_id', $id)->get();
+        return response()->json(['data' => $forms]);
+    }
+
+    public function getStreamFields(Request $request)
+    {
+        $id = $request->id;
+        $response = StreamField::where(['stream_id'=>$id, 'fieldType' => 'number'])->get();
+
+        return response()->json([
+            'data' => $response
+        ]);
+    }
+
+    public function saveGraph(Request $request)
+    {
+        //dd($request->all());
+        Graph::create($request->all());
+        return back()->with('success','New Graph has been successfully added.');
+    }
+
+    public function removeGraph(Request $request)
+    {
+        $id = $request->id;
+
+        return back()->with('success','Graph has been successfully removed');
+    }
+
 }
