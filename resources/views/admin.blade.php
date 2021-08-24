@@ -103,7 +103,11 @@
                                                 </div>
                                             </div>
                                             <div class="cross_image">
-                                                <img class="cross_imgae_width" src="../assets/images/cross_new.png" />
+                                                <form action="{{route('dashboard.delete_graph')}}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{$graph->id}}">
+                                                    <button type="submit" style="background: #fff; border: 0"><img class="cross_imgae_width" src="../assets/images/cross_new.png"/></button>
+                                                </form>
                                             </div>
                                         </div>
                                         <div class="row new_row_adjusted">
@@ -135,7 +139,11 @@
                                                 </div>
                                             </div>
                                             <div class="cross_image">
-                                                <img class="cross_imgae_width" src="../assets/images/cross_new.png"/>
+                                                <form action="{{route('dashboard.delete_graph')}}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{$graph->id}}">
+                                                    <button type="submit" style="background: #fff; border: 0"><img class="cross_imgae_width" src="../assets/images/cross_new.png"/></button>
+                                                </form>
                                             </div>
                                         </div>
                                         <div class="row new_row_adjusted">

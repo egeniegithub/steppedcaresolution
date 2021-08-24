@@ -130,10 +130,10 @@ class HomeController extends Controller
         return back()->with('success','New Graph has been successfully added.');
     }
 
-    public function removeGraph(Request $request)
+    public function deleteGraph(Request $request)
     {
         $id = $request->id;
-
+        Graph::where('id',$id)->delete();
         return back()->with('success','Graph has been successfully removed');
     }
 
