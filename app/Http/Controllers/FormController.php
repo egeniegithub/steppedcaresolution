@@ -44,7 +44,7 @@ class FormController extends Controller
                 if ($active_user->role == 'Admin') {
 
                 }else{
-                    $q->where('forms.created_by', $active_user->id);
+                    $q->where('p.id', $active_user->project_id);
                 }
             })
             ->where('period_id', $period_id)

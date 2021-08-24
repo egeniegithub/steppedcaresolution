@@ -35,7 +35,7 @@ class PermissionsController extends Controller
         }
 
         $prefilled_data = array(
-            'project_id' => $form ? $form->project_id : null,
+            'project_id' => $form ? $form->project_id : null, //($active_user->role == 'Manager' ? $active_user->project_id : null)
             'period_id' => $form ? $form->period_id : null,
             'stream_id' => $stream_id ?? null,
             'stream_name' => $stream->name ?? null,
