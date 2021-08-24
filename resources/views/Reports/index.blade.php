@@ -85,8 +85,7 @@
                                                         class="forward_icon"
                                                         src="{{asset('assets/images/forward_icon.PNG')}}"/></td>
                                                 <td data-toggle="collapse"
-                                                    data-target="#accordion_{{$loop->iteration}}"><a href="#"
-                                                                                                     class="form_anchor_text">{{$form->name}}</a>
+                                                    data-target="#accordion_{{$loop->iteration}}">{{$form->name}}
                                                 </td>
                                                 <td data-toggle="collapse"
                                                     data-target="#accordion_{{$loop->iteration}}">{{formStatus($form->id)}}</td>

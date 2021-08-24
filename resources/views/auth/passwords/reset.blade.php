@@ -9,8 +9,8 @@
                     <form method="POST" action="{{ route('reset.password.post') }}">
                     @csrf
                     <div class="row">
-                    @include('layouts.flash-message') 
-                    </div>     
+                    @include('layouts.flash-message')
+                    </div>
                      <center><h3> {{ __('Update Password') }}</h3></center>
                         <input type="hidden" name="token" value="{{ $token }}">
 

@@ -24,6 +24,7 @@
 
     <!-- ckeditor -->
     <script src="{{asset('assets/ckeditor/ckeditor.js')}}"></script>
+    <script src="{{asset('assets/ckfinder/ckfinder.js')}}"></script>
     <script src="{{asset('assets/js/jquery-2.2.4.js')}}"></script>
     <script src="{{asset('assets/js/jquery-ui.js')}}"></script>
 
@@ -40,14 +41,19 @@
     <!-- [ Pre-loader ] End -->
 
     @if(Auth::check())
-        @if(Auth::user()->role=="Admin" || Auth::user()->role=="Manager")
-            @include('layouts.leftside_navigation')
-            @include('layouts.header')
-        @else
-            @include('layouts.user_header')
-        @endif
-    @endif
-
+      
+            @if(Auth::user()->role=="Admin" || Auth::user()->role=="Manager"  )
+               @if(request()->segment(1) !="reset-password")
+                    @include('layouts.leftside_navigation')
+                    @include('layouts.header')
+                @else
+                    @include('layouts.user_header')
+                @endif
+                @else
+                    @include('layouts.user_header')
+                @endif
+            @endif
+      
     <!-- [ Main Content ] start -->
     <div class=" @if(request()->segment(1) == "login" || request()->segment(1) =="reset-password" || request()->segment(1) =="forget-password"  ) @else pcoded-main-container @endif
         @if(Auth::check())
