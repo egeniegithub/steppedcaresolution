@@ -9292,7 +9292,7 @@ table thead tr th:last-child {
 
 .table_margin_adj {
     margin-bottom: 0px !important;
-    table-layout: fixed;
+    table-layout: auto;
 }
 
 table.table_margin_adj {
@@ -10166,7 +10166,6 @@ table.table_margin_adj thead tr td:last-child{
 .user_table thead tr td:nth-child(2){
     width:22%;
 }
-
 .dropdownfiield_icon{
     width:24px
 }
@@ -10181,6 +10180,12 @@ table.stream_data_table thead tr td:last-child {
 }
 .dropdown_small_text{
     color:grey
+}
+.user_table_layout{
+    table-layout: auto;
+}
+.user_table_layout thead tr th{
+    border-right: 1px solid #e2e5e8 ;
 }
 @media only screen and (min-width:768px) and (max-width:1000px) {
     .grid_container {
