@@ -62,6 +62,7 @@ class StreamController extends Controller
 
     public function store(Request $request)
     {
+        //dd($request->input());
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
         ]);
@@ -73,18 +74,28 @@ class StreamController extends Controller
         try {
             $user = auth()->user();
             $input = $request->input();
-            $streamObj = !empty($input['stream_id']) ? Stream::find($input['stream_id']) : new Stream();
-            $streamObj->name = $input['name'];
-            $streamObj->form_id = $input['form_id'];
-            $streamObj->fields = null;
-            $streamObj->status = 'Draft';
-            $streamObj->save();
+
+            $stream = array(
+                'name' => $input['name'],
+                'form_id' => $input['form_id'],
+                'fields' => null,
+                'status' => 'Draft'
+            );
+
+            if (!empty($input['stream_id'])){
+                Stream::where('id', $input['stream_id'])->update($stream);
+                $inserted_stream = $input['stream_id'];
+            }else{
+                $inserted = Stream::create($stream);
+                $inserted_stream = $inserted->id;
+            }
+
             $fields = [];
             foreach ($input['fields'] as $field) {
 
                 $fields[] = [
                     'id' => !empty($field['id']) ? $field['id'] : null,
-                    'stream_id' => $streamObj->id,
+                    'stream_id' => $inserted_stream,
                     'form_id' => $input['form_id'],
                     'user_id' => $user->id,
                     'isRequired' => $field['isRequired'],
