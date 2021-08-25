@@ -9366,6 +9366,7 @@ table.table_margin_adj thead tr th:last-child {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    left: 20px;
 }
 
 .view_btn {
@@ -10288,11 +10289,12 @@ table.stream_data_table thead tr td:last-child {
         table-layout: auto !important;
     }
     .pcoded-header .custom_dropdown .dropdown-menu {
-        top: 72px;
+        top: 42px;
         transform: translate(146%, 0%);
         min-width: 124px;
         width: 100px;
         line-height: 26px;
+        left: 20px;
     }
     .main-search.open {
         display: none
