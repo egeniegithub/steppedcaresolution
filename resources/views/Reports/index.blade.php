@@ -79,10 +79,10 @@
                                         </thead>
                                         <tbody>
                                         @forelse($form_streams as $form)
-                                            <tr class="clickable collapsed">
-                                                <td data-toggle="collapse"
+                                            <tr class=" clickable collapsed">
+                                                <td data-toggle="collapse" class="clickable"
                                                     data-target="#accordion_{{$loop->iteration}}"><img
-                                                        class="forward_icon"
+                                                        class="forward_icon "
                                                         src="{{asset('assets/images/forward_icon.PNG')}}"/></td>
                                                 <td data-toggle="collapse"
                                                     data-target="#accordion_{{$loop->iteration}}">{{$form->name}}
@@ -238,15 +238,21 @@
                 }
             }, 100);
         })
-        $('.report_table tbody tr.clickable').each(function () {
-            if ($(this).next('tr').length != 0) {
-                $(this).find('td').css('border-bottom', '0');
+        $('.report_table tbody tr.clickable').each(function(){
+            if( $(this).next('tr').length != 0)
+            {
+                $(this).find('td').css('border-bottom','0');
             }
         });
-
+        $(".no-open").click(function(e) {
+            e.preventDefault();
+            // return true;
+        });
+    </script>
+    <script>
+      
 
         function getReport(id) {
-            console.log('id', id)
             $('#report-model-data').html('<p>Loading data...</p>')
             $.ajax({
                 url: "/dashboard/reports/stream/" + id,
@@ -256,8 +262,6 @@
                     data = data.data
                     let streams = data.streams
                     $('#download_id').val(data.id);
-                    console.log('data', data)
-
                     let html = '';
 
                     html = '<div class="row">'

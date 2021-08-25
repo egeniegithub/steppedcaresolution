@@ -25,9 +25,10 @@
                         <div class="table_div_padding">
                             <div class="card mb-0">
                                 <div class="card_header">
-                                    <div class="grid_container li_dark_border">
+                                    <div class=" li_dark_border">
                                         <div class="summary_text_center">
                                             <h5>Summary of Period</h5>
+                                         
                                             <div class="summary_view_more ml-2">
                                                 <form method="get" action="{{route('dashboard.forms')}}">
                                                     <input type="hidden" name="period_id" value="{{$period_id}}">
@@ -36,6 +37,7 @@
                                                     </button>
                                                 </form>
                                             </div>
+                                            
                                         </div>
                                         <div class="cross_image">
                                             {{--<img class="cross_imgae_width" src="../assets/images/cross_new.png" />--}}
@@ -43,7 +45,8 @@
                                     </div>
                                     <form method="get" action="">
                                         <div class="row new_row_adjusted li_dark_border">
-                                            <div class="col-sm-10 sumary_select_list ">
+                                            <div class="col-sm-12 sumary_select_list ">
+                                                <div class="form-group  pt-1 d-flex ">
                                                 <select class="form-control form-select white_input" name="period_id"
                                                         aria-label="Default select example">
                                                     @foreach($periods as $period)
@@ -53,11 +56,11 @@
                                                         </option>
                                                     @endforeach
                                                 </select>
-                                            </div>
-                                            <div class="col-sm-2 sumary_select_list ">
-                                                <button class="span_search span_mid"><i
+                                                <button class="dashboard_span_search span_mid"><i
                                                         class="fas fa-search search_icon"></i></button>
+</div>
                                             </div>
+                                           
                                         </div>
                                     </form>
                                 </div>
