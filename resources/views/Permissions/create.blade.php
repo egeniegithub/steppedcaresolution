@@ -37,10 +37,10 @@
                                         </div>
 
                                         @if($active_user->role != 'Admin')
-                                            <input type="hidden" name="project_id" value="{{$active_user->project_id}}">
+                                            <input type="hidden" name="project_id" id="project_id" value="{{$active_user->project_id}}">
                                         @else
                                             <div class="col-xl-6 col-lg-6 col-md-6 col-12">
-                                                <div class="mb-4">
+                                                <div class="mb-4" id="project_div">
                                                     <label for="FormGroup" class="form-label">Select Project *</label>
                                                     <select class="form-control form-select" id="project_id" name="project_id" aria-label="Default select example" required>
                                                         <option value="">Select Project</option>
@@ -65,7 +65,7 @@
 
                                                     @if(!empty($forms))
                                                         @foreach($forms as $form)
-                                                            <option value="{{$form->id}}" {{$prefilled_data['form_id'] == auth()->user()->project_id ? "selected" : ""}} >{{$form->name}}</option>
+                                                            <option value="{{$form->id}}" {{$prefilled_data['form_id'] == $prefilled_data['form_id'] ? "selected" : ""}} >{{$form->name}}</option>
                                                         @endforeach
                                                     @endif
                                                 </select>
@@ -98,12 +98,12 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                        <div class="col-xl-4 col-lg-4 col-md-4 col-12">
+                                        <div class="col-xl-4 col-lg-4 col-md-4 col-12 text-center">
                                             <br>
                                             <br>
                                             <br>
                                             <br>
-                                            <h4>Drag User from <u>Unassigned User</u> to <u>Assigned User</u></h4>
+                                            <h5>Drag User from one box to other</h5>
 
                                         </div>
                                         <div class="col-xl-4 col-lg-4 col-md-4 col-12">

@@ -21,8 +21,8 @@ class FormController extends Controller
         if (!empty($request->period_id)){
             $period_id = $request->period_id;
         }else{
-
-            $current_period = Period::all()->filter(function($item) {
+            $period_id = null;
+            /*$current_period = Period::all()->filter(function($item) {
                 if (Carbon::now()->between($item->start_date, $item->end_date)) {
                     return $item;
                 }
@@ -32,7 +32,7 @@ class FormController extends Controller
                 $period_id = $current_period->id;
             }else{
                 $period_id = null;
-            }
+            }*/
         }
 
         $forms = Form::when($search_keyword, function ($query, $value) {
@@ -40,6 +40,7 @@ class FormController extends Controller
                 ->orWhere('p.name', 'like', '%' . $value . '%');
         })
             ->leftjoin('projects as p', 'p.id', '=', 'forms.project_id')
+            ->leftjoin('periods as pe', 'pe.id', '=', 'forms.period_id')
             ->where(function ($q) use($active_user) {
                 if ($active_user->role == 'Admin') {
 
@@ -47,8 +48,13 @@ class FormController extends Controller
                     $q->where('p.id', $active_user->project_id);
                 }
             })
-            ->where('period_id', $period_id)
-            ->select('forms.id AS form_id', 'forms.name as form_name', 'p.name as project_name', 'p.id as project_id')
+            ->where(function ($q) use($period_id) {
+                if ($period_id) {
+                    $q->where('period_id', $period_id);
+                }
+            })
+
+            ->select('forms.id AS form_id', 'forms.name as form_name', 'p.name as project_name', 'p.id as project_id', 'pe.name as period_name')
             ->orderBy('form_id', 'DESC')
             ->paginate($perPage);
 

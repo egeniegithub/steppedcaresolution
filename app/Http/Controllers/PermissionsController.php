@@ -26,17 +26,20 @@ class PermissionsController extends Controller
             $form = NULL;
         }
 
+        $date = Carbon::now();
+        $period_id = Period::whereRaw('"'.$date.'" between `start_date` and `end_date`')->value('id');
+
         $active_user = User::where('id', auth()->user()->id)->first();
 
         if ($active_user->role != 'Admin'){
-            $forms = Form::where('project_id', $active_user->project_id)->get();
+            $forms = Form::where('project_id', $active_user->project_id)->where('period_id', $period_id)->get();
         }else{
             $forms = (object) array();
         }
 
         $prefilled_data = array(
             'project_id' => $form ? $form->project_id : null, //($active_user->role == 'Manager' ? $active_user->project_id : null)
-            'period_id' => $form ? $form->period_id : null,
+            'period_id' => $form ? $form->period_id : $period_id,
             'stream_id' => $stream_id ?? null,
             'stream_name' => $stream->name ?? null,
             'form_id' => $stream->form_id ?? null,
@@ -148,9 +151,10 @@ class PermissionsController extends Controller
         return response()->json($streams);
     }
 
-    public function getPermissionedUsers($project_id, $form_id, $stream_id)
+    public function getPermissionedUsers($period_id, $project_id, $form_id, $stream_id)
     {
         $permissioned_users = StreamAccess::leftjoin('permissions as p', 'p.id', '=', 'stream_accesses.permission_id')
+            ->where('p.period_id', $period_id)
             ->where('p.project_id', $project_id)
             ->where('p.form_id', $form_id)
             ->where('p.stream_id', $stream_id)

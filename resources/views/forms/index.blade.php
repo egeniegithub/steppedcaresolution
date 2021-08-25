@@ -88,6 +88,7 @@
                                                 <td style="width: 10%">No</td>
                                                 <td>Form</td>
                                                 <td>Project</td>
+                                                <td>Period</td>
                                                 <td>Actions</td>
                                             </tr>
                                         </thead>
@@ -97,6 +98,7 @@
                                                 <td>{{$loop->iteration}}</td>
                                                 <td><a type="button" href="{{ route('dashboard.streams', [$form->form_id]) }}" >{{$form->form_name}}</a></td>
                                                 <td>{{$form->project_name}}</td>
+                                                <td>{{$form->period_name}}</td>
                                                 <td>
                                                     <div class="btn-group" role="group" aria-label="Basic example">
                                                         <a data-toggle="modal" data-target="#editFormModal{{$form->form_id}}" class="btn table_btn update_btn text-white">Update</a>
