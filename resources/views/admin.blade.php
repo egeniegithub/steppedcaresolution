@@ -55,7 +55,7 @@
                                                 </select>
                                             </div>
                                             <div class="col-sm-2 sumary_select_list ">
-                                                <button class="span_search span_mid"><i
+                                                <button class="dashboard_span_search span_mid"><i
                                                         class="fas fa-search search_icon"></i></button>
                                             </div>
                                         </div>

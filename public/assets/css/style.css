@@ -9320,7 +9320,17 @@ table.table_margin_adj thead tr th:last-child {
     border-radius: 1px solid;
     border-radius: 10px;
 }
-
+.dashboard_span_search{
+  /* width: 29.6px; */
+  min-width: 43px;
+  /* height: 28.2px; */
+  min-height: 42px;
+  margin: 0px 0px 0px 10px;
+  padding: 5.1px 6.3px 5.1px 5.3px;
+  background-color: #4A90CB;
+  border-radius: 1px solid;
+  border-radius: 10px;
+}
 .search_icon {
     width: 14px;
     height: 14px;
