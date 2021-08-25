@@ -38,9 +38,9 @@
                     url:"{{url('/get-users')}}/"+selected_option,
                     success:function(response)
                     {
-                        if(response)
-                        {
+                        if(response) {
                             $('#all_users').html('');
+                            $("#assigned_users").html('');
 
                             var html = '';
                             const unassign_array = [];
@@ -103,6 +103,7 @@
             var stream_from_form = $("#stream_from_form").val();
             var selected_form_id = $("#selected_form_id").val();
             var project_id = $("#project_id").val();
+            var period_id = $("#period_id").val();
             var form_id = 0;
 
             if (selected_form_id){
@@ -111,11 +112,16 @@
                 form_id = $("#form_id").val();
             }
 
+            /*alert('period_id '+period_id);
+            alert('project '+project_id);
+            alert('form '+form_id);
+            alert('stream '+selected_stream);*/
+
             if(selected_stream || stream_from_form){
 
                 $.ajax({
                     type:"get",
-                    url:"{{url('/get-permissioned-users')}}/"+project_id+'/'+form_id+'/'+selected_stream,
+                    url:"{{url('/get-permissioned-users')}}/"+period_id+'/'+project_id+'/'+form_id+'/'+selected_stream,
                     success:function(response)
                     {
                         if(response)
@@ -128,6 +134,7 @@
                             if (response.unassigned_users){
 
                                 $('#all_users').html('');
+                                $("#assigned_users").html('');
 
                                 $.each(response.unassigned_users,function(key,value){
                                     html += '<li class="list-group-item" data-draggable="item" draggable="true">'+
@@ -141,6 +148,7 @@
                             }
 
                             if (response.assigned_users){
+
                                 $.each(response.assigned_users,function(key,value){
                                     assigned_html += '<li class="list-group-item" data-draggable="item" draggable="true">'+
                                         '<input type="hidden" name="assigned_users[]" value="'+key+'"><span>'+value+'</span>'

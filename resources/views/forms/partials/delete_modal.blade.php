@@ -9,7 +9,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p> Are you sure you want to delete ?</p>
+                <p> Are you sure you want to delete ? Related streams will also be deleted</p>
                 <p> Remember this action will not be reversible .</p>
             </div>
             <input type="hidden" id="target_row_form">

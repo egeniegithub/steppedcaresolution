@@ -12,8 +12,7 @@
                 <form method="POST" action="{{ route('dashboard.period.sync_data') }}"  enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="period_id" value="{{$period->id}}">
-                    <p style="color: black">Are you sure ?</p>
-                    <p style="color: black">Sync data from previous period</p>
+                    <p style="color: black">Are you sure , you want to Sync data from previous period?</p>
                     <div class="modal-footer project_modal_footer users_modal_footer">
                         <button type="submit" class="btn btn-primary">Sync</button>
                         <button class="btn btn-light text-white" data-dismiss="modal">Cancel</button>

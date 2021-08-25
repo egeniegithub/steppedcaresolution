@@ -8,6 +8,7 @@ use App\Models\StreamAnswer;
 use App\Models\StreamChangeLog;
 use App\Models\StreamField;
 use App\Models\StreamFieldValue;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -79,12 +80,10 @@ class StreamController extends Controller
             $streamObj->status = 'Draft';
             $streamObj->save();
             $fields = [];
-            $ids = [];
             foreach ($input['fields'] as $field) {
-                if (!empty($field['id'])) {
-                    $ids[] = $field['id'];
-                }
+
                 $fields[] = [
+                    'id' => !empty($field['id']) ? $field['id'] : null,
                     'stream_id' => $streamObj->id,
                     'form_id' => $input['form_id'],
                     'user_id' => $user->id,
@@ -98,12 +97,13 @@ class StreamController extends Controller
                     'tableData' => $field['tableData'] ?? ''
                 ];
             }
-            if (count($ids)) {
-                StreamField::whereIn('id',$ids)->update($fields);
-            } else {
-                DB::table('stream_fields')->insert($fields);
+            foreach ($fields as $field) {
+                if (!empty($field['id'])){
+                    StreamField::where('id',$field['id'])->update($field);
+                }else{
+                    StreamField::create($field);
+                }
             }
-
         } catch (\Exception $e) {
 
             \Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
@@ -163,25 +163,23 @@ class StreamController extends Controller
      * Remove the specified resource from storage.
      *
      * @param \App\Models\Stream $stream
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
 
     public function destroy(Request $request)
     {
-        //
         $id = $request->id;
         try {
+            StreamField::where('stream_id', $id)->delete();
             Stream::find($id)->delete();
             return back()->with('success', "Stream has been successfully deleted");
         } catch (\Exception $exception) {
-            //dd($exception);
             return back()->with('error', "Something went wrong");
         }
     }
 
     public function addUpdateStreamSummary(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'summary' => ['required', 'string'],
         ]);
@@ -233,7 +231,6 @@ class StreamController extends Controller
                     'stream_field_id' => $key,
                     'value' => $imageName,
                 ];
-
             }
         }
 
@@ -251,7 +248,6 @@ class StreamController extends Controller
                     'value' => $field,
                 ];
             }
-
 
             if (count($data_array)) {
                 DB::table('stream_field_values')->insert($data_array);
@@ -317,11 +313,7 @@ class StreamController extends Controller
     public function streamField(Request $request)
     {
         $id = $request->id;
-
         StreamField::where('id',$id)->delete();
-
         return back()->with('success','Field has been successfully saved.');
     }
 }
-
-
