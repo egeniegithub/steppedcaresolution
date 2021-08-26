@@ -124,24 +124,26 @@
                                                                         class="table demographic_table platform_visitors table_margin_adj">
                                                                         <thead>
                                                                         <tr>
-                                                                            @foreach($tableData as $table)
-                                                                                @if($table->type == 'column')
-                                                                                    <td>
-                                                                                        {{$table->fieldName}}
-                                                                                        @if($table->tableDropdown == 'yes')
-                                                                                            @php
-                                                                                                $dropdowns = explode(',',$table->tableFieldOptions)
-                                                                                            @endphp
-                                                                                            <select name="" id="">
-                                                                                                @foreach($dropdowns as $dropdown)
-                                                                                                    <option
-                                                                                                        value="">{{$dropdown}}</option>
-                                                                                                @endforeach
-                                                                                            </select>
-                                                                                        @endif
-                                                                                    </td>
-                                                                                @endif
-                                                                            @endforeach
+                                                                            @if(!empty($tableData))
+                                                                                @foreach($tableData as $table)
+                                                                                    @if($table->type == 'column')
+                                                                                        <td>
+                                                                                            {{$table->fieldName}}
+                                                                                            @if($table->tableDropdown == 'yes')
+                                                                                                @php
+                                                                                                    $dropdowns = explode(',',$table->tableFieldOptions)
+                                                                                                @endphp
+                                                                                                <select name="" id="">
+                                                                                                    @foreach($dropdowns as $dropdown)
+                                                                                                        <option
+                                                                                                            value="">{{$dropdown}}</option>
+                                                                                                    @endforeach
+                                                                                                </select>
+                                                                                            @endif
+                                                                                        </td>
+                                                                                    @endif
+                                                                                @endforeach
+                                                                            @endif
                                                                         </tr>
                                                                         </thead>
                                                                         <tbody>

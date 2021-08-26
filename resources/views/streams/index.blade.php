@@ -65,30 +65,7 @@
                                     </table>
                                 </div>
                             </div>
-                            <div class=" flex-columns mob_margin_pagination flex-setting">
-                                <div class="inline_block_adj show_rows_adj">
-                                    <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Show Rows :</label>
-                                    <select class=" my-1 show_rows_count" id="inlineFormCustomSelectPref">
-                                        <option value="1">10</option>
-                                        <option value="2">20</option>
-                                        <option selected value="3">30</option>
-                                        <option value="4">40</option>
-                                        <option value="5">50</option>
-                                    </select>
-                                </div>
-                                <div class="show_rows_adj margin_top">
-                                    <nav aria-label="Page navigation example ">
-                                        <ul class="pagination">
-                                            <li class="page-item "><a class="page-link active" href="#">Prev</a>
-                                            </li>
-                                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </div>
+                            {{--pagination will come here--}}
                         </div>
                     </div>
                 </div>
