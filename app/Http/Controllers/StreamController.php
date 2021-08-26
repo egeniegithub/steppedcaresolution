@@ -47,7 +47,7 @@ class StreamController extends Controller
         $stream = null;
         $fields = [];
         if (!empty($stream_id)) {
-            $stream = Stream::find($stream_id)->with(['getFields'])->first();
+            $stream = Stream::where('id', $stream_id)->with(['getFields'])->first();
             $fields = $stream->getFields;
         }
         return view('streams.create')->with(compact('form_id', 'stream', 'fields'));
