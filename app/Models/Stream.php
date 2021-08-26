@@ -18,7 +18,7 @@ class Stream extends Model
 
     public function getFields()
     {
-        return $this->hasMany(StreamField::class, 'stream_id');
+        return $this->hasMany(StreamField::class);
     }
 
     public function getFieldValues()

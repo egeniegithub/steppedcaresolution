@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Form;
 use App\Models\Period;
 use App\Models\project;
+use App\Models\Stream;
+use App\Models\StreamField;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class FormController extends Controller
@@ -130,9 +133,19 @@ class FormController extends Controller
     public function delete(Request $request)
     {
         try {
-            Form::find(decrypt($request->ref))->delete();
+            $id = decrypt($request->ref);
+            $stream_ids = Stream::where('form_id', $id)->pluck('id')->toArray();
+
+            DB::beginTransaction();
+            // delete all previous data
+            StreamField::whereIn('stream_id', $stream_ids)->delete();
+            Stream::whereIn('id', $stream_ids)->delete();
+            Form::where('id', $id)->delete();
+
+            DB::commit();
             return back()->with('success', 'Form deleted successfully!');
         } catch (Exception $e) {
+            DB::rollBack();
             return back()->with('error', $e->getMessage());
         }
     }
