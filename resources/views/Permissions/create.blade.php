@@ -65,7 +65,7 @@
 
                                                     @if(!empty($forms))
                                                         @foreach($forms as $form)
-                                                            <option value="{{$form->id}}" {{$prefilled_data['form_id'] == $prefilled_data['form_id'] ? "selected" : ""}} >{{$form->name}}</option>
+                                                            <option value="{{$form->id}}" {{$prefilled_data['form_id'] == $form->id ? "selected" : ""}} >{{$form->name}}</option>
                                                         @endforeach
                                                     @endif
                                                 </select>

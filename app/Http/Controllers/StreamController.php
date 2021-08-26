@@ -62,7 +62,6 @@ class StreamController extends Controller
 
     public function store(Request $request)
     {
-        //dd($request->input());
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
         ]);
