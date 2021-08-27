@@ -62,6 +62,7 @@ class StreamController extends Controller
 
     public function store(Request $request)
     {
+        //dd(json_decode(urldecode($request->fields[1]['tableData']))[0]);
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
         ]);
@@ -216,13 +217,14 @@ class StreamController extends Controller
     public function render($id)
     {
         $stream = Stream::where('id', $id)->with('getFields')->first();
-        $values = StreamFieldValue::whereStreamId($id)->get();
+        $values = StreamFieldValue::where('stream_id', $id)->get();
 
         return view('streams.render')->with(compact('stream', 'values'));
     }
 
     public function streamPost(Request $request)
     {
+        //dd($request->input());
         $user = auth()->user();
         $stream_id = $request->stream_id;
         $stream_answer_id = $request->stream_answer_id;
@@ -260,7 +262,7 @@ class StreamController extends Controller
             }
 
             if (count($data_array)) {
-                DB::table('stream_field_values')->insert($data_array);
+                StreamFieldValue::insert($data_array);
             }
             $changeLog = [
                 'stream_id' => $stream_id,
@@ -271,14 +273,14 @@ class StreamController extends Controller
         } else {
             $streamDataOld = StreamFieldValue::where(['stream_id' => $stream_id])->get();
             foreach ($request->field as $key => $field) {
-                StreamFieldValue::where(['stream_id' => $stream_id, 'id' => $key])->update([
+                StreamFieldValue::where(['stream_id' => $stream_id, 'stream_field_id' => $key])->update([
                     'value' => $field
                 ]);
             }
             if (count($data_array)) {
                 foreach ($data_array as $key => $image) {
-                    StreamFieldValue::where(['stream_id' => $stream_id, 'id' => $key])->update([
-                        'value' => $image
+                    StreamFieldValue::where(['stream_id' => $stream_id, 'stream_field_id' => $image['stream_field_id']])->update([
+                        'value' => $image['value']
                     ]);
                 }
             }
