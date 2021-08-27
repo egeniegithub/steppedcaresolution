@@ -125,7 +125,7 @@
                                                             </thead>
                                                             <tbody>
                                                             @forelse($form->streams as $stream)
-                                                                <tr>
+                                                                <tr class="inner_tr">
                                                                     <td>{{$stream->name}}</td>
                                                                     <td>{{$stream->status}}</td>
                                                                     <td>
@@ -228,6 +228,7 @@
 
     {{--<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>--}}
     <script>
+        $("tr_inner").find('td').css('border-bottom','0');
         var table = $('.report_table');
         $("td.clickable").click(function () {
             setTimeout(() => {
@@ -241,6 +242,7 @@
         $('.report_table tbody tr.clickable').each(function(){
             if( $(this).next('tr').length != 0)
             {
+              
                 $(this).find('td').css('border-bottom','0');
             }
         });

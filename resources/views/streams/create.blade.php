@@ -446,7 +446,7 @@
                                 </div>
                                 <div class="card mb-0">
                                     <div class="table-responsive">
-                                        <table class="table   table-bordered stream_primary_table table_margin_adj"
+                                        <table class="table  stream_primary_table table_margin_adj"
                                                id="myTable">
                                             <thead>
                                             <tr>
