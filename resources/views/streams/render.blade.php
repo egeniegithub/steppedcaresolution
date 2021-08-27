@@ -49,44 +49,45 @@
                                                             <label
                                                                 for="exampleFormControlTextarea1">{{$field->fieldName}} {{$field->isRequired == 'no' ? '' : "*"}}</label>
                                                             @php
-                                                                $name = preg_replace('/\s+/', '_', strtolower($field->fieldName));
+                                                                //$name = preg_replace('/\s+/', '_', strtolower($field->fieldName));
                                                                 $required = $field->isRequired == 'no' ? '' : "required";
+                                                                $value = \App\Models\StreamFieldValue::where('stream_field_id', $field->id)->value('value');
                                                             @endphp
                                                             @switch($field->fieldType)
                                                                 @case('text')
                                                                 <input type="text" class="form-control white_input"
-                                                                       name="field[{{ $values[$fieldKey]->id ?? $field->id}}]"
-                                                                       value="{{$values[$fieldKey]->value ?? ''}}" {{$required}}>
+                                                                       name="field[{{$field->id}}]"
+                                                                       value="{{$value ?? ''}}" {{$required}}>
                                                                 @break
 
                                                                 @case('textarea')
                                                                 <textarea class="form-control white_input"
-                                                                          name="field[{{$values[$fieldKey]->id ?? $field->id}}]"
-                                                                          {{$required}} rows="5">{{$values[$fieldKey]->value ?? ''}}</textarea>
+                                                                          name="field[{{$field->id}}]"
+                                                                          {{$required}} rows="5">{{$value ?? ''}}</textarea>
                                                                 @break
 
                                                                 @case('number')
                                                                 <input type="number" class="form-control white_input"
-                                                                       name="field[{{$values[$fieldKey]->id ?? $field->id}}]"
-                                                                       value="{{$values[$fieldKey]->value ?? ''}}" {{$required}}>
+                                                                       name="field[{{$field->id}}]"
+                                                                       value="{{$value ?? ''}}" {{$required}}>
                                                                 @break
 
                                                                 @case('date')
                                                                 <input type="date" class="form-control white_input"
-                                                                       name="field[{{$values[$fieldKey]->id ?? $field->id}}]"
-                                                                       value="{{$values[$fieldKey]->value ?? ''}}" {{$required}}>
+                                                                       name="field[{{$field->id}}]"
+                                                                       value="{{$value ?? ''}}" {{$required}}>
                                                                 @break
 
                                                                 @case('file')
                                                                 <input type="file" class="form-control white_input"
                                                                        src=""
                                                                        alt=""
-                                                                       name="image[{{$values[$fieldKey]->id ?? $field->id}}]" {{$required}}>
+                                                                       name="image[{{$field->id}}]" {{$required}}>
                                                                 <br>
                                                                 <div class="text-center">
-                                                                    @if(isset($values[$fieldKey]->id))
+                                                                    @if(isset($value))
                                                                         <img
-                                                                            src="{{asset('stream_answer_image')}}/{{$values[$fieldKey]->value ?? ''}}"
+                                                                            src="{{asset('stream_answer_image')}}/{{$value ?? ''}}"
                                                                             height="300px" width="500px" alt="No Img">
                                                                     @endif
                                                                 </div>
@@ -98,11 +99,11 @@
                                                                     $options = explode(',', $field->fieldOptions);
                                                                 @endphp
                                                                 <select class="form-control white_input"
-                                                                        name="field[{{$values[$fieldKey]->id ?? $field->id}}]" {{$required}}>
+                                                                        name="field[{{$field->id}}]" {{$required}}>
                                                                     <option value="">Please Select</option>
                                                                     @foreach($options as $option)
                                                                         <option
-                                                                            value="{{$option}}" {{( isset($values[$fieldKey]->value) && $option == $values[$fieldKey]->value) ? 'selected' : ''}}>{{$option}}</option>
+                                                                            value="{{$option}}" {{( isset($value) && $option == $value) ? 'selected' : ''}}>{{$option}}</option>
                                                                     @endforeach
                                                                 </select>
                                                                 @break
@@ -111,10 +112,6 @@
                                                                 @php
                                                                     $tableData =json_decode(urldecode($field->tableData));
                                                                 @endphp
-
-                                                                {{--<pre>
-                                                                    {{print_r($tableData)}}
-                                                                </pre>--}}
 
                                                                 <h5 class="header_padding_adj no_margin_bottom">
                                                                     {{$field->fieldName}}
@@ -135,8 +132,7 @@
                                                                                                 @endphp
                                                                                                 <select name="" id="">
                                                                                                     @foreach($dropdowns as $dropdown)
-                                                                                                        <option
-                                                                                                            value="">{{$dropdown}}</option>
+                                                                                                        <option value="">{{$dropdown}}</option>
                                                                                                     @endforeach
                                                                                                 </select>
                                                                                             @endif
@@ -155,7 +151,7 @@
                                                                         </tbody>
                                                                     </table>
                                                                 </div>
-                                                        </div>
+                                                            </div>
                                                         @break
 
                                                         @default
@@ -163,8 +159,8 @@
                                                         @endswitch
                                                     </div>
                                                 </div>
-                                    </div>
-                                    @endforeach
+                                            </div>
+                                        @endforeach
                                     @endif
 
                                     <div class="row three_btn_margin">
