@@ -10207,6 +10207,30 @@ table.stream_data_table thead tr td:last-child {
 /* .report_table tbody tr:last-child td{
     border-bottom: 1px solid #dee2e6;
 } */
+.stream_editable_coloumn{
+    padding:0px 0px !important;
+}
+.stream_editable_input.custom-select:focus, .stream_editable_input.form-control:focus {
+    background: none;
+}
+.stream_editable_input.form-control:disabled, .stream_editable_input.form-control[readonly] {
+    background-color: white;
+    opacity: 1;
+}
+.stream_editable_input.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: none;
+    outline: 0;
+    box-shadow: unset;
+}
+.stream_view_icons{
+    font-size: 25px;
+    margin-right: 10px;
+}
+.forms_stream_table thead tr td:nth-child(5){
+    width:10%
+}
 @media only screen and (min-width:768px) and (max-width:1000px) {
     .grid_container {
         grid-template-columns: 87% 12%;
