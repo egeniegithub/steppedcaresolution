@@ -311,7 +311,7 @@
                                                     </div>
                                                     <div class="col-sm-12 col-lg-6 add_tables_margin">
                                                         <b class=""><a class="add_icon"
-                                                                       href=""><span> Build Table</span></a></b>
+                                                                      ><span> Build Table</span></a></b>
                                                     </div>
                                                 </div>
                                                 <div class="row row_adjusted">
@@ -334,11 +334,11 @@
                                                                     </label>
                                                                 </td>
                                                             </tr>
-                                                            <tr class="mb-2">
+                                                            <tr class="mb-2 hide_row">
                                                                 <td colspan="2"><span
                                                                         style="font-weight: bold">Dropdown</span></td>
                                                             </tr>
-                                                            <tr>
+                                                            <tr class="hide_row">
                                                                 <td>
                                                                     <label class="radio_container">
                                                                         <input type="radio" checked="checked"
@@ -446,7 +446,7 @@
                                 </div>
                                 <div class="card mb-0">
                                     <div class="table-responsive">
-                                        <table class="table   table-bordered stream_primary_table table_margin_adj"
+                                        <table class="table  stream_primary_table table_margin_adj"
                                                id="myTable">
                                             <thead>
                                             <tr>
@@ -537,9 +537,27 @@
                     integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
             <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
                     integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
-
+          
             <script type="text/javascript">
+             
 
+                $('input[name="tableFieldType"]').click(function(){
+                    var val=$('input[name="tableFieldType"]:checked').val();
+                    var dropdowntable_val=$('input[name="tableDropdown"]:checked').val();
+                    console.log(dropdowntable_val);
+                    if(val=="row"){
+                      $(".hide_row").hide();
+                      $(".table-dropdown-switch").hide();
+                    }else if(val=="row" && dropdowntable_val=="yes" ){
+                        $(".table-dropdown-switch").hide();
+                    }else if(val=="column" && dropdowntable_val=="yes"){
+                        $(".table-dropdown-switch").show();
+                        $(".hide_row").show();
+
+                    }else{
+                        $(".hide_row").show();
+                    }
+                });
                 var tableData = []
                 var recordData = []
 

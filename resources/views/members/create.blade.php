@@ -170,9 +170,7 @@
                                                     <div class="mb-4">
                                                         <div class="custom-file mb-3">
                                                             <label>Image</label>
-
                                                             <div class="row">
-
                                                                <div class="col-sm-9 col-xs-9 col-md-9">
                                                                    <label for="file-upload" class=" btn btn-light text-black custom-file-upload" >
                                                                        <i class="fa fa-cloud-upload"></i> Upload Image

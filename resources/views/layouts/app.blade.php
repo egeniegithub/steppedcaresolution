@@ -27,6 +27,12 @@
     <script src="{{asset('assets/ckfinder/ckfinder.js')}}"></script>
     <script src="{{asset('assets/js/jquery-2.2.4.js')}}"></script>
     <script src="{{asset('assets/js/jquery-ui.js')}}"></script>
+    
+    <script src="{{asset('assets/js/highchart.js')}}"></script>
+    <script src="{{asset('assets/js/accessibility.js')}}"></script>
+    <script src="{{asset('assets/js/export-data.js')}}"></script>
+    <script src="{{asset('assets/js/exporting.js')}}"></script>
+   
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>

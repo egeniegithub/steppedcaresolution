@@ -92,6 +92,6 @@
             </div>
         </div>
     </div>
-
+    
     @include('layouts.pagination')
 @endsection

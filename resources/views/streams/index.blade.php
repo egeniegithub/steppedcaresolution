@@ -31,23 +31,29 @@
                             @include('layouts.flash-message')
                             <div class="card mb-0">
                                 <div class="table-responsive">
-                                    <table class="table  forms_stream_table  table_margin_adj">
+                                    <table class="table  forms_stream_table  table_margin_adj" id="myTable">
                                         <thead>
                                         <tr>
                                             <td>Stream Name</td>
                                             <td>Form</td>
                                             <td>Project</td>
                                             <td>Status</td>
+                                            <td >
+                                                <p> Order </p> 
+                                                <span  class=" edit_button  stream_view_icons"><i class="fas fa-pen-square" style="color:#4A90CB"></i></span> <span type="button" class="cancel_edit_button stream_view_icons"><i style="color:#bf1f28" class="fas fa-window-close"></i></span> <span type="button" class="add_more_button stream_view_icons"><i style="color:#1b9c53" class="fas fa-plus-square"></i></span></td>
                                             <td>Actions</td>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         @forelse($streams as $stream)
-                                            <tr>
+                                            <tr  >
                                                 <td scope="row">{{$stream->stream_name}}</td>
                                                 <td>{{$stream->form_name}}</td>
                                                 <td>{{$stream->project_name}}</td>
                                                 <td>{{$stream->stream_status}}</td>
+                                                <td class="stream_editable_coloumn"><input
+                                                    class="form-control editable_table_coloumn stream_editable_input target" id="1"
+                                                    type="number" readonly value="66">  </td>
                                                 <td>
                                                     <div class="btn-group" role="group" aria-label="Basic example">
                                                         <a href="{{route('dashboard.stream.create', [$form->id, $stream->stream_id])}}" type="button" class="btn table_btn  update_btn text-white">Update</a>
@@ -72,4 +78,61 @@
             </div>
         </div>
     </div>
+
+
+<script src="https://code.jquery.com/jquery-2.2.4.js"
+                    integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+                    integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
+<script>
+ $(".cancel_edit_button").hide();
+ $(".add_more_button").hide();
+
+$(".edit_button").click(function(){
+  $(".edit_button").hide();
+  $(".cancel_edit_button").show();
+  $(".add_more_button").show();
+  $(".editable_table_coloumn").attr("readonly",false);
+});
+
+$(".cancel_edit_button").click(function(){
+  $(".cancel_edit_button").hide();
+  $(".add_more_button").hide();
+  $(".edit_button").show();
+  $(".editable_table_coloumn").attr("readonly",true);
+});
+</script>
+<!-- <script>
+  var fixHelperModified = function (e, tr) {
+      
+                        var $originals = tr.children();
+                        var $helper = tr.clone();
+                        $helper.children().each(function (index) {
+                            $(this).width($originals.eq(index).width())
+                        });
+                        return $helper;
+                    },
+                    updateIndex = function (e, ui) {
+                        $('td.index', ui.item.parent()).each(function (i) {
+                            $(this).html(i + 1);
+                        });
+                        $('input[type=text]', ui.item.parent()).each(function (i) {
+                            $(this).val(i + 1);
+                        });
+                    };
+                $("#myTable tbody").sortable({
+                    helper: fixHelperModified,
+                    stop: updateIndex
+                }).disableSelection();
+
+                $("tbody").sortable(
+                    {
+                    distance: 5,
+                    delay: 100,
+                    opacity: 0.6,
+                    cursor: 'move',
+                    update: function () {
+                    }
+                });
+</script> -->
 @endsection
