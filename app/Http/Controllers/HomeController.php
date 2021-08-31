@@ -38,14 +38,10 @@ class HomeController extends Controller
             $active_user = User::where('id', auth()->user()->id)->first();
             $perPage = $request->show_rows ?? 10;
             $period_id = $request->period_id ?? '';
+            $date = Carbon::now();
 
             if (!$period_id){
-                $current_period_id = Period::all()->filter(function($item) {
-                    if (Carbon::now()->between($item->start_date, $item->end_date)) {
-                        return $item;
-                    }
-                })->first();
-                $current_period_id = $current_period_id ? $current_period_id->value('id') : null;
+                $current_period_id =Period::whereRaw('"'.$date.'" between `start_date` and `end_date`')->value('id');
             }else{
                 $current_period_id = null;
             }
@@ -61,6 +57,11 @@ class HomeController extends Controller
             $streams = Stream::leftjoin('forms as f', 'streams.form_id', '=', 'f.id')
                 ->where('f.project_id', $active_user->project_id)
                 ->whereIn('streams.id', $stream_ids)
+                ->where(function ($q) use($period_id) {
+                    if ($period_id) {
+                        $q->where('period_id', $period_id);
+                    }
+                })
                 ->select('streams.id AS stream_id', 'streams.name as stream_name', 'f.name as form_name', 'f.project_id as project_id',
                     'streams.status as stream_status')
                 ->orderBy('stream_id', 'DESC')

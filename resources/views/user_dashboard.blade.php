@@ -20,7 +20,7 @@
                             <p class="pl-4 mt-2 mb-0"> Select Period </p>
                             <div class="form-group pl-4 pt-1 d-flex search_bar_adj">
                                 <select class="form-control form-select white_input" name="period_id" aria-label="Default select example">
-                                    <option value="" selected>All</option>
+                                    {{--<option value="" selected>All</option>--}}
                                     @foreach($periods as $period)
                                         <option value="{{$period->id}}" {{($current_period_id ? $current_period_id : request()->get('period_id')) == $period->id?"selected":""}}>{{$period->name}}</option>
                                     @endforeach
@@ -60,8 +60,9 @@
                                                 <td>{{$stream->stream_status}}</td>
                                                 <td>
                                                     <div class="btn-group" role="group" aria-label="Basic example">
-                                                        {{--<a type="button" class="btn table_btn update_btn text-white" href="{{route('dashboard.stream.stream_update')}}">Update</a>--}}
-                                                        <a href="{{route('dashboard.stream.render', [$stream->stream_id])}}" type="button" class="btn table_btn update_btn text-white">Update</a>
+                                                        @if($stream->stream_status != 'Published')
+                                                            <a href="{{route('dashboard.stream.render', [$stream->stream_id])}}" type="button" class="btn table_btn update_btn text-white">Update</a>
+                                                        @endif
                                                     </div>
                                                 </td>
                                             </tr>
