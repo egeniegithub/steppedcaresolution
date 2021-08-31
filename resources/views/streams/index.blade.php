@@ -38,7 +38,9 @@
                                             <td>Form</td>
                                             <td>Project</td>
                                             <td>Status</td>
-                                            <td ><a type="button" class="btn table_btn edit_button update_btn text-white">Edit</a> <span class="cancel_edit_button stream_view_icons"><i class="fas fa-window-close"></i></span> <span type="button" class="add_more_button stream_view_icons"><i class="fas fa-plus"></i></span></td>
+                                            <td >
+                                                <p> Order </p> 
+                                                <span  class=" edit_button  stream_view_icons"><i class="fas fa-pen-square" style="color:#4A90CB"></i></span> <span type="button" class="cancel_edit_button stream_view_icons"><i style="color:#bf1f28" class="fas fa-window-close"></i></span> <span type="button" class="add_more_button stream_view_icons"><i style="color:#1b9c53" class="fas fa-plus-square"></i></span></td>
                                             <td>Actions</td>
                                         </tr>
                                         </thead>
@@ -51,7 +53,7 @@
                                                 <td>{{$stream->stream_status}}</td>
                                                 <td class="stream_editable_coloumn"><input
                                                     class="form-control editable_table_coloumn stream_editable_input target" id="1"
-                                                    type="text" readonly value="66">  </td>
+                                                    type="number" readonly value="66">  </td>
                                                 <td>
                                                     <div class="btn-group" role="group" aria-label="Basic example">
                                                         <a href="{{route('dashboard.stream.create', [$form->id, $stream->stream_id])}}" type="button" class="btn table_btn  update_btn text-white">Update</a>
