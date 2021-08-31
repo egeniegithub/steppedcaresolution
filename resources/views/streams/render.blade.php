@@ -39,17 +39,14 @@
                                         @csrf
 
                                         <input type="hidden" name="stream_id" value="{{$stream->id}}">
-                                        <input type="hidden" name="stream_answer_id" value="{{count($values)}}">
 
                                         @if($stream->getFields)
                                             @foreach($stream->getFields as $fieldKey => $field)
                                                 <div class="row">
                                                     <div class="col-sm-12">
                                                         <div class="form-group">
-                                                            <label
-                                                                for="exampleFormControlTextarea1">{{$field->fieldName}} {{$field->isRequired == 'no' ? '' : "*"}}</label>
+                                                            <label for="exampleFormControlTextarea1">{{$field->fieldName}} {{$field->isRequired == 'no' ? '' : "*"}}</label>
                                                             @php
-                                                                //$name = preg_replace('/\s+/', '_', strtolower($field->fieldName));
                                                                 $required = $field->isRequired == 'no' ? '' : "required";
                                                                 $value = \App\Models\StreamFieldValue::where('stream_field_id', $field->id)->value('value');
                                                             @endphp
@@ -57,25 +54,47 @@
                                                                 @case('text')
                                                                 <input type="text" class="form-control white_input"
                                                                        name="field[{{$field->id}}]"
-                                                                       value="{{$value ?? ''}}" {{$required}}>
+                                                                       value="{{$field->value}}" {{$required}}>
                                                                 @break
 
                                                                 @case('textarea')
                                                                 <textarea class="form-control white_input"
                                                                           name="field[{{$field->id}}]"
-                                                                          {{$required}} rows="5">{{$value ?? ''}}</textarea>
+                                                                          {{$required}} rows="5">{{$field->value}}</textarea>
                                                                 @break
 
                                                                 @case('number')
-                                                                <input type="number" class="form-control white_input"
-                                                                       name="field[{{$field->id}}]"
-                                                                       value="{{$value ?? ''}}" {{$required}}>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <input type="number" id="field{{$field->id}}" data-cumulative="{{$field->id}}" class="form-control white_input cumulative-class"
+                                                                               name="field[{{$field->id}}]"
+                                                                               value="{{$field->value}}" {{$required}}>
+                                                                    </div>
+                                                                    <div class="col-md-6" style="margin-top: -30px">
+                                                                        @php
+                                                                        if (empty($field->cumulative_value)){
+                                                                            if (empty($field->value)){
+                                                                                $hidden_value = 0;
+                                                                            }else{
+                                                                                $hidden_value = $field->value;
+                                                                            }
+                                                                        }else{
+                                                                            $hidden_value = $field->cumulative_value;
+                                                                        }
+                                                                        @endphp
+                                                                        <label  for="exampleFormControlTextarea1">Cumulative Value</label>
+                                                                        <input type="hidden" id="cumulative_field_hidden{{$field->id}}" value="{{$hidden_value}}">
+                                                                        <input type="number" id="cumulative_field{{$field->id}}" class="form-control white_input"
+                                                                               name="cumulative_field[{{$field->id}}]"
+                                                                               value="{{$field->cumulative_value}}" readonly>
+                                                                    </div>
+                                                                </div>
                                                                 @break
 
                                                                 @case('date')
                                                                 <input type="date" class="form-control white_input"
                                                                        name="field[{{$field->id}}]"
-                                                                       value="{{$value ?? ''}}" {{$required}}>
+                                                                       value="{{$field->value}}" {{$required}}>
                                                                 @break
 
                                                                 @case('file')
@@ -87,7 +106,7 @@
                                                                 <div class="text-center">
                                                                     @if(isset($value))
                                                                         <img
-                                                                            src="{{asset('stream_answer_image')}}/{{$value ?? ''}}"
+                                                                            src="{{asset('stream_answer_image')}}/{{$field->value}}"
                                                                             height="300px" width="500px" alt="No Img">
                                                                     @endif
                                                                 </div>
@@ -103,54 +122,89 @@
                                                                     <option value="">Please Select</option>
                                                                     @foreach($options as $option)
                                                                         <option
-                                                                            value="{{$option}}" {{( isset($value) && $option == $value) ? 'selected' : ''}}>{{$option}}</option>
+                                                                            value="{{$option}}" {{( isset($value) && $option == $field->value) ? 'selected' : ''}}>{{$option}}</option>
                                                                     @endforeach
                                                                 </select>
                                                                 @break
 
                                                                 @case('table')
                                                                 @php
-                                                                    $tableData =json_decode(urldecode($field->tableData));
+                                                                    $tableData = \App\Models\StreamFieldGrid::where('stream_field_id', $field->id)->orderBy('type', 'ASC')->orderBy('order_count', 'ASC')->get();
+                                                                    $column_dropdown = array();
+                                                                    $table_options = array();
                                                                 @endphp
 
-                                                                <h5 class="header_padding_adj no_margin_bottom">
-                                                                    {{$field->fieldName}}
-                                                                </h5>
-                                                                <div class="table-responsive">
-                                                                    <table
-                                                                        class="table demographic_table platform_visitors table_margin_adj">
-                                                                        <thead>
-                                                                        <tr>
-                                                                            @if(!empty($tableData))
+                                                                @if($tableData)
+                                                                    <div class="table-responsive">
+                                                                        <table class="table demographic_table platform_visitors table-bordered">
+                                                                            <thead>
+                                                                            <tr>
+                                                                                @php
+                                                                                    $column_count = 0;
+                                                                                @endphp
                                                                                 @foreach($tableData as $table)
                                                                                     @if($table->type == 'column')
+                                                                                        @php
+                                                                                            if ($table->is_dropdown == 1){
+                                                                                                array_push($column_dropdown, $column_count);
+                                                                                                $table_options[$column_count] = explode(',',$table->field_options);
+                                                                                            }
+                                                                                            $column_count++;
+                                                                                        @endphp
+                                                                                        @if($loop->iteration == 1)
+                                                                                            <td></td>
+                                                                                        @endif
                                                                                         <td>
-                                                                                            {{$table->fieldName}}
-                                                                                            @if($table->tableDropdown == 'yes')
-                                                                                                @php
-                                                                                                    $dropdowns = explode(',',$table->tableFieldOptions)
-                                                                                                @endphp
-                                                                                                <select name="" id="">
-                                                                                                    @foreach($dropdowns as $dropdown)
-                                                                                                        <option value="">{{$dropdown}}</option>
-                                                                                                    @endforeach
-                                                                                                </select>
-                                                                                            @endif
+                                                                                            {{$table->name}}
                                                                                         </td>
                                                                                     @endif
                                                                                 @endforeach
-                                                                            @endif
-                                                                        </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                        @foreach($tableData as $table)
-                                                                            @if($table->type == 'row')
-                                                                                <td>{{$table->fieldName}}</td>
-                                                                            @endif
-                                                                        @endforeach
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
+                                                                                <td>Cumulative</td>
+                                                                            </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            @foreach($tableData as $table)
+                                                                                @if($table->type == 'row')
+                                                                                    @if($loop->iteration == 1)
+                                                                                        <tr>
+                                                                                            @for($i=0; $i<$column_count; $i++)
+                                                                                                <td></td>
+                                                                                            @endfor
+                                                                                        </tr>
+                                                                                    @endif
+                                                                                    <tr>
+                                                                                        <td>{{$table->name}}</td>
+                                                                                        @for($i=0; $i<$column_count; $i++)
+                                                                                            <td>
+                                                                                                @if( in_array($i, $column_dropdown))
+                                                                                                    @php
+                                                                                                        $dropdowns = $table_options[$i];
+                                                                                                    @endphp
+                                                                                                    <select class="form-control editable_table_coloumn new_target" name="table_value[{{$table->id}}][{{$i}}]" id="">
+                                                                                                        @foreach($dropdowns as $dropdown)
+                                                                                                            <option value="{{$dropdown}}" {{$value ? ($dropdown == $value[$i] ? "selected" : "") : null}}>{{$dropdown}}</option>
+                                                                                                        @endforeach
+                                                                                                    </select>
+                                                                                                @else
+                                                                                                    @php
+                                                                                                    $value = json_decode($table->value);
+                                                                                                    $cumulative_table_value = json_decode($table->cumulative_value);
+                                                                                                    @endphp
+                                                                                                    <input type="text" id="current_value_{{$loop->iteration.$i}}" class="form-control editable_table_coloumn target_{{$loop->iteration}} new_target" num="{{$loop->iteration.$i}}" name="table_value[{{$table->id}}][{{$i}}]" value="{{$value ? $value[$i] : null}}">
+                                                                                                @endif
+                                                                                            </td>
+                                                                                        @endfor
+                                                                                        <td>
+                                                                                            <input type="hidden" id="for_sum{{$loop->iteration.$i}}" class="for_sum" readonly value="{{$cumulative_table_value ?? 0}}">
+                                                                                            <input type="text" id="cumulative_{{$loop->iteration.$i}}" class="form-control editable_table_coloumn" name="cumulative_table_value[{{$table->id}}]" readonly value="{{$cumulative_table_value ?? 0}}">
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                @endif
+                                                                            @endforeach
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                @endif
                                                             </div>
                                                         @break
 
@@ -187,17 +241,53 @@
 @endsection
 
 @section('scripts')
-    {{--<script>
-        $.ajax({
-            url: '',
-            method: 'POST',
-            data: ,
-            success: function (data) {
-
-            },
-            error: function (error) {
-
-            }
+    <script>
+        $(".target").on('paste', function (event) {
+            event.preventDefault();
+            var counter_start = $(this).attr("id");
+            console.log(counter_start);
+            var pastedData = event.originalEvent.clipboardData.getData('text');
+            console.log(pastedData);
+            var myArr = pastedData.split("\r\n");
+            myArr.forEach((value, key) => {
+                $("#" + counter_start).val(value);
+                counter_start++;
+            });
         });
-    </script>--}}
+
+        $(".new_target").on('paste', function (event) {
+            event.preventDefault();
+            var counter_second = $(this).attr("num");
+            console.log(counter_second);
+            var new_pastedData = event.originalEvent.clipboardData.getData('text');
+            console.log(new_pastedData);
+            var new_myArr = new_pastedData.split("\r\n");
+            new_myArr.forEach((value, key) => {
+                // $("num"+counter_second).val(value);
+                $(".target_" + counter_second).val(value);
+                counter_second++;
+            });
+        });
+
+        // set cumulative for table
+        $(".editable_table_coloumn").focusout(function (e) {
+            var number = $(this).attr("num");
+            var number_plus = parseInt($(this).attr("num"))+1;
+            var value = parseInt($("#current_value_"+number).val());
+            var cumulative = parseInt($("#for_sum"+number_plus).val());
+            var total = value+cumulative;
+
+            $("#cumulative_"+number_plus).val(total);
+        });
+
+        // set cumulative for field
+        $(".cumulative-class").focusout(function (e) {
+            var number = $(this).attr("data-cumulative");
+            var value = parseInt($("#field"+number).val());
+            var cumulative_hidden = parseInt($("#cumulative_field_hidden"+number).val());
+            var total = value+cumulative_hidden;
+
+            $("#cumulative_field"+number).val(total);
+        });
+    </script>
 @endsection

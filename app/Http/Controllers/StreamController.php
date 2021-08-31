@@ -7,6 +7,7 @@ use App\Models\Stream;
 use App\Models\StreamAnswer;
 use App\Models\StreamChangeLog;
 use App\Models\StreamField;
+use App\Models\StreamFieldGrid;
 use App\Models\StreamFieldValue;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -62,7 +63,7 @@ class StreamController extends Controller
 
     public function store(Request $request)
     {
-        //dd(json_decode(urldecode($request->fields[1]['tableData']))[0]);
+        //dd($request);
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
         ]);
@@ -82,6 +83,8 @@ class StreamController extends Controller
                 'status' => 'Draft'
             );
 
+            DB::beginTransaction();
+
             if (!empty($input['stream_id'])){
                 Stream::where('id', $input['stream_id'])->update($stream);
                 $inserted_stream = $input['stream_id'];
@@ -91,6 +94,7 @@ class StreamController extends Controller
             }
 
             $fields = [];
+            $table_fields = [];
             foreach ($input['fields'] as $field) {
 
                 $fields[] = [
@@ -109,14 +113,34 @@ class StreamController extends Controller
                 ];
             }
             foreach ($fields as $field) {
+
                 if (!empty($field['id'])){
                     StreamField::where('id',$field['id'])->update($field);
                 }else{
-                    StreamField::create($field);
+                    $stream_field = StreamField::create($field);
+
+                    if (!empty($field['tableData'])){
+
+                        $grid_data = json_decode(urldecode($field['tableData']));
+
+                        foreach ($grid_data as $grid) {
+                            $table_fields = array(
+                                'name' => $grid->fieldName,
+                                'type' => $grid->type,
+                                'is_dropdown' => $grid->tableDropdown == 'no' ? 0 : 1,
+                                'field_options' => $grid->tableFieldOptions,
+                                'order_count' => $grid->orderCount,
+                                'stream_field_id' => $stream_field->id,
+                                'cumulative_value' => null
+                            );
+                            StreamFieldGrid::create($table_fields);
+                        }
+                    }
                 }
             }
+            DB::commit();
         } catch (\Exception $e) {
-
+            DB::rollBack();
             \Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
             return back()->with('error', $e->getMessage());
         }
@@ -217,81 +241,105 @@ class StreamController extends Controller
     public function render($id)
     {
         $stream = Stream::where('id', $id)->with('getFields')->first();
-        $values = StreamFieldValue::where('stream_id', $id)->get();
-
-        return view('streams.render')->with(compact('stream', 'values'));
+        return view('streams.render')->with(compact('stream'));
     }
 
     public function streamPost(Request $request)
     {
-        //dd($request->input());
+        //dd($request);
         $user = auth()->user();
         $stream_id = $request->stream_id;
-        $stream_answer_id = $request->stream_answer_id;
-        $data_array = [];
 
-        $inputs = $request->except('_token', 'stream_id', 'stream_answer_id');
-        if ($request->image) {
-            foreach ($request->image as $key => $image) {
-                $imageName = time() . '.' . $image->extension();
-                $image->move(public_path('stream_answer_image'), $imageName);
+        try {
+            DB::beginTransaction();
 
-                $data_array[] = [
-                    'stream_id' => $stream_id,
-                    'user_id' => $user->id,
-                    'form_id' => $request->form_id ?? 0,
-                    'stream_field_id' => $key,
-                    'value' => $imageName,
-                ];
-            }
-        }
+            // start previous data change log
+            $stream_field_data = StreamField::where('stream_id', $stream_id)
+                ->select('stream_id', 'form_id', 'user_id', 'value', 'cumulative_value')
+                ->get();
 
-        Stream::whereId($stream_id)->update([
-            'status' => $request->submit == 'Save Only' ? 'In-progress' : 'Published'
-        ]);
+            $stream_table_data = StreamFieldGrid::leftjoin('stream_fields as sf', 'sf.id', '=', 'stream_field_grids.stream_field_id')
+                ->where('sf.stream_id', $stream_id)
+                ->select('stream_field_grids.id AS grid_id', 'stream_field_id', 'stream_field_grids.value', 'stream_field_grids.cumulative_value')
+                ->get();
 
-        if (empty($stream_answer_id)) {
-            foreach ($request->field as $key => $field) {
-                $data_array[] = [
-                    'stream_id' => $stream_id,
-                    'user_id' => $user->id,
-                    'form_id' => $request->form_id ?? 0,
-                    'stream_field_id' => $key,
-                    'value' => $field,
-                ];
-            }
+            $previous_data = array(
+                'stream_field_data' => json_encode($stream_field_data),
+                'stream_table_data' => json_encode($stream_table_data)
 
-            if (count($data_array)) {
-                StreamFieldValue::insert($data_array);
-            }
-            $changeLog = [
-                'stream_id' => $stream_id,
-                'user_id' => $user->id,
-                'new_data' => json_encode($data_array)
-            ];
-            StreamChangeLog::create($changeLog);
-        } else {
-            $streamDataOld = StreamFieldValue::where(['stream_id' => $stream_id])->get();
-            foreach ($request->field as $key => $field) {
-                StreamFieldValue::where(['stream_id' => $stream_id, 'stream_field_id' => $key])->update([
-                    'value' => $field
-                ]);
-            }
-            if (count($data_array)) {
-                foreach ($data_array as $key => $image) {
-                    StreamFieldValue::where(['stream_id' => $stream_id, 'stream_field_id' => $image['stream_field_id']])->update([
-                        'value' => $image['value']
-                    ]);
+            );
+            // end previous data change log
+
+            if ($request->image) {
+                foreach ($request->image as $key => $image) {
+                    $imageName = time() . '.' . $image->extension();
+                    $image->move(public_path('stream_answer_image'), $imageName);
+                    StreamField::where('id', $key)->update(['value' => $imageName]);
                 }
             }
-            $streamData = StreamFieldValue::where(['stream_id' => $stream_id])->get();
+
+            Stream::whereId($stream_id)->update([
+                'status' => $request->submit == 'Save Only' ? 'In-progress' : 'Published'
+            ]);
+
+            // for field value
+            if ($request->field) {
+                foreach ($request->field as $key => $field) {
+                    StreamField::where('id', $key)->update(['value' => $field]);
+                }
+            }
+
+            // for cumulative value
+            if ($request->cumulative_field) {
+                foreach ($request->cumulative_field as $key => $cumulative_field) {
+                    StreamField::where('id', $key)->update(['cumulative_value' => $cumulative_field]);
+                }
+            }
+
+            // for table values
+            if ($request->table_value) {
+                foreach ($request->table_value as $key => $value) {
+                    StreamFieldGrid::where('id', $key)->update(['value' => json_encode($value)]);
+                }
+            }
+
+            // for table cumulative values
+            if ($request->cumulative_table_value) {
+                foreach ($request->cumulative_table_value as $key => $cumulative_table_value) {
+                    StreamFieldGrid::where('id', $key)->update(['cumulative_value' => $cumulative_table_value]);
+                }
+            }
+
+            // start changed data change log
+            $stream_field_data = StreamField::where('stream_id', $stream_id)
+                ->select('stream_id', 'form_id', 'user_id', 'value', 'cumulative_value')
+                ->get();
+
+            $stream_table_data = StreamFieldGrid::leftjoin('stream_fields as sf', 'sf.id', '=', 'stream_field_grids.stream_field_id')
+                ->where('sf.stream_id', $stream_id)
+                ->select('stream_field_grids.id AS grid_id', 'stream_field_id', 'stream_field_grids.value', 'stream_field_grids.cumulative_value')
+                ->get();
+
+            $changed_data = array(
+                'stream_field_data' => json_encode($stream_field_data),
+                'stream_table_data' => json_encode($stream_table_data)
+
+            );
+            // end changed data change log
+
             $changeLog = [
                 'stream_id' => $stream_id,
                 'user_id' => $user->id,
-                'old_data' => json_encode($streamDataOld),
-                'new_data' => json_encode($streamData)
+                'old_data' => json_encode($previous_data),
+                'new_data' => json_encode($changed_data)
             ];
             StreamChangeLog::create($changeLog);
+            DB::commit();
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+            return back()->with('error', $e->getMessage());
         }
         return redirect()->route('dashboard')->with('success', 'Data saved successfully!');
     }

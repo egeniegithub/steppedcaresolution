@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Stream extends Model
+class StreamFieldGrid extends Model
 {
     use HasFactory;
 
@@ -15,9 +15,4 @@ class Stream extends Model
      * @var array
      */
     protected $guarded = ['id'];
-
-    public function getFields()
-    {
-        return $this->hasMany(StreamField::class);
-    }
 }
