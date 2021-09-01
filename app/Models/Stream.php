@@ -18,6 +18,6 @@ class Stream extends Model
 
     public function getFields()
     {
-        return $this->hasMany(StreamField::class);
+        return $this->hasMany(StreamField::class)->orderBy('orderCount', 'ASC');
     }
 }

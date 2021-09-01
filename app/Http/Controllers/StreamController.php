@@ -109,7 +109,7 @@ class StreamController extends Controller
                     'isCumulative' => $field['isCumulative'],
                     'orderCount' => $field['orderCount'],
                     'fieldOptions' => $field['fieldOptions'] ?? '',
-                    'tableData' => $field['tableData'] ?? ''
+                    'tableData' => ''
                 ];
             }
             foreach ($fields as $field) {
