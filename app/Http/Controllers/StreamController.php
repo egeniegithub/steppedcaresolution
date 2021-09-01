@@ -63,7 +63,7 @@ class StreamController extends Controller
 
     public function store(Request $request)
     {
-        //dd($request);
+        dd($request);
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
         ]);
@@ -109,7 +109,7 @@ class StreamController extends Controller
                     'isCumulative' => $field['isCumulative'],
                     'orderCount' => $field['orderCount'],
                     'fieldOptions' => $field['fieldOptions'] ?? '',
-                    'tableData' => ''
+                    'tableData' => $field['tableData'] ?? '',
                 ];
             }
             foreach ($fields as $field) {
