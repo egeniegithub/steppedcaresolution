@@ -1,4 +1,7 @@
 @extends('layouts.app')
+
+@section('title', 'Edit Member')
+
 @section('content')
 <div class="pcoded-wrapper">
     <div class="pcoded-content">
