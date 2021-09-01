@@ -28,7 +28,7 @@ class StreamController extends Controller
             ->leftjoin('projects as p', 'p.id', '=', 'f.project_id')
             ->where('form_id', $form_id)
             ->select(
-                'streams.id as stream_id', 'streams.name as stream_name', 'streams.status as stream_status', 'f.name as form_name', 'p.name as project_name'
+                'streams.id as stream_id', 'streams.name as stream_name', 'streams.status as stream_status', 'f.name as form_name', 'p.name as project_name', 'order_count'
             )
             ->orderBy('stream_id', 'DESC')
             ->get();
@@ -374,6 +374,14 @@ class StreamController extends Controller
     {
         $id = $request->id;
         StreamField::where('id',$id)->delete();
+        return back()->with('success','Field has been successfully saved.');
+    }
+
+    // save stream order
+    public function streamOrder(Request $request)
+    {
+        $id = $request->stream_id;
+        Stream::where('id',$id)->update(['order_count' => $request->value]);
         return back()->with('success','Field has been successfully saved.');
     }
 }
