@@ -1,4 +1,7 @@
 @extends('layouts.app')
+
+@section('title', 'Create Member')
+
 @section('content')
     <style>
         .custom-file-upload {

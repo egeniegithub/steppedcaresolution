@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'List Form')
+@section('title', 'User Dashboard')
 
 @section('content')
     <div class="pcoded-wrapper">

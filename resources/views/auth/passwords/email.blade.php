@@ -1,10 +1,13 @@
 @extends('layouts.app')
+
+@section('title', 'Reset Password')
+
 @section('content')
 <div class="container">
     <div class="row">
         <div class="col-sm-6">
             <div class="login-container">
-            
+
                 <div class="card" style="width: 65%">
                     <div class="card-body">
                         <form method="POST" action="{{ route('forget.password.post')}}">
@@ -27,9 +30,9 @@
                                 @enderror
                                     </div>
                                 </div>
-                               
+
                             </div>
-                            
+
                             <div class="row">
                                 <div class="col-sm-12">
                                     <button class="btn sign-in-btn text-white">

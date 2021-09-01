@@ -1,4 +1,7 @@
 @extends('layouts.app')
+
+@section('title', 'List Member')
+
 @section('content')
 <div class="pcoded-wrapper">
     <div class="pcoded-content">
@@ -70,8 +73,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
-                                        @foreach($users as $key=>$data)
+                                    @foreach($users as $key=>$data)
                                         {{--@if(auth()->user()->id==$data->id)
                                         @else--}}
                                         <tr>
@@ -90,7 +92,7 @@
                                             </td>
                                         </tr>
                                         {{--@endif--}}
-                                        @endforeach
+                                    @endforeach
                                     </tbody>
                                 </table>
                             </div>

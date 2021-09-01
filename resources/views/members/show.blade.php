@@ -1,4 +1,7 @@
 @extends('layouts.app')
+
+@section('title', 'View Member')
+
 @section('content')
 <div class="pcoded-wrapper">
     <div class="pcoded-content">
@@ -105,7 +108,7 @@
                                                     @foreach(users_roles() as $data)
                                                     <option value="{{ $data}}" {{$user->role==$data?"selected":""}}>{{ $data}}</option>
                                                     @endforeach
-                                                    
+
                                                 </select>
                                             </div>
                                         </div>
@@ -131,7 +134,7 @@
                                             <p class="user_details_font">Created On: {{\Carbon\Carbon::parse($user->created_at)->format("Y-m-d")}} </p>
                                         </div>
                                         <div class="col-lg-2 col-xl-2 col-md-4 col-sm-6 col-12">
-                                            
+
                                         <p class="user_details_font">Created By: {{(created_BY($user->createdBy))}}</p>
                                         </div>
                                     </div>
