@@ -22,7 +22,7 @@ class CreateStreamFieldGridsTable extends Migration
             $table->integer('order_count')->nullable();
             $table->unsignedBigInteger('stream_field_id');
             $table->string('value')->nullable();
-            $table->bigInteger('cumulative_value')->nullable();
+            $table->string('cumulative_value')->nullable();
             $table->foreign('stream_field_id')->references('id')->on('stream_fields');
             $table->timestamps();
         });
