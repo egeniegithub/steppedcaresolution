@@ -306,7 +306,7 @@ class StreamController extends Controller
             // for table cumulative values
             if ($request->cumulative_table_value) {
                 foreach ($request->cumulative_table_value as $key => $cumulative_table_value) {
-                    StreamFieldGrid::where('id', $key)->update(['cumulative_value' => $cumulative_table_value]);
+                    StreamFieldGrid::where('id', $key)->update(['cumulative_value' => json_encode($cumulative_table_value)]);
                 }
             }
 

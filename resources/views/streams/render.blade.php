@@ -48,7 +48,6 @@
                                                             <label for="exampleFormControlTextarea1">{{$field->fieldName}} {{$field->isRequired == 'no' ? '' : "*"}}</label>
                                                             @php
                                                                 $required = $field->isRequired == 'no' ? '' : "required";
-                                                                $value = \App\Models\StreamFieldValue::where('stream_field_id', $field->id)->value('value');
                                                             @endphp
                                                             @switch($field->fieldType)
                                                                 @case('text')
@@ -72,21 +71,16 @@
                                                                     </div>
                                                                     <div class="col-md-6" style="margin-top: -30px">
                                                                         @php
-                                                                        if (empty($field->cumulative_value)){
-                                                                            if (empty($field->value)){
-                                                                                $hidden_value = 0;
-                                                                            }else{
-                                                                                $hidden_value = $field->value;
-                                                                            }
-                                                                        }else{
-                                                                            $hidden_value = $field->cumulative_value;
-                                                                        }
+                                                                        $previous_cumulative = \App\Models\StreamField::where('id', $field->previous_id)->value('cumulative_value');
                                                                         @endphp
-                                                                        <label  for="exampleFormControlTextarea1">Cumulative Value</label>
-                                                                        <input type="hidden" id="cumulative_field_hidden{{$field->id}}" value="{{$hidden_value}}">
-                                                                        <input type="number" id="cumulative_field{{$field->id}}" class="form-control white_input"
-                                                                               name="cumulative_field[{{$field->id}}]"
-                                                                               value="{{$field->cumulative_value}}" readonly>
+
+                                                                        @if($field->isCumulative == 'yes')
+                                                                            <label  for="exampleFormControlTextarea1">Cumulative Value</label>
+                                                                            <input type="hidden" id="cumulative_field_hidden{{$field->id}}" value="{{$previous_cumulative ?? 0}}">
+                                                                            <input type="number" id="cumulative_field{{$field->id}}" class="form-control white_input"
+                                                                                   name="cumulative_field[{{$field->id}}]"
+                                                                                   value="{{$field->cumulative_value}}" readonly>
+                                                                        @endif
                                                                     </div>
                                                                 </div>
                                                                 @break
@@ -104,7 +98,7 @@
                                                                        name="image[{{$field->id}}]" {{$required}}>
                                                                 <br>
                                                                 <div class="text-center">
-                                                                    @if(isset($value))
+                                                                    @if(isset($field->value))
                                                                         <img
                                                                             src="{{asset('stream_answer_image')}}/{{$field->value}}"
                                                                             height="300px" width="500px" alt="No Img">
@@ -122,7 +116,7 @@
                                                                     <option value="">Please Select</option>
                                                                     @foreach($options as $option)
                                                                         <option
-                                                                            value="{{$option}}" {{( isset($value) && $option == $field->value) ? 'selected' : ''}}>{{$option}}</option>
+                                                                            value="{{$option}}" {{( isset($field->value) && $option == $field->value) ? 'selected' : ''}}>{{$option}}</option>
                                                                     @endforeach
                                                                 </select>
                                                                 @break
@@ -145,11 +139,13 @@
                                                                                 @foreach($tableData as $table)
                                                                                     @if($table->type == 'column')
                                                                                         @php
-                                                                                            if ($table->is_dropdown == 1){
-                                                                                                array_push($column_dropdown, $column_count);
-                                                                                                $table_options[$column_count] = explode(',',$table->field_options);
-                                                                                            }
-                                                                                            $column_count++;
+                                                                                        if ($table->is_dropdown == 1){
+                                                                                            array_push($column_dropdown, $column_count);
+                                                                                            $table_options[$column_count] = explode(',',$table->field_options);
+                                                                                        }
+                                                                                        $column_count++;
+
+                                                                                        $check_cumulative = \App\Models\StreamField::where('id', $table->stream_field_id)->value('isCumulative');
                                                                                         @endphp
                                                                                         @if($loop->iteration == 1)
                                                                                             <td></td>
@@ -157,9 +153,14 @@
                                                                                         <td>
                                                                                             {{$table->name}}
                                                                                         </td>
+
+                                                                                        @if($check_cumulative == 'on')
+                                                                                            <td>
+                                                                                                {{$table->name}} (Cumulative)
+                                                                                            </td>
+                                                                                        @endif
                                                                                     @endif
                                                                                 @endforeach
-                                                                                <td>Cumulative</td>
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -176,6 +177,9 @@
                                                                                         <td>{{$table->name}}</td>
                                                                                         @for($i=0; $i<$column_count; $i++)
                                                                                             <td>
+                                                                                                @php
+                                                                                                    $value = json_decode($table->value);
+                                                                                                @endphp
                                                                                                 @if( in_array($i, $column_dropdown))
                                                                                                     @php
                                                                                                         $dropdowns = $table_options[$i];
@@ -186,18 +190,17 @@
                                                                                                         @endforeach
                                                                                                     </select>
                                                                                                 @else
-                                                                                                    @php
-                                                                                                    $value = json_decode($table->value);
-                                                                                                    $cumulative_table_value = json_decode($table->cumulative_value);
-                                                                                                    @endphp
                                                                                                     <input type="text" id="current_value_{{$loop->iteration.$i}}" class="form-control editable_table_coloumn target_{{$loop->iteration}} new_target" num="{{$loop->iteration.$i}}" name="table_value[{{$table->id}}][{{$i}}]" value="{{$value ? $value[$i] : null}}">
                                                                                                 @endif
                                                                                             </td>
+                                                                                            <td>
+                                                                                                @php
+                                                                                                    $previous_cumulative_grid = \App\Models\StreamFieldGrid::where('id', $table->previous_id)->value('cumulative_value');
+                                                                                                @endphp
+                                                                                                <input type="hidden" id="for_sum{{$loop->iteration.$i}}" class="for_sum" readonly value="{{$previous_cumulative_grid ? json_decode($previous_cumulative_grid)[$i] : 0}}">
+                                                                                                <input type="text" id="cumulative_{{$loop->iteration.$i}}" class="form-control editable_table_coloumn" name="cumulative_table_value[{{$table->id}}][{{$i}}]" readonly value="{{$table->cumulative_value ? json_decode($table->cumulative_value)[$i] : 0}}">
+                                                                                            </td>
                                                                                         @endfor
-                                                                                        <td>
-                                                                                            <input type="hidden" id="for_sum{{$loop->iteration.$i}}" class="for_sum" readonly value="{{$cumulative_table_value ?? 0}}">
-                                                                                            <input type="text" id="cumulative_{{$loop->iteration.$i}}" class="form-control editable_table_coloumn" name="cumulative_table_value[{{$table->id}}]" readonly value="{{$cumulative_table_value ?? 0}}">
-                                                                                        </td>
                                                                                     </tr>
                                                                                 @endif
                                                                             @endforeach
@@ -272,12 +275,12 @@
         // set cumulative for table
         $(".editable_table_coloumn").focusout(function (e) {
             var number = $(this).attr("num");
-            var number_plus = parseInt($(this).attr("num"))+1;
+            //var number_plus = parseInt($(this).attr("num"))+1;
             var value = parseInt($("#current_value_"+number).val());
-            var cumulative = parseInt($("#for_sum"+number_plus).val());
+            var cumulative = parseInt($("#for_sum"+number).val());
             var total = value+cumulative;
 
-            $("#cumulative_"+number_plus).val(total);
+            $("#cumulative_"+number).val(total);
         });
 
         // set cumulative for field
