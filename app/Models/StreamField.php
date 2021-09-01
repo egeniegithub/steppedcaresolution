@@ -8,19 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class StreamField extends Model
 {
     use HasFactory;
-    protected $table = 'stream_fields';
 
-    protected $fillable = [
-        'stream_id',
-        'form_id',
-        'user_id',
-        'isRequired',
-        'fieldName',
-        'fieldType',
-        'isDuplicate',
-        'isCumulative',
-        'orderCount',
-        'fieldOptions',
-        'tableData'
-    ];
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = ['id'];
 }

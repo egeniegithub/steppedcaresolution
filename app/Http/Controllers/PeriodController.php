@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Form;
 use App\Models\Period;
 use App\Models\Stream;
+use App\Models\StreamChangeLog;
 use App\Models\StreamField;
+use App\Models\StreamFieldGrid;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -157,8 +159,26 @@ class PeriodController extends Controller
 
                     $form_ids = Form::where('period_id', $current_period_id)->pluck('id')->toArray();
                     $stream_ids = Stream::whereIn('form_id', $form_ids)->pluck('id')->toArray();
+                    $stream_field_ids = StreamField::whereIn('stream_id', $stream_ids)->pluck('id')->toArray();
 
-                    // delete all previous data
+                    // check if data is added in current period
+                    $stream_field_data = StreamField::whereIn('id', $stream_field_ids)->get();
+                    foreach ($stream_field_data as $stream_field_datum) {
+                        if (!empty($stream_field_datum->value)){
+                            return back()->with('error', 'Data is added in the current period it cannot be synced');
+                        }
+
+                        $stream_field_grid_data = StreamFieldGrid::where('stream_field_id', $stream_field_datum->id)->get();
+                        foreach ($stream_field_grid_data as $value) {
+                            if (!empty($value->value)){
+                                return back()->with('error', 'Data is added in the current period it cannot be synced');
+                            }
+                        }
+                    }
+
+                    // delete all previously added data
+                    StreamFieldGrid::whereIn('stream_field_id', $stream_field_ids)->delete();
+                    StreamChangeLog::whereIn('stream_id', $stream_ids)->delete();
                     StreamField::whereIn('stream_id', $stream_ids)->delete();
                     Stream::whereIn('id', $stream_ids)->delete();
                     Form::whereIn('id', $form_ids)->delete();
@@ -169,7 +189,8 @@ class PeriodController extends Controller
                             'project_id' => $form->project_id,
                             'period_id' => $current_period_id,
                             'created_by' => auth()->user()->id,
-                            'updated_by' => auth()->user()->id
+                            'updated_by' => auth()->user()->id,
+                            'previous_id' => $form->id
                         );
                         $stored_form = Form::create($form_data);
 
@@ -179,9 +200,11 @@ class PeriodController extends Controller
                                 'form_id' => $stored_form->id,
                                 'fields' => $stream->fields,
                                 'status' => 'Draft',
+                                'previous_id' => $stream->id
                             );
                             $stored_stream = Stream::create($stream_data);
                             $stream_fields = StreamField::where('stream_id', $stream->id)->orderBy('id', 'ASC')->get();
+
 
                             foreach ($stream_fields as $field) {
                                 $field_data = array(
@@ -195,9 +218,29 @@ class PeriodController extends Controller
                                     'isCumulative' => $field->isCumulative,
                                     'fieldOptions' => $field->fieldOptions,
                                     'tableData' => $field->tableData,
-                                    'orderCount' => $field->orderCount
+                                    'orderCount' => $field->orderCount,
+                                    'value' => null,
+                                    'cumulative_value' => $field->cumulative_value,
+                                    'previous_id' => $field->id
                                 );
-                                StreamField::create($field_data);
+                                $stream_field = StreamField::create($field_data);
+                                $stream_field_grids = StreamFieldGrid::where('stream_field_id', $field->id)->orderBy('id', 'ASC')->get();
+
+                                foreach ($stream_field_grids as $grid) {
+
+                                    $grid_data = array(
+                                        'name' => $grid->name,
+                                        'type' => $grid->type,
+                                        'is_dropdown' => $grid->is_dropdown,
+                                        'field_options' => $grid->field_options,
+                                        'order_count' => $grid->order_count,
+                                        'stream_field_id' => $stream_field->id,
+                                        'value' => null,
+                                        'cumulative_value' => $grid->cumulative_value,
+                                        'previous_id' => $grid->id
+                                    );
+                                    StreamFieldGrid::create($grid_data);
+                                }
                             }
                         }
                     }
@@ -215,7 +258,8 @@ class PeriodController extends Controller
                             'name' => $form->name,
                             'project_id' => $form->project_id,
                             'period_id' => $current_period_id,
-                            'created_by' => auth()->user()->id
+                            'created_by' => auth()->user()->id,
+                            'previous_id' => $form->id,
                         );
                         $stored_form = Form::create($form_data);
 
@@ -225,6 +269,7 @@ class PeriodController extends Controller
                                 'form_id' => $stored_form->id,
                                 'fields' => $stream->fields,
                                 'status' => 'Draft',
+                                'previous_id' => $stream->id,
                             );
                             $stored_stream = Stream::create($stream_data);
                             $stream_fields = StreamField::where('stream_id', $stream->id)->orderBy('id', 'ASC')->get();
@@ -241,9 +286,28 @@ class PeriodController extends Controller
                                     'isCumulative' => $field->isCumulative,
                                     'fieldOptions' => $field->fieldOptions,
                                     'tableData' => $field->tableData,
-                                    'orderCount' => $field->orderCount
+                                    'orderCount' => $field->orderCount,
+                                    'value' => null,
+                                    'cumulative_value' => $field->cumulative_value,
+                                    'previous_id' => $field->id
                                 );
-                                StreamField::create($field_data);
+                                $stream_field = StreamField::create($field_data);
+                                $stream_field_grids = StreamFieldGrid::where('stream_field_id', $stream_field->id)->orderBy('id', 'ASC')->get();
+
+                                foreach ($stream_field_grids as $grid) {
+                                    $grid_data = array(
+                                        'name' => $grid->name,
+                                        'type' => $grid->type,
+                                        'is_dropdown' => $grid->is_dropdown,
+                                        'field_options' => $grid->field_options,
+                                        'order_count' => $grid->order_count,
+                                        'stream_field_id' => $stream_field->id,
+                                        'value' => null,
+                                        'cumulative_value' => $field->cumulative_value,
+                                        'previous_id' => $grid->id
+                                    );
+                                    StreamFieldGrid::create($grid_data);
+                                }
                             }
                         }
                     }
