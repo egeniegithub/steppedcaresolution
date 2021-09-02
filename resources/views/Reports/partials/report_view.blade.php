@@ -146,7 +146,7 @@
                                                                                     @php
                                                                                         $dropdowns = $table_options[$i];
                                                                                     @endphp
-                                                                                    {{$value[$i]}}
+                                                                                    {{$value ? $value[$i] : null}}
                                                                                 @else
                                                                                     {{$value ? $value[$i] : null}}
                                                                                 @endif
