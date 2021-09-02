@@ -16,15 +16,15 @@ class ProjectsTableSeeder extends Seeder
         //
         \DB::table('projects')->insert([
             'name' => 'project 1',
-            'image'=>'/uploads/login.PNG'
+            'image'=>'default.png'
         ]);
         \DB::table('projects')->insert([
             'name' => 'project 2',
-            'image'=>'/uploads/login.PNG'
+            'image'=>'default.png'
         ]);
         \DB::table('projects')->insert([
             'name' => 'project 3',
-            'image'=>'/uploads/login.PNG'
+            'image'=>'default.png'
         ]);
     }
 }

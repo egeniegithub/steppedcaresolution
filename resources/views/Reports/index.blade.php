@@ -97,11 +97,16 @@
                                                                 class="btn table_btn update_btn text-white">Add Summary
                                                         </button>
                                                         @include('Reports.partials.add_form_summary')
-                                                        <button type="button"
-                                                                class="btn  table_btn view_report_btn text-white"
+                                                        {{--<button type="button"
+                                                                class="btn table_btn view_report_btn text-white"
                                                                 data-toggle="modal" data-target="#exampleModal"
                                                                 onclick="getReport({{$form->id}})">View Report
+                                                        </button>--}}
+                                                        <button type="button" data-toggle="modal"
+                                                                data-target="#viewReport{{$form->id}}"
+                                                                class="btn table_btn view_report_btn text-white">View Report
                                                         </button>
+                                                        @include('Reports.partials.report_view')
                                                     </div>
                                                 </td>
                                             </tr>
@@ -242,7 +247,7 @@
         $('.report_table tbody tr.clickable').each(function(){
             if( $(this).next('tr').length != 0)
             {
-              
+
                 $(this).find('td').css('border-bottom','0');
             }
         });
@@ -252,7 +257,7 @@
         });
     </script>
     <script>
-      
+
 
         function getReport(id) {
             $('#report-model-data').html('<p>Loading data...</p>')

@@ -7131,6 +7131,9 @@ select.form-control-lg:not([size]):not([multiple]) {
 }
 
 
+.modal_report_p_fix{
+    white-space: unset !important;
+}
 /**====== Label & Badges css end ======**/
 
 
