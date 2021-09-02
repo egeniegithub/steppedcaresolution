@@ -13,13 +13,24 @@
                 <div class="text-center">
                     <img src="{{asset('project_images')}}/{{\App\Models\project::where('id', $form->project_id)->value('image')}}" height="300px" width="500px" alt="No Img">
                 </div>
-                <b>Report Summary:</b><p>{{$form->summary}}</p>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <b>Report Summary:</b>
+                        <p>{!! $form->summary !!}</p>
+                    </div>
+                </div>
 
                 @foreach($form->streams as $stream)
-                    <h4>{{$stream->name}}</h4>
-                    <b>Stream Summary:</b><p>{{$stream->summary}}</p>
+                    <div class="row">
+                        <div class="col-sm-12 ">
+                            <p class="report_modal_dark_font">{{$stream->name}}</p>
+                            <b>Stream Summary:</b>
+                            <p>{!! $stream->summary !!}</p>
+                        </div>
+                    </div>
+
                     @php
-                    $stream_fields = \App\Models\StreamField::where('stream_id', $stream->id)->orderBy('orderCount', 'ASC')->get();
+                        $stream_fields = \App\Models\StreamField::where('stream_id', $stream->id)->orderBy('orderCount', 'ASC')->get();
                     @endphp
 
                     @if(!empty($stream_fields))
@@ -27,10 +38,7 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label for="exampleFormControlTextarea1">{{$field->fieldName}} {{$field->isRequired == 'no' ? '' : "*"}}</label>
-                                        @php
-                                            $required = $field->isRequired == 'no' ? '' : "required";
-                                        @endphp
+                                        <label for="exampleFormControlTextarea1"><b>{{$field->fieldName}}</b></label>
                                         @switch($field->fieldType)
                                             @case('text')
                                             <span>{{$field->value}}</span>
@@ -65,12 +73,9 @@
                                             @case('file')
                                             <div class="text-center">
                                                 @if(isset($field->value))
-                                                    <img
-                                                        src="{{asset('stream_answer_image')}}/{{$field->value}}"
-                                                        height="300px" width="500px" alt="No Img">
+                                                    <img src="{{asset('stream_answer_image')}}/{{$field->value}}" height="300px" width="500px" alt="No Img">
                                                 @endif
                                             </div>
-
                                             @break
 
                                             @case('select')
@@ -85,91 +90,88 @@
                                             @endphp
 
                                             @if($tableData)
-                                                <div class="table-responsive">
-                                                    <table class="table demographic_table  platform_visitors table-bordered">
-                                                        <thead>
-                                                        <tr>
-                                                            @php
-                                                                $column_count = 0;
-                                                            @endphp
-                                                            @foreach($tableData as $table)
-                                                                @if($table->type == 'column')
-                                                                    @php
-                                                                        if ($table->is_dropdown == 1){
-                                                                            array_push($column_dropdown, $column_count);
-                                                                            $table_options[$column_count] = explode(',',$table->field_options);
-                                                                        }
-                                                                        $column_count++;
+                                                <div class="col-sm-12 col-md-12">
+                                                    <div class="table-responsive">
+                                                        <table class="table report_sub_table table-bordered">
+                                                            <thead>
+                                                            <tr class="red_row">
+                                                                @php
+                                                                    $column_count = 0;
+                                                                @endphp
+                                                                @foreach($tableData as $table)
+                                                                    @if($table->type == 'column')
+                                                                        @php
+                                                                            if ($table->is_dropdown == 1){
+                                                                                array_push($column_dropdown, $column_count);
+                                                                                $table_options[$column_count] = explode(',',$table->field_options);
+                                                                            }
+                                                                            $column_count++;
 
-                                                                        $check_cumulative = \App\Models\StreamField::where('id', $table->stream_field_id)->value('isCumulative');
-                                                                    @endphp
-                                                                    @if($loop->iteration == 1)
-                                                                        <td></td>
-                                                                    @endif
-                                                                    <td>
-                                                                        {{$table->name}}
-                                                                    </td>
-
-                                                                    @if($check_cumulative == 'yes')
-                                                                        <td>
-                                                                            {{$table->name}} (Cumulative)
-                                                                        </td>
-                                                                    @endif
-                                                                @endif
-                                                            @endforeach
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        @foreach($tableData as $table)
-                                                            @if($table->type == 'row')
-                                                                @if($loop->iteration == 1)
-                                                                    <tr>
-                                                                        @for($i=0; $i<$column_count; $i++)
+                                                                            $check_cumulative = \App\Models\StreamField::where('id', $table->stream_field_id)->value('isCumulative');
+                                                                        @endphp
+                                                                        @if($loop->iteration == 1)
                                                                             <td></td>
+                                                                        @endif
+                                                                        <td class="text-white">
+                                                                            {{$table->name}}
+                                                                        </td>
+
+                                                                        @if($check_cumulative == 'yes')
+                                                                            <td>
+                                                                                {{$table->name}} (Cumulative)
+                                                                            </td>
+                                                                        @endif
+                                                                    @endif
+                                                                @endforeach
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            @foreach($tableData as $table)
+                                                                @if($table->type == 'row')
+                                                                    @if($loop->iteration == 1)
+                                                                        <tr>
+                                                                            @for($i=0; $i<$column_count; $i++)
+                                                                                <td></td>
+                                                                            @endfor
+                                                                        </tr>
+                                                                    @endif
+                                                                    <tr>
+                                                                        <td>{{$table->name}}</td>
+                                                                        @for($i=0; $i<$column_count; $i++)
+                                                                            <td>
+                                                                                @php
+                                                                                    $value = json_decode($table->value);
+                                                                                @endphp
+                                                                                @if( in_array($i, $column_dropdown))
+                                                                                    @php
+                                                                                        $dropdowns = $table_options[$i];
+                                                                                    @endphp
+                                                                                    {{$value[$i]}}
+                                                                                @else
+                                                                                    {{$value ? $value[$i] : null}}
+                                                                                @endif
+                                                                            </td>
+                                                                            @php
+                                                                                $check_cumulative = \App\Models\StreamField::where('id', $table->stream_field_id)->value('isCumulative');
+                                                                            @endphp
+                                                                            @if($check_cumulative == 'yes')
+                                                                                <td>
+                                                                                    @php
+                                                                                        $previous_cumulative_grid = \App\Models\StreamFieldGrid::where('id', $table->previous_id)->value('cumulative_value');
+                                                                                    @endphp
+                                                                                    {{$table->cumulative_value ? json_decode($table->cumulative_value)[$i] : 0}}
+                                                                                </td>
+                                                                            @endif
                                                                         @endfor
                                                                     </tr>
                                                                 @endif
-                                                                <tr>
-                                                                    <td>{{$table->name}}</td>
-                                                                    @for($i=0; $i<$column_count; $i++)
-                                                                        <td>
-                                                                            @php
-                                                                                $value = json_decode($table->value);
-                                                                            @endphp
-                                                                            @if( in_array($i, $column_dropdown))
-                                                                                @php
-                                                                                    $dropdowns = $table_options[$i];
-                                                                                @endphp
-                                                                                <select class="form-control editable_table_coloumn new_target" name="table_value[{{$table->id}}][{{$i}}]" id="">
-                                                                                    @foreach($dropdowns as $dropdown)
-                                                                                        <option value="{{$dropdown}}" {{$value ? ($dropdown == $value[$i] ? "selected" : "") : null}}>{{$dropdown}}</option>
-                                                                                    @endforeach
-                                                                                </select>
-                                                                            @else
-                                                                                <input type="text" id="current_value_{{$loop->iteration.$i}}" class="form-control editable_table_coloumn target_{{$loop->iteration}} new_target" num="{{$loop->iteration.$i}}" name="table_value[{{$table->id}}][{{$i}}]" value="{{$value ? $value[$i] : null}}">
-                                                                            @endif
-                                                                        </td>
-                                                                        @php
-                                                                            $check_cumulative = \App\Models\StreamField::where('id', $table->stream_field_id)->value('isCumulative');
-                                                                        @endphp
-                                                                        @if($check_cumulative == 'yes')
-                                                                            <td>
-                                                                                @php
-                                                                                    $previous_cumulative_grid = \App\Models\StreamFieldGrid::where('id', $table->previous_id)->value('cumulative_value');
-                                                                                @endphp
-                                                                                <input type="hidden" id="for_sum{{$loop->iteration.$i}}" class="for_sum" readonly value="{{$previous_cumulative_grid ? json_decode($previous_cumulative_grid)[$i] : 0}}">
-                                                                                <input type="text" id="cumulative_{{$loop->iteration.$i}}" class="form-control editable_table_coloumn" name="cumulative_table_value[{{$table->id}}][{{$i}}]" readonly value="{{$table->cumulative_value ? json_decode($table->cumulative_value)[$i] : 0}}">
-                                                                            </td>
-                                                                        @endif
-                                                                    @endfor
-                                                                </tr>
-                                                            @endif
-                                                        @endforeach
-                                                        </tbody>
-                                                    </table>
+                                                            @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </div>
                                             @endif
-                                        </div>
+                                    </div>
                                     @break
 
                                     @default
