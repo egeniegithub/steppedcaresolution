@@ -37,8 +37,7 @@
                             <div class="col-xl-5 col-lg-5 col-md-6 col-12 report_flex_row">
                                 <div class=" select_project_width">
                                     <label for="FormGroup" class="form-label">Select Project</label>
-                                    <select class="form-control form-select" id="project_id" name="project_id"
-                                            aria-label="Default select example">
+                                    <select class="form-control form-select" id="project_id" name="project_id" aria-label="Default select example">
                                         <option value="all" selected>All</option>
                                         @foreach($projects as $project)
                                             <option
@@ -242,7 +241,7 @@
                 $(this).find('td').css('border-bottom','0');
             }
         });
-       
+
     </script>
     <script>
 
