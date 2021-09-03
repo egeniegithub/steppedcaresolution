@@ -13,14 +13,6 @@
                             <h3 class="margin-page-title">Report</h3>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-md-3 col-lg-2">
-                        <div class="top-header right_icon_text">
-                            <b class="">
-                                <a class="add_icon" href="{{route('dashboard.period.create')}}"><span><i
-                                            class="fas fa-plus-circle"></i></span><span> Add Periods</span></a>
-                            </b>
-                        </div>
-                    </div>
                 </div>
                 <form method="get" action="">
                     <div class="row report_row_top blue-border-bottom">
@@ -45,8 +37,7 @@
                             <div class="col-xl-5 col-lg-5 col-md-6 col-12 report_flex_row">
                                 <div class=" select_project_width">
                                     <label for="FormGroup" class="form-label">Select Project</label>
-                                    <select class="form-control form-select" id="project_id" name="project_id"
-                                            aria-label="Default select example">
+                                    <select class="form-control form-select" id="project_id" name="project_id" aria-label="Default select example">
                                         <option value="all" selected>All</option>
                                         @foreach($projects as $project)
                                             <option
@@ -250,7 +241,7 @@
                 $(this).find('td').css('border-bottom','0');
             }
         });
-       
+
     </script>
     <script>
 
