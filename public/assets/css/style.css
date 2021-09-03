@@ -10276,7 +10276,17 @@ table.stream_data_table thead tr td:last-child {
 }
 .report_generated_table thead tr td{
     width: 20%;
+   
 }
+.report_generated_table tbody tr td{
+    border-bottom: 2px solid black !important;
+}
+.report_summary_col{
+    margin-bottom: 15px;
+}
+/* .report_over_flow_fix p{
+    margin-top: -25px;
+} */
 @media only screen and (min-width:768px) and (max-width:1000px) {
     .grid_container {
         grid-template-columns: 87% 12%;
