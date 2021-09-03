@@ -185,7 +185,7 @@
                                                 <div class="row row_adjusted">
                                                     <div class="col-sm-12">
                                                         <div class="btn-group btn_group_padding">
-                                                            <button type="button" onclick="addField()" class="btn table_btn del_modal_btn text-white"> Add</button>
+                                                            <button type="button" onclick="addField()" class="btn btn-primary table_btn text-white"> Add</button>
                                                             <button class="btn table_btn cancel_modal_btn text-white"
                                                                     type="button">
                                                                 Reset
@@ -256,7 +256,7 @@
                                                 <div class="row row_adjusted">
                                                     <div class="col-sm-12">
                                                         <div class="btn-group btn_group_padding">
-                                                            <button class="btn table_btn del_modal_btn text-white"
+                                                            <button class="btn table_btn btn-primary text-white"
                                                                     type="button"
                                                                     onclick="addField()"> Add
                                                             </button>
@@ -394,7 +394,7 @@
                                                             <div class="btn-group btn_group_padding pt-4">
                                                                 <button
                                                                     type="button"
-                                                                    class="btn table_btn del_modal_btn text-white"
+                                                                    class="btn table_btn btn-primary text-white"
                                                                     onclick="addTableField()">
                                                                     Add to Table
                                                                 </button>
@@ -435,7 +435,7 @@
                                         <div class="row row_adjusted mt-2">
                                             <div class="col-sm-12">
                                                 <div class="btn-group btn_group_padding">
-                                                    <button class="btn stream_btn del_modal_btn text-white"
+                                                    <button class="btn stream_btn btn-primary text-white"
                                                             type="button" onclick="addField()">
                                                         Add Table to Stream
                                                     </button>
@@ -519,8 +519,7 @@
                                 <div class="row mt-2">
                                     <div class="col-sm-12">
                                         <div class="btn-group btn_group_padding">
-                                            <button class="btn table_btn del_modal_btn text-white" type="submit"> Save
-                                            </button>
+                                            <button class="btn btn-primary table_btn text-white" type="submit"> Save</button>
                                             <a href="{{route('dashboard.streams',$form_id)}}" class="btn table_btn cancel_modal_btn text-white" >
                                                 Cancel
                                             </a>
