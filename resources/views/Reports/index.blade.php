@@ -13,14 +13,6 @@
                             <h3 class="margin-page-title">Report</h3>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-md-3 col-lg-2">
-                        <div class="top-header right_icon_text">
-                            <b class="">
-                                <a class="add_icon" href="{{route('dashboard.period.create')}}"><span><i
-                                            class="fas fa-plus-circle"></i></span><span> Add Periods</span></a>
-                            </b>
-                        </div>
-                    </div>
                 </div>
                 <form method="get" action="">
                     <div class="row report_row_top blue-border-bottom">
