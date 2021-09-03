@@ -14,18 +14,18 @@
                     <img src="{{asset('project_images')}}/{{\App\Models\project::where('id', $form->project_id)->value('image')}}" height="300px" width="500px" alt="No Img">
                 </div>
                 <div class="row">
-                    <div class="col-sm-12">
-                        <b>Report Summary:</b>
-                        <p class="report_over_flow_fix">{!! $form->summary !!}</p>
+                    <div class="col-sm-12 report_summary_col">
+                         <b>Report Summary:</b> </br>
+                          <span class="report_over_flow_fix">{!! $form->summary !!}</span>
                     </div>
                 </div>
 
                 @foreach($form->streams as $stream)
                     <div class="row">
-                        <div class="col-sm-12 ">
+                        <div class="col-sm-12 " >
                             <p class="report_modal_dark_font">{{$stream->name}}</p>
-                            <b>Stream Summary:</b>
-                            <p class="report_over_flow_fix">{!! $stream->summary !!}</p>
+                            <b>Stream Summary:</b> </br>
+                            <span class="report_over_flow_fix">{!! $stream->summary !!}</span>
                         </div>
                     </div>
 

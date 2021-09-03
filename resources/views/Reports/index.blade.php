@@ -251,10 +251,7 @@
                 $(this).find('td').css('border-bottom','0');
             }
         });
-        $(".no-open").click(function(e) {
-            e.preventDefault();
-            // return true;
-        });
+       
     </script>
     <script>
 
