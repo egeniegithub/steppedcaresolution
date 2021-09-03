@@ -89,7 +89,7 @@
                                                 </td>
                                                 <td data-toggle="collapse"
                                                     data-target="#accordion_{{$loop->iteration}}">{{formStatus($form->id)}}</td>
-                                                <td class="no-open">
+                                                <td>
                                                     <div class="btn-group" role="group" aria-label="Basic example">
                                                         {{--<button type="button" class="btn update_status_btn table_btn text-white">Update Status</button>--}}
                                                         <button type="button" data-toggle="modal"

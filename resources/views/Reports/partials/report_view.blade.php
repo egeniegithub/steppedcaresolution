@@ -22,7 +22,7 @@
 
                 @foreach($form->streams as $stream)
                     <div class="row">
-                        <div class="col-sm-12 " >
+                        <div class="col-sm-12">
                             <p class="report_modal_dark_font">{{$stream->name}}</p>
                             <b>Stream Summary:</b> </br>
                             <span class="report_over_flow_fix">{!! $stream->summary !!}</span>
@@ -45,14 +45,14 @@
                                             @break
 
                                             @case('textarea')
-                                            <p>{{$field->value}}</p>
+                                            <p>{{$field->value ?? ''}}</p>
                                             @break
 
                                             @case('number')
-                                            <span>{{$field->value}}</span>
+                                            <span>{{$field->value ?? ''}}</span>
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                   
+
                                                 </div>
                                                 <div class="col-md-6" style="margin-top: -30px">
                                                     @php
@@ -61,14 +61,14 @@
 
                                                     @if($field->isCumulative == 'yes')
                                                         <label  for="exampleFormControlTextarea1"><b>Cumulative Value</b></label>
-                                                        <span>{{$field->cumulative_value}}</span>
+                                                        <span>{{$field->cumulative_value ?? 0}}</span>
                                                     @endif
                                                 </div>
                                             </div>
                                             @break
 
                                             @case('date')
-                                            <span>{{$field->value}}</span>
+                                            <span>{{$field->value ?? ''}}</span>
                                             @break
 
                                             @case('file')
@@ -80,7 +80,7 @@
                                             @break
 
                                             @case('select')
-                                            <span>{{$field->value}}</span>
+                                            <span>{{$field->value ?? ''}}</span>
                                             @break
 
                                             @case('table')
@@ -114,12 +114,12 @@
                                                                             <td></td>
                                                                         @endif
                                                                         <td class="text-white">
-                                                                            {{$table->name}}
+                                                                            {{$table->name ?? ''}}
                                                                         </td>
 
                                                                         @if($check_cumulative == 'yes')
                                                                             <td>
-                                                                                {{$table->name}} (Cumulative)
+                                                                                {{$table->name ?? ''}} (Cumulative)
                                                                             </td>
                                                                         @endif
                                                                     @endif
@@ -147,9 +147,9 @@
                                                                                     @php
                                                                                         $dropdowns = $table_options[$i];
                                                                                     @endphp
-                                                                                    {{$value ? $value[$i] : null}}
+                                                                                    {{$value ? $value[$i] : ''}}
                                                                                 @else
-                                                                                    {{$value ? $value[$i] : null}}
+                                                                                    {{$value ? $value[$i] : ''}}
                                                                                 @endif
                                                                             </td>
                                                                             @php
@@ -172,17 +172,26 @@
                                                     </div>
                                                 </div>
                                             @endif
-                                    </div>
-                                    @break
 
-                                    @default
-                                    ..
-                                    @endswitch
+                                        @break
+
+                                        @default
+                                        ..
+                                        @endswitch
+                                    </div>
                                 </div>
                             </div>
                         @endforeach
                     @endif
                 @endforeach
+            </div>
+            <div class="modal-footer">
+                <div id="model-footer">
+                    <div>
+                        {{--<a href="{{route('dashboard.reports.stream.pdf_download', $form->id)}}" class="btn btn-primary">Download</a>--}}
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

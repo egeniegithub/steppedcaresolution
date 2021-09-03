@@ -99,6 +99,7 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
         Route::get('/', [App\Http\Controllers\ReportController::class,'index'])->name('dashboard.reports');
         Route::get('/stream/{id}', [App\Http\Controllers\ReportController::class,'getStreamReport'])->name('dashboard.reports.stream');
         Route::post('/stream/download', [App\Http\Controllers\ReportController::class,'downReport'])->name('dashboard.reports.stream.download');
+        Route::get('/stream/pdf-download/{form_id}', [App\Http\Controllers\ReportController::class,'pdfReport'])->name('dashboard.reports.stream.pdf_download');
     });
 
     Route::group(['prefix' => 'permissions',  'middleware' => 'auth'], function(){
