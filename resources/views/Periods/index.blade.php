@@ -14,7 +14,7 @@
                     </div>
                     <div class="col-sm-6 col-md-3 col-lg-2">
                         <div class="top-header right_icon_text">
-                            <b class=""><a class="add_icon" href="{{route('dashboard.period.create')}}"><span ><i class="fas fa-plus-circle"></i></span><span> Add Periods</span></a></b>
+                            <b class=""><a class="add_icon" href="{{route('dashboard.period.create')}}"><span ><i class="fas fa-plus-circle"></i></span><span> Add Period</span></a></b>
                         </div>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="5">No period added</td>
+                                                <td colspan="5">No period found</td>
                                             </tr>
                                         @endforelse
                                         </tbody>

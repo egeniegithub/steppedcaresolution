@@ -247,14 +247,10 @@
         $('.report_table tbody tr.clickable').each(function(){
             if( $(this).next('tr').length != 0)
             {
-
                 $(this).find('td').css('border-bottom','0');
             }
         });
-        $(".no-open").click(function(e) {
-            e.preventDefault();
-            // return true;
-        });
+       
     </script>
     <script>
 
@@ -363,10 +359,5 @@
             })
         }
 
-
-        $(".no-open").click(function(e) {
-            e.preventDefault();
-            // return true;
-        });
     </script>
 @endsection

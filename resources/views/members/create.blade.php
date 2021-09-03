@@ -103,7 +103,7 @@
                                 </div>
                             </div>
                             <div class="card">
-                                <div class="card-header">Aditional Info</div>
+                                <div class="card-header">Additional Info</div>
                                 <div class="container">
                                     <div class="row pt-4">
                                         <div class="col-lg-6 col-x-6 col-md-6 col-12">
@@ -167,16 +167,16 @@
                                             <div class="row">
                                                 <div class="col-lg-12 col-xl-12 col-md-12 col-12">
                                                     <div class="mb-4">
-                                                        <label for="firstname" class="form-label"> Name </label>
+                                                        <label for="firstname" class="form-label"> Name *</label>
                                                         <input type="text" class="form-control" id="project_name" name="project_name" aria-describedby="project_name">
                                                     </div>
                                                     <div class="mb-4">
                                                         <div class="custom-file mb-3">
-                                                            <label>Image</label>
+                                                            <label>Image *</label>
                                                             <div class="row">
                                                                <div class="col-sm-9 col-xs-9 col-md-9">
                                                                    <label for="file-upload" class=" btn btn-light text-black custom-file-upload" >
-                                                                       <i class="fa fa-cloud-upload"></i> Upload Image
+                                                                       <i class="fa fa-cloud-upload"></i> Upload Image 
                                                                    </label>
                                                                    <input class="file_upload_custom" id="file-upload" name='project_image' type="file" style="display:none;">
                                                                 </div>
