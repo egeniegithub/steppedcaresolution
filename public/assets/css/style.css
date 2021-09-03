@@ -9823,7 +9823,7 @@ table.sub_table td:last-child {
 }
 
 .report_sub_table {
-    width: 50%;
+    width: 100%;
     border: 2px solid black !important;
 }
 
@@ -9848,11 +9848,11 @@ table.sub_table td:last-child {
 }
 
 .report_sub_table td:nth-child(2) {
-    text-align: right;
+    text-align: left;
 }
 
 .report_sub_table td:nth-child(3) {
-    text-align: right;
+    text-align: left;
 }
 
 .demographic_table thead td:nth-child(3) {
@@ -10234,6 +10234,52 @@ table.stream_data_table thead tr td:last-child {
 .forms_stream_table thead tr td:nth-child(5){
     width:10%
 }
+.rendered_table thead tr td{
+    border-top: 1px solid #e2e5e8 !important;
+}
+.rendered_table thead tr td{
+    width:20% !important;
+}
+.rendered_table{
+    table-layout: fixed !important;
+}
+.rendered_table tbody tr:last-child td {
+    border-bottom: 1px solid #e2e5e8 !important;
+}
+.rendered_table thead td:nth-child(3) {
+    color: #212529 !important;
+}
+.rendered_table tbody td:nth-child(1){
+    color: #212529 !important;
+}
+.report_over_flow_fix{
+    white-space: break-spaces;
+}
+.stream_report_modal b{
+    font-weight: bolder;
+}
+.stream_report_modal .row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+}
+.stream_report_modal .table td,.stream_report_modal .table th {
+    border-top: unset;
+    white-space: inherit;
+    padding: 1.05rem 0.75rem;
+}
+.report_generated_table{
+    min-width: 50% !important;
+}
+.report_generated_table{
+    table-layout: fixed !important;
+}
+.report_generated_table thead tr td{
+    width: 20%;
+}
 @media only screen and (min-width:768px) and (max-width:1000px) {
     .grid_container {
         grid-template-columns: 87% 12%;
@@ -10392,7 +10438,7 @@ table.stream_data_table thead tr td:last-child {
     }
 }
 @media only screen and (min-width: 1200px){
-.container {
+.container { 
     max-width: 100% !important;
 }
 }

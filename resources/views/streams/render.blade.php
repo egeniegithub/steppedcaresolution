@@ -130,7 +130,7 @@
 
                                                                 @if($tableData)
                                                                     <div class="table-responsive">
-                                                                        <table class="table demographic_table platform_visitors table-bordered">
+                                                                        <table class="table demographic_table platform_visitors rendered_table table-bordered">
                                                                             <thead>
                                                                             <tr>
                                                                                 @php
@@ -250,30 +250,35 @@
 
 @section('scripts')
     <script>
-        $(".target").on('paste', function (event) {
-            event.preventDefault();
-            var counter_start = $(this).attr("id");
-            console.log(counter_start);
-            var pastedData = event.originalEvent.clipboardData.getData('text');
-            console.log(pastedData);
-            var myArr = pastedData.split("\r\n");
-            myArr.forEach((value, key) => {
-                $("#" + counter_start).val(value);
-                counter_start++;
-            });
-        });
+        // $(".target").on('paste', function (event) {
+        //     event.preventDefault();
+        //     var counter_start = $(this).attr("id");
+        //     console.log(counter_start);
+        //     var pastedData = event.originalEvent.clipboardData.getData('text');
+        //     console.log(pastedData);
+        //     var myArr = pastedData.split("\r\n");
+        //     myArr.forEach((value, key) => {
+        //         $("#" + counter_start).val(value);
+        //         counter_start++;
+        //     });
+        // });
 
         $(".new_target").on('paste', function (event) {
+           
             event.preventDefault();
             var counter_second = $(this).attr("num");
-            console.log(counter_second);
+            
             var new_pastedData = event.originalEvent.clipboardData.getData('text');
-            console.log(new_pastedData);
+            
             var new_myArr = new_pastedData.split("\r\n");
+            new_myArr.pop()
+            console.log(new_myArr);
+            var num_value =counter_second ;
+           
             new_myArr.forEach((value, key) => {
-                // $("num"+counter_second).val(value);
-                $(".target_" + counter_second).val(value);
-                counter_second++;
+              
+                $("#current_value_"+ num_value +" ").val(value);
+                num_value = +num_value+10;
             });
         });
 

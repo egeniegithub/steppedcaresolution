@@ -1,6 +1,6 @@
 {{--Modal to add summary--}}
 <div style="color:black !important " class="modal fade" id="viewReport{{$form->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-dialog stream_report_modal modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Report</h5>
@@ -16,7 +16,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <b>Report Summary:</b>
-                        <p>{!! $form->summary !!}</p>
+                        <p class="report_over_flow_fix">{!! $form->summary !!}</p>
                     </div>
                 </div>
 
@@ -25,7 +25,7 @@
                         <div class="col-sm-12 ">
                             <p class="report_modal_dark_font">{{$stream->name}}</p>
                             <b>Stream Summary:</b>
-                            <p>{!! $stream->summary !!}</p>
+                            <p class="report_over_flow_fix">{!! $stream->summary !!}</p>
                         </div>
                     </div>
 
@@ -35,10 +35,10 @@
 
                     @if(!empty($stream_fields))
                         @foreach($stream_fields as $field)
-                            <div class="row">
+                            <div class="row" style="white-space:normal">
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label for="exampleFormControlTextarea1"><b>{{$field->fieldName}}</b></label>
+                                        <label for="exampleFormControlTextarea1"><b>{{$field->fieldName}}</b> : </label>
                                         @switch($field->fieldType)
                                             @case('text')
                                             <span>{{$field->value}}</span>
@@ -49,9 +49,10 @@
                                             @break
 
                                             @case('number')
+                                            <span>{{$field->value}}</span>
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <span>{{$field->value}}</span>
+                                                   
                                                 </div>
                                                 <div class="col-md-6" style="margin-top: -30px">
                                                     @php
@@ -59,7 +60,7 @@
                                                     @endphp
 
                                                     @if($field->isCumulative == 'yes')
-                                                        <label  for="exampleFormControlTextarea1">Cumulative Value</label>
+                                                        <label  for="exampleFormControlTextarea1"><b>Cumulative Value</b></label>
                                                         <span>{{$field->cumulative_value}}</span>
                                                     @endif
                                                 </div>
@@ -92,7 +93,7 @@
                                             @if($tableData)
                                                 <div class="col-sm-12 col-md-12">
                                                     <div class="table-responsive">
-                                                        <table class="table report_sub_table table-bordered">
+                                                        <table class="table report_sub_table report_generated_table table-bordered">
                                                             <thead>
                                                             <tr class="red_row">
                                                                 @php
