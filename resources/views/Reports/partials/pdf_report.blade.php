@@ -2,7 +2,6 @@
     .report_summary_col{
         margin-bottom: 15px;
     }
-
     .report_over_flow_fix{
         white-space: break-spaces;
     }
@@ -16,7 +15,7 @@
 
     .report_sub_table {
         width: 100%;
-        border: 2px solid black !important;
+        /* border: 2px solid black !important; */
     }
 
     .report_sub_table .red_row td {
@@ -63,7 +62,7 @@
 
     .table-bordered td,
     .table-bordered th {
-        border: 1px solid #e2e5e8;
+        /* border: 2px solid #e2e5e8; */
     }
 
     .table-bordered tbody tr td {
@@ -83,7 +82,6 @@
     .text-center {
         text-align: center;
     }
-
 </style>
 <div class="">
 
@@ -173,7 +171,7 @@
                                 @if($tableData)
                                     <div class="col-sm-12 col-md-12">
                                         <div class="table-responsive">
-                                            <table class="table report_sub_table report_generated_table ">
+                                            <table class="table report_sub_table report_generated_table" style="border-collapse: collapse">
                                                 <thead>
                                                 <tr class="red_row">
                                                     @php
