@@ -32,7 +32,7 @@ class ForgotPasswordController extends Controller
     {
 
         $request->validate([
-            'email' => 'required|email|exists:users',
+            'email' => 'required|email',
         ]);
 
         $token = Str::random(64);

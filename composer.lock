@@ -4,7 +4,9 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
+
     "content-hash": "72881102fbeae08bfbd7c538b8556005",
+
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -63,6 +65,7 @@
             "time": "2021-03-11T06:42:03+00:00"
         },
         {
+
             "name": "balping/json-raw-encoder",
             "version": "v1.0.1",
             "source": {
@@ -109,6 +112,7 @@
             "time": "2020-06-06T16:24:31+00:00"
         },
         {
+
             "name": "barryvdh/laravel-dompdf",
             "version": "v0.9.0",
             "source": {
@@ -293,81 +297,6 @@
                 }
             ],
             "time": "2020-09-10T14:20:26+00:00"
-        },
-        {
-            "name": "dflydev/dot-access-data",
-            "version": "v3.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/dflydev/dflydev-dot-access-data.git",
-                "reference": "0992cc19268b259a39e86f296da5f0677841f42c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/dflydev/dflydev-dot-access-data/zipball/0992cc19268b259a39e86f296da5f0677841f42c",
-                "reference": "0992cc19268b259a39e86f296da5f0677841f42c",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1 || ^8.0"
-            },
-            "require-dev": {
-                "phpstan/phpstan": "^0.12.42",
-                "phpunit/phpunit": "^7.5 || ^8.5 || ^9.3",
-                "scrutinizer/ocular": "1.6.0",
-                "squizlabs/php_codesniffer": "^3.5",
-                "vimeo/psalm": "^3.14"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-main": "3.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Dflydev\\DotAccessData\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Dragonfly Development Inc.",
-                    "email": "info@dflydev.com",
-                    "homepage": "http://dflydev.com"
-                },
-                {
-                    "name": "Beau Simensen",
-                    "email": "beau@dflydev.com",
-                    "homepage": "http://beausimensen.com"
-                },
-                {
-                    "name": "Carlos Frutos",
-                    "email": "carlos@kiwing.it",
-                    "homepage": "https://github.com/cfrutos"
-                },
-                {
-                    "name": "Colin O'Dell",
-                    "email": "colinodell@gmail.com",
-                    "homepage": "https://www.colinodell.com"
-                }
-            ],
-            "description": "Given a deep data structure, access data by dot notation.",
-            "homepage": "https://github.com/dflydev/dflydev-dot-access-data",
-            "keywords": [
-                "access",
-                "data",
-                "dot",
-                "notation"
-            ],
-            "support": {
-                "issues": "https://github.com/dflydev/dflydev-dot-access-data/issues",
-                "source": "https://github.com/dflydev/dflydev-dot-access-data/tree/v3.0.1"
-            },
-            "time": "2021-08-13T13:06:58+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -1914,6 +1843,7 @@
         },
         {
             "name": "nesbot/carbon",
+
             "version": "2.53.1",
             "source": {
                 "type": "git",
@@ -1924,6 +1854,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/f4655858a784988f880c1b8c7feabbf02dfdf045",
                 "reference": "f4655858a784988f880c1b8c7feabbf02dfdf045",
+
                 "shasum": ""
             },
             "require": {
@@ -2004,7 +1935,9 @@
                     "type": "tidelift"
                 }
             ],
+
             "time": "2021-09-06T09:29:23+00:00"
+
         },
         {
             "name": "nette/schema",
