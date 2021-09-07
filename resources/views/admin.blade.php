@@ -202,7 +202,7 @@
                                     <div class="card_header grid_container li_dark_border">
                                         <div class=" row new_row_adjusted  text-center">
                                             <div class="col-sm-12">
-                                                <h5 class="chart_heading">{{$graph_data['graph_info']['name']}} (Cumulative)</h5>
+                                                <h5 class="chart_heading">{{$graph_data['graph_info']['name']}}</h5>
                                             </div>
                                             <div class="col-sm-12">
                                                 <p class="chart_sub_heading">
@@ -311,5 +311,64 @@
             </div>
         </div>
     </div>
+    <script>
+        $(".cross_imgae_width").click(function () {
+            $(this).closest("div.parent_col").hide();
+        })
 
+        function getForms(id) {
+            $.ajax({
+                url: '{{url("dashboard/get-forms")}}/' + id,
+                method: 'GET',
+                success: function (data) {
+                    data = data.data
+                    let html = '<option>Select Form</option>';
+                    for (let i = 0; i < data.length; i++) {
+                        html += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+                    }
+                    $('#add-forms').html(html);
+                },
+                error: function (error) {
+
+                }
+            });
+        }
+
+        function getStreams(id) {
+            $.ajax({
+                url: '{{url("dashboard/get-streams")}}/' + id,
+                method: 'GET',
+                success: function (data) {
+                    data = data.data
+                    let html = '<option>Select Stream</option>';
+                    for (let i = 0; i < data.length; i++) {
+                        html += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+                    }
+                    $('#add-streams').html(html);
+                },
+                error: function (error) {
+
+                }
+            });
+        }
+
+        function getFields(id) {
+            $.ajax({
+                url: '{{url("dashboard/get-fields")}}/' + id,
+                method: 'GET',
+                success: function (data) {
+                    data = data.data
+                    console.log('data', data)
+                    let html = '<option>Select Field</option>';
+                    for (let i = 0; i < data.length; i++) {
+                        html += '<option value="' + data[i].id + '">' + data[i].fieldName + '</option>';
+                    }
+                    $('#add-field').html(html);
+                },
+                error: function (error) {
+
+                }
+            });
+        }
+    </script>
 @endsection
