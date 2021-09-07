@@ -202,7 +202,7 @@
                                     <div class="card_header grid_container li_dark_border">
                                         <div class=" row new_row_adjusted  text-center">
                                             <div class="col-sm-12">
-                                                <h5 class="chart_heading">{{$graph_data['graph_info']['name']}}</h5>
+                                                <h5 class="chart_heading">{{$graph_data['graph_info']['name']}} (Cumulative)</h5>
                                             </div>
                                             <div class="col-sm-12">
                                                 <p class="chart_sub_heading">
