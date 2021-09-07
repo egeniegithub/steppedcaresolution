@@ -264,19 +264,19 @@
         // });
 
         $(".new_target").on('paste', function (event) {
-           
+
             event.preventDefault();
             var counter_second = $(this).attr("num");
-            
+
             var new_pastedData = event.originalEvent.clipboardData.getData('text');
-            
+
             var new_myArr = new_pastedData.split("\r\n");
             new_myArr.pop()
             console.log(new_myArr);
             var num_value =counter_second ;
-           
+
             new_myArr.forEach((value, key) => {
-              
+
                 $("#current_value_"+ num_value +" ").val(value);
                 num_value = +num_value+10;
             });

@@ -28,7 +28,7 @@
                                     <div class=" li_dark_border">
                                         <div class="summary_text_center">
                                             <h5>Summary of Period</h5>
-                                         
+
                                             <div class="summary_view_more ml-2">
                                                 <form method="get" action="{{route('dashboard.forms')}}">
                                                     <input type="hidden" name="period_id" value="{{$period_id}}">
@@ -37,7 +37,7 @@
                                                     </button>
                                                 </form>
                                             </div>
-                                            
+
                                         </div>
                                         <div class="cross_image">
                                             {{--<img class="cross_imgae_width" src="../assets/images/cross_new.png" />--}}
@@ -47,20 +47,19 @@
                                         <div class="row new_row_adjusted li_dark_border">
                                             <div class="col-sm-12 sumary_select_list ">
                                                 <div class="form-group  pt-1 d-flex ">
-                                                <select class="form-control form-select white_input" name="period_id"
-                                                        aria-label="Default select example">
-                                                    @foreach($periods as $period)
-                                                        <option
-                                                            value="{{$period->id}}" {{$period_id == $period->id ? "selected" : ""}}>{{$period->name}}
-                                                            ({{$period->start_date}} - {{$period->end_date}})
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                <button class="dashboard_span_search span_mid"><i
-                                                        class="fas fa-search search_icon"></i></button>
-</div>
+                                                    <select class="form-control form-select white_input" name="period_id" id="period_id" aria-label="Default select example">
+                                                        @foreach($periods as $period)
+                                                            <option
+                                                                value="{{$period->id}}" {{$period_id == $period->id ? "selected" : ""}}>{{$period->name}}
+                                                                ({{$period->start_date}} - {{$period->end_date}})
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    <button class="dashboard_span_search span_mid"><i
+                                                            class="fas fa-search search_icon"></i></button>
+                                                </div>
                                             </div>
-                                           
+
                                         </div>
                                     </form>
                                 </div>
@@ -91,6 +90,223 @@
                             </div>
                         </div>
                     </div>
+
+                    @foreach($non_cumulative_graph as $graph_data)
+                        <div class="col-sm-12 col-md-6 parent_col">
+                            <div class="table_div_padding">
+                                <div class="card mb-0">
+                                    <div class="card_header grid_container li_dark_border">
+                                        <div class=" row new_row_adjusted  text-center">
+                                            <div class="col-sm-12">
+                                                <h5 class="chart_heading">{{$graph_data['graph_info']['name']}}</h5>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <p class="chart_sub_heading">
+                                                    Duration: {{$graph_data['graph_info']['duration']}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="cross_image">
+                                            <form action="{{route('dashboard.delete_graph')}}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{$graph_data['graph_info']['graph_id']}}">
+                                                <button type="submit" style="background: #fff; border: 0">
+                                                    <img class="cross_imgae_width" src="{{asset('assets/images/cross_new.png')}}"/>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="row new_row_adjusted">
+                                        <div class="col-sm-12">
+
+                                            <div class="chart_padding">
+                                                <p class="yaxis_chart_label">Value</p>
+                                                <figure class="highcharts-figure">
+                                                    <div id="container{{$loop->iteration}}"></div>
+                                                </figure>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            Highcharts.chart("container{{$loop->iteration}}", {
+                                chart: {
+                                    type: 'column'
+                                },
+                                exporting: {
+                                    enabled: true
+                                },
+                                credits: {
+                                    enabled: false
+                                },
+
+                                title: {
+                                    text: ''
+                                },
+                                subtitle: {
+                                    text: ''
+                                },
+                                /*xAxis: {
+                                    categories: ['Period'],
+                                    title: {
+                                        text: "Period",
+                                        color: "black",
+                                    },
+                                    crosshair: true
+                                },*/
+                                yAxis: {
+                                    gridLineDashStyle: 'longdash',
+                                    // min: 0,
+                                    // title: {
+                                    //     align: 'high',
+                                    //     offset: 1,
+                                    //     text: 'Value',
+                                    //     rotation: 0,
+                                    //     y: -5,
+                                    // }
+                                },
+                                tooltip: {
+                                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                                        '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                                    footerFormat: '</table>',
+                                    shared: true,
+                                    useHTML: true
+                                },
+                                plotOptions: {
+                                    column: {
+                                        pointPadding: 0,
+                                        borderWidth: 0
+                                    }
+                                },
+                                series: [
+                                    @foreach($graph_data['data'] as $data)
+                                        {
+                                            name: "{{$data['row_name']}}",
+                                            data: {{$data['row_values']}}
+                                        },
+                                    @endforeach
+                                ]
+                            });
+                        </script>
+                    @endforeach
+
+                    @foreach($cumulative_graph as $graph_data)
+                        <div class="col-sm-12 col-md-6 parent_col">
+                            <div class="table_div_padding">
+                                <div class="card mb-0">
+                                    <div class="card_header grid_container li_dark_border">
+                                        <div class=" row new_row_adjusted  text-center">
+                                            <div class="col-sm-12">
+                                                <h5 class="chart_heading">{{$graph_data['graph_info']['name']}}</h5>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <p class="chart_sub_heading">
+                                                    Duration: {{$graph_data['graph_info']['duration']}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="cross_image">
+                                            <form action="{{route('dashboard.delete_graph')}}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{$graph_data['graph_info']['graph_id']}}">
+                                                <button type="submit" style="background: #fff; border: 0">
+                                                    <img class="cross_imgae_width" src="{{asset('assets/images/cross_new.png')}}"/>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="row new_row_adjusted">
+                                        <div class="col-sm-12">
+
+                                            <div class="chart_padding">
+                                                <p class="yaxis_chart_label">Value</p>
+                                                <figure class="highcharts-figure">
+                                                    <div id="area_container{{$loop->iteration}}"></div>
+                                                </figure>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            Highcharts.chart("area_container{{$loop->iteration}}", {
+                                chart: {
+                                    type: 'area'
+                                },
+                                exporting: {
+                                    enabled: true
+                                },
+                                credits: {
+                                    enabled: false
+                                },
+
+                                title: {
+                                    text: ''
+                                },
+                                subtitle: {
+                                    text: ''
+                                },
+                                /*xAxis: {
+                                    categories: ['Period'],
+                                    title: {
+                                        text: "Period",
+                                        color: "black",
+                                    },
+                                    crosshair: true
+                                },*/
+                                yAxis: {
+                                    gridLineDashStyle: 'longdash',
+                                    // min: 0,
+                                    // title: {
+                                    //     align: 'high',
+                                    //     offset: 1,
+                                    //     text: 'Value',
+                                    //     rotation: 0,
+                                    //     y: -5,
+                                    // }
+                                },
+                                tooltip: {
+                                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                                        '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                                    footerFormat: '</table>',
+                                    shared: true,
+                                    useHTML: true
+                                },
+                                plotOptions: {
+                                    area: {
+                                        marker: {
+                                            enabled: true,
+                                            symbol: 'circle',
+                                            radius: 5,
+                                            states: {
+                                                hover: {
+                                                    enabled: true
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                series: [
+                                        @foreach($graph_data['data'] as $data)
+                                    {
+                                        name: "{{$data['row_name']}}",
+                                        data: {{$data['row_values']}}
+                                    },
+                                    @endforeach
+                                ]
+                            });
+                        </script>
+                    @endforeach
+
                     @foreach($graphs as $graph)
                         @if($graph->is_cumulative == 1)
                             <div class="col-sm-12 col-md-6 parent_col">
@@ -99,17 +315,21 @@
                                         <div class="card_header grid_container li_dark_border">
                                             <div class="row new_row_adjusted  text-center">
                                                 <div class="col-sm-12">
-                                                    <h5 class="chart_heading">HC Reports - {{$graph->stream->name}}</h5>
+                                                    <h5 class="chart_heading">{{$graph->form->name}} - {{$graph->stream->name}} - {{$graph->field->fieldName}} (Cumulative)</h5>
                                                 </div>
                                                 <div class="col-sm-12">
-                                                    <p class="chart_sub_heading">Duration: {{$graph->period->start_date}} to {{$graph->period->end_date}}</p>
+                                                    <p class="chart_sub_heading">
+                                                        Duration: {{$graph->period->start_date}}
+                                                        to {{$graph->period->end_date}}</p>
                                                 </div>
                                             </div>
                                             <div class="cross_image">
                                                 <form action="{{route('dashboard.delete_graph')}}" method="POST">
                                                     @csrf
                                                     <input type="hidden" name="id" value="{{$graph->id}}">
-                                                    <button type="submit" style="background: #fff; border: 0"><img class="cross_imgae_width" src="../assets/images/cross_new.png"/></button>
+                                                    <button type="submit" style="background: #fff; border: 0">
+                                                        <img class="cross_imgae_width" src="{{asset('assets/images/cross_new.png')}}"/>
+                                                    </button>
                                                 </form>
                                             </div>
                                         </div>
@@ -127,201 +347,14 @@
                                     </div>
                                 </div>
                             </div>
-                        @else
-
-                            <div class="col-sm-12 col-md-6 parent_col">
-                                <div class="table_div_padding">
-                                    <div class="card mb-0">
-                                        <div class="card_header grid_container li_dark_border">
-                                            <div class=" row new_row_adjusted  text-center">
-                                                <div class="col-sm-12">
-                                                    <h5 class="chart_heading">HC Reports - {{$graph->stream->name}}</h5>
-                                                </div>
-                                                <div class="col-sm-12">
-                                                    <p class="chart_sub_heading">Duration: {{$graph->period->start_date}} to {{$graph->period->end_date}}</p>
-                                                </div>
-                                            </div>
-                                            <div class="cross_image">
-                                                <form action="{{route('dashboard.delete_graph')}}" method="POST">
-                                                    @csrf
-                                                    <input type="hidden" name="id" value="{{$graph->id}}">
-                                                    <button type="submit" style="background: #fff; border: 0"><img class="cross_imgae_width" src="../assets/images/cross_new.png"/></button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                        <div class="row new_row_adjusted">
-                                            <div class="col-sm-12">
-
-                                                <div class="chart_padding">
-                                                    <p class="yaxis_chart_label">Value</p>
-                                                    <figure class="highcharts-figure">
-                                                        <div id="container"></div>
-                                                    </figure>
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                            @endif
+                        @endif
                     @endforeach
-
-                    {{--<div class="col-sm-12 col-md-6 parent_col">
-                        <div class="table_div_padding">
-                            <div class="card mb-0">
-                                <div class="card_header grid_container li_dark_border">
-                                    <div class="row new_row_adjusted  text-center">
-                                        <div class="col-sm-12">
-                                            <h5 class="chart_heading">HC Reports - Stream 1.0 - Device</h5>
-                                        </div>
-                                        <div class="col-sm-12">
-                                            <p class="chart_sub_heading">Duration: Mar 21 to Aug 21 </p>
-                                        </div>
-                                    </div>
-                                    <div class="cross_image">
-                                        <img class="cross_imgae_width" src="../assets/images/cross_new.png" />
-                                    </div>
-                                </div>
-                                <div class="row new_row_adjusted">
-                                    <div class="col-sm-12">
-                                        <div class="chart_padding">
-                                            <p class="yaxis_chart_label">Value</p>
-                                            <figure class="highcharts-figure">
-                                                <div id="second_coloumn_chart"></div>
-                                            </figure>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>--}}
-
-                
                 </div>
-                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-                     aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg" role="document">
-                        <div class="modal-content ">
-                            <form action="{{route('dashboard.save_graph')}}" method="POST">
-                                @csrf
-                                <div class="modal-header">
-                                    <h5 class="modal-title text-center report_modal_header" id="exampleModalLabel">Add
-                                        Graph</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12">
-                                            <div class="form-group">
-                                                <label for="exampleFormControlSelect1">Period</label>
-                                                <select class="form-control white_input" id="exampleFormControlSelect1"
-                                                        name="start_period_id">
-                                                    <option>Select Period</option>
-                                                    @foreach($periods as $period)
-                                                        <option value="{{$period->id}}">{{$period->name}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        {{--<div class="col-sm-12 col-md-6">
-                                            <div class="form-group">
-                                                <label for="exampleFormControlSelect1">Ending Period</label>
-                                                <select class="form-control white_input" id="exampleFormControlSelect1">
-                                                    <option>Month 2</option>
-                                                    <option>2</option>
-                                                    <option>3</option>
-                                                    <option>4</option>
-                                                    <option>5</option>
-                                                </select>
-                                            </div>
-                                        </div>--}}
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-6">
-                                            <div class="form-group">
-                                                <label for="exampleFormControlSelect1">Project</label>
-                                                <select class="form-control white_input" id="exampleFormControlSelect1"
-                                                        onchange="getForms(this.value)" name="project_id">
-                                                    <option>Select Project</option>
-                                                    @foreach($projects as $project)
-                                                        <option value="{{$project->id}}">{{$project->name}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-6">
-                                            <div class="form-group">
-                                                <label for="add-forms">Form</label>
-                                                <select class="form-control white_input" id="add-forms"
-                                                        onchange="getStreams(this.value)" name="form_id">
-                                                    <option>Select Form</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-6">
-                                            <div class="form-group">
-                                                <label for="add-streams">Stream</label>
-                                                <select class="form-control white_input" id="add-streams"
-                                                        onchange="getFields(this.value)" name="stream_id">
-                                                    <option>Select Stream</option>
-
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-6">
-                                            <div class="form-group">
-                                                <label for="add-table">Field</label>
-                                                <select class="form-control white_input" id="add-field" name="field_id">
-                                                    <option>Select Field</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-6">
-                                            <table class="radio_table" style="width:75%">
-                                                <tr>
-                                                    <th> Cumulative Value</th>
-                                                    <td>
-                                                        <label class="radio_container">
-                                                            <input type="radio" checked="checked" name="is_cumulative"
-                                                                   value="1">
-                                                            <span class="checkmark"></span>
-                                                            Yes
-                                                        </label>
-                                                    </td>
-                                                    <td>
-                                                        <label class="radio_container">No
-                                                            <input type="radio" checked="checked" name="is_cumulative"
-                                                                   value="0">
-                                                            <span class="checkmark"></span>
-                                                        </label>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-primary">Create</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                @include('modals.create_graph')
             </div>
         </div>
     </div>
-    </div>
-    </div>
+
 
     <!-- <script src="../../assets/js/highchart.js"></script>
     <script src="../../assets/js/exporting.js"></script>
@@ -334,150 +367,6 @@
     <!-- <script src="https://code.highcharts.com/modules/export-data.js"></script> -->
     <!-- <script src="https://code.highcharts.com/modules/accessibility.js"></script> -->
 
-    <script>
-
-        Highcharts.chart('container', {
-            chart: {
-                type: 'column'
-            },
-            exporting: {
-                enabled: true
-            },
-            credits: {
-                enabled: false
-            },
-
-            title: {
-                text: ''
-            },
-            subtitle: {
-                text: ''
-            },
-            xAxis: {
-                categories: [
-                    'Mar 21',
-                    'Apr 21',
-                    'May 21',
-                    'Jun 21',
-                    'Jul 21',
-                    'Aug 21',
-                ],
-                title: {
-                    text: "Period",
-                    color: "black",
-                },
-                crosshair: true
-            },
-            yAxis: {
-                gridLineDashStyle: 'longdash',
-                // min: 0,
-                // title: {
-                //     align: 'high',
-                //     offset: 1,
-                //     text: 'Value',
-                //     rotation: 0,
-                //     y: -5,
-                // }
-            },
-            tooltip: {
-                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
-                footerFormat: '</table>',
-                shared: true,
-                useHTML: true
-            },
-            plotOptions: {
-                column: {
-                    pointPadding: 0,
-                    borderWidth: 0
-                }
-            },
-            series: [{
-                name: 'Registered Users',
-                color: "#4472C4",
-                data: [40, 37, 42, 20, 45, 28]
-
-            }, {
-                name: 'Unique Visitors',
-                color: "#ED7D31",
-                data: [18, 12, 38, 28, 5, 12]
-
-            }]
-        });
-    </script>
-    <script>
-        Highcharts.chart('second_coloumn_chart', {
-            chart: {
-                type: 'column'
-            },
-            exporting: {
-                enabled: true
-            },
-            credits: {
-                enabled: false
-            },
-
-            title: {
-                text: ''
-            },
-            subtitle: {
-                text: ''
-            },
-            xAxis: {
-                categories: [
-                    'Mar 21',
-                    'Apr 21',
-                    'May 21',
-                    'Jun 21',
-                    'Jul 21',
-                    'Aug 21',
-                ],
-                title: {
-                    text: "Period",
-                    color: "black",
-                },
-                crosshair: true
-            },
-            yAxis: {
-                gridLineDashStyle: 'longdash',
-                // min: 0,
-                // title: {
-                //     align: 'high',
-                //     offset: 1,
-                //     text: 'Value',
-                //     rotation: 0,
-                //     y: -5,
-                // }
-            },
-            tooltip: {
-                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
-                footerFormat: '</table>',
-                shared: true,
-                useHTML: true
-            },
-            plotOptions: {
-                column: {
-                    pointPadding: 0,
-                    borderWidth: 0
-                }
-            },
-            series: [
-                {
-                name: 'Mobile',
-                color: "#44C477",
-                data: [40, 37, 42, 20, 45, 28]
-
-            }, {
-                name: 'Computer',
-                color: "#4A90CB",
-                data: [18, 12, 38, 28, 5, 12]
-
-            }]
-        });
-    </script>
     <script>
         Highcharts.chart('area_container', {
             chart: {
@@ -564,17 +453,27 @@
             $(this).closest("div.parent_col").hide();
         })
 
-        function getForms(id) {
+        function getForms(project_id) {
+
+            var period_id = $('#start_period_id').val();
+
             $.ajax({
-                url: '{{url("dashboard/get-forms")}}/' + id,
+                url: '{{url('/get-forms')}}/'+project_id+'/'+period_id,
                 method: 'GET',
-                success: function (data) {
-                    data = data.data
+                success: function (response) {
+
+                    $('#form_id').empty();
+                    $('#form_id').append('<option value="">Select Form</option>');
+                    $.each(response,function(key,value){
+                        $('#form_id').append('<option value="'+key+'">'+value+'</option>');
+                    });
+
+                    /*data = data.data
                     let html = '<option>Select Form</option>';
                     for (let i = 0; i < data.length; i++) {
                         html += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
                     }
-                    $('#add-forms').html(html);
+                    $('#add-forms').html(html);*/
                 },
                 error: function (error) {
 

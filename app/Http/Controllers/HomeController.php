@@ -8,6 +8,7 @@ use App\Models\Permission;
 use App\Models\Stream;
 use App\Models\StreamAccess;
 use App\Models\StreamField;
+use App\Models\StreamFieldGrid;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Auth;
@@ -89,11 +90,123 @@ class HomeController extends Controller
                 }
             }
 
+            //start non cumulative graphs
+            $non_cumulative_graph = array();
+            $graphs_array = array();
+
+            $grid_non_cumulative = Graph::with(['stream','project','form','period','field'])->where('is_cumulative', 0)->get();
+
+            foreach ($grid_non_cumulative as $grid_value) {
+                $single_table_array = array();
+                $grid_current_graph = array();
+
+                $check_field = StreamField::where('id', $grid_value->field_id)->first();
+                //dd($check_field);
+
+                if ($check_field->fieldType == 'table'){
+
+                    $column_count = 0;
+                    $grid_data = StreamFieldGrid::where('stream_field_id', $check_field->id)->orderBy('type', 'ASC')->orderBy('order_count', 'ASC')->get();
+
+                    // column check
+                    foreach($grid_data as $grid){
+                        if($grid->type == 'column'){
+                            $column_count++;
+                        }
+                    }
+
+                    $graphs_array['graph_info'] = [
+                        'graph_id' => $grid_value->id,
+                        'name' => $grid_value->form->name.' - '.$grid_value->stream->name.' - '.$grid_value->field->fieldName,
+                        'duration' => date('d M, Y', strtotime($grid_value->period->start_date)).' to '.date('d M, Y', strtotime($grid_value->period->end_date))
+                    ];
+
+                    // row values
+                    foreach($grid_data as $grid) {
+                        $row_values_array = array();
+                        if ($grid->type == 'row'){
+                            for($i=0; $i<$column_count; $i++){
+                                $value = json_decode($grid->value);
+                                if ($value){
+                                    $final_value = (float)$value[$i];
+                                    //dd($final_value);
+                                    array_push($row_values_array, $final_value);
+                                }
+                            }
+                            $grid_current_graph['row_name'] = $grid->name;
+                            $grid_current_graph['row_values'] = json_encode($row_values_array);
+                            array_push($single_table_array, $grid_current_graph);
+                        }
+                    }
+                    $graphs_array['data'] = $single_table_array;
+                    array_push($non_cumulative_graph, $graphs_array);
+
+                }
+            }
+            //end non cumulative graphs
+
+            //start cumulative graphs
+            $cumulative_graph = array();
+            $graphs_array_cumulative = array();
+
+            $grid_cumulative = Graph::with(['stream','project','form','period','field'])->where('is_cumulative', 1)->get();
+
+            foreach ($grid_cumulative as $grid_value_cumulative) {
+                $cumulative_single_table_array = array();
+                $cumulative_grid_current_graph = array();
+
+                $check_field = StreamField::where('id', $grid_value_cumulative->field_id)->first();
+                //dd($check_field);
+
+                if ($check_field->fieldType == 'table'){
+
+                    $column_count = 0;
+                    $grid_data_cumulative = StreamFieldGrid::where('stream_field_id', $check_field->id)->orderBy('type', 'ASC')->orderBy('order_count', 'ASC')->get();
+
+                    // column check
+                    foreach($grid_data_cumulative as $grid){
+                        if($grid->type == 'column'){
+                            $column_count++;
+                        }
+                    }
+
+                    $graphs_array_cumulative['graph_info'] = [
+                        'graph_id' => $grid_value_cumulative->id,
+                        'name' => $grid_value_cumulative->form->name.' - '.$grid_value_cumulative->stream->name.' - '.$grid_value_cumulative->field->fieldName,
+                        'duration' => date('d M, Y', strtotime($grid_value_cumulative->period->start_date)).' to '.date('d M, Y', strtotime($grid_value_cumulative->period->end_date))
+                    ];
+
+                    // row values
+                    foreach($grid_data_cumulative as $grid) {
+                        $row_values_array = array();
+                        if ($grid->type == 'row'){
+                            for($i=0; $i<$column_count; $i++){
+                                $value = json_decode($grid->cumulative_value);
+                                if ($value){
+                                    $final_value = (float)$value[$i];
+                                    //dd($final_value);
+                                    array_push($row_values_array, $final_value);
+                                }
+                            }
+                            $cumulative_grid_current_graph['row_name'] = $grid->name;
+                            $cumulative_grid_current_graph['row_values'] = json_encode($row_values_array);
+                            array_push($cumulative_single_table_array, $cumulative_grid_current_graph);
+                        }
+                    }
+                    //dd($cumulative_single_table_array);
+                    $graphs_array_cumulative['data'] = $cumulative_single_table_array;
+                    array_push($cumulative_graph, $graphs_array_cumulative);
+
+                }
+            }
+            //dd($cumulative_graph);
+            //end cumulative graphs
+
             $forms = Form::where('period_id', $period_id)->with('streams')->orderBy('id', 'DESC')->get();
             $periods = Period::all();
             $projects = project::all();
             $graphs = Graph::with(['stream','project','form','period','field'])->get();
-            return view('dashboard')->with(compact('forms', 'periods', 'period_id','projects','graphs'));
+            return view('dashboard')->with(compact('forms', 'periods', 'period_id','projects','graphs', 'non_cumulative_graph', 'cumulative_graph'));
         }
     }
 
@@ -117,7 +230,7 @@ class HomeController extends Controller
     public function getStreamFields(Request $request)
     {
         $id = $request->id;
-        $response = StreamField::where(['stream_id'=>$id, 'fieldType' => 'number'])->get();
+        $response = StreamField::where(['stream_id'=>$id, 'fieldType' => 'table'])->get();
 
         return response()->json([
             'data' => $response
@@ -138,4 +251,22 @@ class HomeController extends Controller
         return back()->with('success','Graph has been successfully removed');
     }
 
+    private function __PurchaseChartOptions($title)
+    {
+        return [
+            'yAxis' => [
+                'title' => [
+                    'text' => $title
+                ]
+            ],
+            'plotOptions' => [
+                'column' => [
+                    //'color' => '#dd4b39',
+                    'dataLabels' => [
+                        'enabled' => true
+                    ]
+                ]
+            ],
+        ];
+    }
 }
