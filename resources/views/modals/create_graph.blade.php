@@ -18,9 +18,9 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
-                                <label for="exampleFormControlSelect1">Period</label>
-                                <select class="form-control white_input" id="start_period_id" name="start_period_id">
-                                    <option>Select Period</option>
+                                <label for="exampleFormControlSelect1">Period *</label>
+                                <select class="form-control white_input" id="start_period_id" name="start_period_id" required="required">
+                                    <option value="">Select Period</option>
                                     @foreach($periods as $period)
                                         <option value="{{$period->id}}">{{$period->name}}</option>
                                     @endforeach
@@ -31,9 +31,9 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-6">
                             <div class="form-group">
-                                <label for="exampleFormControlSelect1">Project</label>
-                                <select class="form-control white_input" id="exampleFormControlSelect1" onchange="getForms(this.value)" name="project_id">
-                                    <option>Select Project</option>
+                                <label for="exampleFormControlSelect1">Project *</label>
+                                <select class="form-control white_input" id="exampleFormControlSelect1" onchange="getForms(this.value)" name="project_id" required>
+                                    <option value="">Select Project</option>
                                     @foreach($projects as $project)
                                         <option value="{{$project->id}}">{{$project->name}}</option>
                                     @endforeach
@@ -42,9 +42,9 @@
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div class="form-group">
-                                <label for="add-forms">Form</label>
-                                <select class="form-control white_input" id="form_id" onchange="getStreams(this.value)" name="form_id">
-                                    <option>Select Form</option>
+                                <label for="add-forms">Form *</label>
+                                <select class="form-control white_input" id="form_id" onchange="getStreams(this.value)" name="form_id" required>
+                                    <option value="">Select Form</option>
                                 </select>
                             </div>
                         </div>
@@ -52,19 +52,17 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-6">
                             <div class="form-group">
-                                <label for="add-streams">Stream</label>
-                                <select class="form-control white_input" id="add-streams"
-                                        onchange="getFields(this.value)" name="stream_id">
-                                    <option>Select Stream</option>
-
+                                <label for="add-streams">Stream *</label>
+                                <select class="form-control white_input" id="add-streams" onchange="getFields(this.value)" name="stream_id" required>
+                                    <option value="">Select Stream</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div class="form-group">
-                                <label for="add-table">Field</label>
-                                <select class="form-control white_input" id="add-field" name="field_id">
-                                    <option>Select Field</option>
+                                <label for="add-table">Field *</label>
+                                <select class="form-control white_input" id="add-field" name="field_id" required>
+                                    <option value="">Select Field</option>
                                 </select>
                             </div>
                         </div>

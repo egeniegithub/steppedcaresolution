@@ -172,7 +172,7 @@
                                 tooltip: {
                                     headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                                     pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                                        '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                                        '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
                                     footerFormat: '</table>',
                                     shared: true,
                                     useHTML: true
@@ -341,7 +341,7 @@
                 method: 'GET',
                 success: function (data) {
                     data = data.data
-                    let html = '<option>Select Stream</option>';
+                    let html = '<option value="">Select Stream</option>';
                     for (let i = 0; i < data.length; i++) {
                         html += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
                     }
@@ -360,7 +360,7 @@
                 success: function (data) {
                     data = data.data
                     console.log('data', data)
-                    let html = '<option>Select Field</option>';
+                    let html = '<option value="">Select Field</option>';
                     for (let i = 0; i < data.length; i++) {
                         html += '<option value="' + data[i].id + '">' + data[i].fieldName + '</option>';
                     }
