@@ -27,9 +27,7 @@ class ReportController extends Controller
         $perPage = $request->show_rows ?? 10;
         $active_user = User::where('id', auth()->user()->id)->first();
         $project = $request->project_id ?? "all";
-
         $projects = $this->projects_model->search_Projects($project);
-
         if (!empty($request->period_id)) {
             $period_id = $request->period_id;
         } else {
@@ -58,11 +56,9 @@ class ReportController extends Controller
             ->with(['streams'])
             ->paginate($perPage);
         }
-
         $row_show = $perPage;
         $periods = Period::all();
         $projects = project::all();
-
         return view("Reports.index")->with(compact('form_streams', 'row_show', 'projects', 'periods', 'active_user'));
     }
 

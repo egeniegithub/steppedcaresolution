@@ -115,10 +115,10 @@
                                                     <div class="col-sm-12 col-lg-5">
                                                         <table class="radio_table" style="width:100%">
                                                             <tr>
-                                                                <th> Required</th>
+                                                                <th> Required </th>
                                                                 <td>
                                                                     <label class="radio_container">
-                                                                        <input type="radio"
+                                                                        <input type="radio" class="field_required"
                                                                                name="field_required" value="yes"
                                                                                id="field_required">
                                                                         <span class="checkmark"></span>
@@ -128,6 +128,7 @@
                                                                 <td>
                                                                     <label class="radio_container">No
                                                                         <input type="radio"
+                                                                               class="field_required"
                                                                                checked="checked"
                                                                                name="field_required" value="no"
                                                                                id="field_required">
@@ -222,7 +223,8 @@
                                                                 <th> Required</th>
                                                                 <td>
                                                                     <label class="radio_container">
-                                                                        <input type="radio" checked="checked"
+                                                                        <input type="radio"  checked="checked"
+                                                                               class="dropdown_required"
                                                                                name="field_required" value="yes"
                                                                                id="field_required">
                                                                         <span class="checkmark"></span>
@@ -231,7 +233,8 @@
                                                                 </td>
                                                                 <td>
                                                                     <label class="radio_container">No
-                                                                        <input type="radio" checked="checked"
+                                                                        <input type="radio"  checked="checked"
+                                                                               class="dropdown_required"
                                                                                name="field_required" value="no"
                                                                                id="field_required">
                                                                         <span class="checkmark"></span>
@@ -536,9 +539,15 @@
                     integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
             <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
                     integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
-
+           <script>
+               $( document ).ready(function() {
+                   $("input[class=dropdown_required][value=no]").prop('checked', true);
+               });
+           </script>
             <script type="text/javascript">
-
+             $( document ).ready(function() {
+                $("input[class=field_required][value=no]").prop('checked', true);
+             });
 
                 $('input[name="tableFieldType"]').click(function(){
                     var val=$('input[name="tableFieldType"]:checked').val();
@@ -675,7 +684,6 @@
                     let orderCount = $(".fields_table")
                     orderCount = orderCount.length + 1
                     let tableFieldData = ''
-
                     if (!fieldName) {
                         toastr.error('Field name is required')
                         return false
@@ -745,6 +753,8 @@
                         $('#table' + tableData[i].orderCount).remove();
                     }
                     tableData = []
+
+                    console.log('recordData', recordData)
                 }
 
                 const addTableField = () => {
@@ -823,7 +833,9 @@
                 }
 
                 const updateFieldFromList = (record) => {
+                    console.log('record', record)
                     let selected = recordData[record - 1]
+                    console.log('selected',selected)
 
                     openCity(null,selected.fieldType)
                 }
