@@ -36,7 +36,7 @@ Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])-
 Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
 
     Route::get('get-streams/{id}',[HomeController::class,'getFormStreams'])->name('dashboard.get_streams');
-    Route::get('get-forms/{id}',[HomeController::class,'getProjectForms'])->name('dashboard.get_forms');
+    //Route::get('get-forms/{id}',[HomeController::class,'getProjectForms'])->name('dashboard.get_forms');
     Route::get('get-fields/{id}',[HomeController::class,'getStreamFields'])->name('dashboard.get_fields');
     Route::post('save_graph',[HomeController::class,'saveGraph'])->name('dashboard.save_graph');
     Route::post('delete_graph',[HomeController::class,'deleteGraph'])->name('dashboard.delete_graph');

@@ -52,7 +52,7 @@ class ForgotPasswordController extends Controller
             $data['username']  = $user->firstname . ' ' . $user->lastname;
             try {
                 Mail::send('emails.forgotpassword', $data, function ($message) use ($data) {
-                    $message->to($data['email'])->from('masif@egenienext.com', 'Stepped Care Solutions')->subject($data['subject']);
+                    $message->to($data['email'])->from('ashakoor@egenienext.com', 'Stepped Care Solutions')->subject($data['subject']);
                 });
                 return back()->with('success', 'We have e-mailed your password reset link!');
             } catch (Exception $e) {
@@ -93,7 +93,7 @@ class ForgotPasswordController extends Controller
         if (!$updatePassword) {
             return back()->withInput()->with('error', 'Invalid token!');
         }
-        
+
         $user = User::where('email', $updatePassword->email)
             ->update(['password' => Hash::make($request->password)]);
 
