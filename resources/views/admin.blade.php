@@ -316,17 +316,18 @@
             $(this).closest("div.parent_col").hide();
         })
 
-        function getForms(id) {
+        function getForms(project_id) {
+
+            var period_id = $('#start_period_id').val();
             $.ajax({
-                url: '{{url("dashboard/get-forms")}}/' + id,
+                url: '{{url("get-forms")}}/' + project_id+'/'+period_id,
                 method: 'GET',
                 success: function (data) {
-                    data = data.data
-                    let html = '<option>Select Form</option>';
-                    for (let i = 0; i < data.length; i++) {
-                        html += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
-                    }
-                    $('#add-forms').html(html);
+                    $('#form_id').empty();
+                    $('#form_id').append('<option value="">Select Form</option>');
+                    $.each(data,function(key,value){
+                        $('#form_id').append('<option value="'+key+'">'+value+'</option>');
+                    });
                 },
                 error: function (error) {
 
