@@ -99,6 +99,7 @@ class HomeController extends Controller
             foreach ($grid_non_cumulative as $grid_value) {
                 $single_table_array = array();
                 $grid_current_graph = array();
+                $column_array = array();
 
                 $check_field = StreamField::where('id', $grid_value->field_id)->first();
                 //dd($check_field);
@@ -112,8 +113,10 @@ class HomeController extends Controller
                     foreach($grid_data as $grid){
                         if($grid->type == 'column'){
                             $column_count++;
+                            array_push($column_array, $grid->name);
                         }
                     }
+                    $graphs_array['column_name'] = $column_array;
 
                     $graphs_array['graph_info'] = [
                         'graph_id' => $grid_value->id,
@@ -143,6 +146,8 @@ class HomeController extends Controller
 
                 }
             }
+
+            //dd($non_cumulative_graph);
             //end non cumulative graphs
 
             //start cumulative graphs
@@ -154,6 +159,7 @@ class HomeController extends Controller
             foreach ($grid_cumulative as $grid_value_cumulative) {
                 $cumulative_single_table_array = array();
                 $cumulative_grid_current_graph = array();
+                $column_array = array();
 
                 $check_field = StreamField::where('id', $grid_value_cumulative->field_id)->first();
                 //dd($check_field);
@@ -167,8 +173,10 @@ class HomeController extends Controller
                     foreach($grid_data_cumulative as $grid){
                         if($grid->type == 'column'){
                             $column_count++;
+                            array_push($column_array, $grid->name);
                         }
                     }
+                    $graphs_array_cumulative['column_name'] = $column_array;
 
                     $graphs_array_cumulative['graph_info'] = [
                         'graph_id' => $grid_value_cumulative->id,

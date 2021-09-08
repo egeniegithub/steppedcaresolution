@@ -95,7 +95,7 @@
                                                                 <input type="file" class="form-control white_input"
                                                                        src=""
                                                                        alt=""
-                                                                       name="image[{{$field->id}}]" {{$required}}>
+                                                                       name="image[{{$field->id}}]" {{ $field->value ? "" : $required}}>
                                                                 <br>
                                                                 <div class="text-center">
                                                                     @if(isset($field->value))
@@ -290,7 +290,11 @@
             var cumulative = parseInt($("#for_sum"+number).val());
             var total = value+cumulative;
 
-            $("#cumulative_"+number).val(total);
+            if(isNaN(total)){
+                $("#cumulative_"+number).val(cumulative);
+            }else{
+                $("#cumulative_"+number).val(total);
+            }
         });
 
         // set cumulative for field
@@ -300,7 +304,11 @@
             var cumulative_hidden = parseInt($("#cumulative_field_hidden"+number).val());
             var total = value+cumulative_hidden;
 
-            $("#cumulative_field"+number).val(total);
+            if(isNaN(total)){
+                $("#cumulative_field"+number).val(cumulative_hidden);
+            }else{
+                $("#cumulative_field"+number).val(total);
+            }
         });
     </script>
 @endsection

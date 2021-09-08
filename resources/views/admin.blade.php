@@ -133,6 +133,7 @@
                         </div>
 
                         <script>
+
                             Highcharts.chart("container{{$loop->iteration}}", {
                                 chart: {
                                     type: 'column'
@@ -150,14 +151,18 @@
                                 subtitle: {
                                     text: ''
                                 },
-                                /*xAxis: {
-                                    categories: ['Period'],
-                                    title: {
+                                xAxis: {
+                                    categories: [
+                                        @foreach($graph_data['column_name'] as $data)
+                                            "{{$data}}",
+                                        @endforeach
+                                    ]
+                                    /*title: {
                                         text: "Period",
                                         color: "black",
                                     },
-                                    crosshair: true
-                                },*/
+                                    crosshair: true*/
+                                },
                                 yAxis: {
                                     gridLineDashStyle: 'longdash',
                                     // min: 0,
@@ -254,14 +259,18 @@
                                 subtitle: {
                                     text: ''
                                 },
-                                /*xAxis: {
-                                    categories: ['Period'],
-                                    title: {
+                                xAxis: {
+                                    categories: [
+                                        @foreach($graph_data['column_name'] as $data)
+                                            "{{$data}}",
+                                        @endforeach
+                                    ]
+                                    /*title: {
                                         text: "Period",
                                         color: "black",
                                     },
-                                    crosshair: true
-                                },*/
+                                    crosshair: true*/
+                                },
                                 yAxis: {
                                     gridLineDashStyle: 'longdash',
                                     // min: 0,
@@ -276,7 +285,7 @@
                                 tooltip: {
                                     headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                                     pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                                        '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                                        '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
                                     footerFormat: '</table>',
                                     shared: true,
                                     useHTML: true
