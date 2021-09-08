@@ -205,10 +205,12 @@ class StreamController extends Controller
     {
         $id = $request->id;
         try {
+            StreamChangeLog::where('stream_id', $id)->delete();
             StreamField::where('stream_id', $id)->delete();
-            Stream::find($id)->delete();
+            Stream::where('id', $id)->delete();
             return back()->with('success', "Stream has been successfully deleted");
-        } catch (\Exception $exception) {
+        } catch (\Exception $e) {
+            \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             return back()->with('error', "Something went wrong");
         }
     }
