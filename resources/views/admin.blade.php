@@ -75,7 +75,7 @@
                                         @forelse($forms as $form)
                                             <tr>
                                                 <td style="color:black !important">{{$form->name}}</td>
-                                                <td style="color:black !important">{{formStatus($form->id)}}</td>
+                                                <td>{{formStatus($form->id)}}</td>
                                             </tr>
                                         @empty
                                             <tr class="text-center">
