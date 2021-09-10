@@ -22,7 +22,7 @@
                                 <select class="form-control white_input" id="start_period_id" name="start_period_id" required="required">
                                     <option value="">Select Period</option>
                                     @foreach($periods as $period)
-                                        <option value="{{$period->id}}">{{$period->name}}</option>
+                                        <option value="{{$period->id}}">{{$period->name}} ({{$period->start_date}} - {{$period->end_date}})</option>
                                     @endforeach
                                 </select>
                             </div>
