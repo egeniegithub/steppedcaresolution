@@ -16,6 +16,11 @@
                             <a href="{{route('dashboard')}}" class="nav-link"><span class="pcoded-micon"><img class="nav-icons nav-icons-new" src="{{asset('assets/images/Dashboard_icon.png')}}"> <span class="nav_tooltip" data-toggle="tooltip" data-placement="right" title="Dashboard"><img class="nav-icons" src="{{asset('assets/images/Dashboard_icon.png')}}"></span></span><span class="pcoded-mtext">Dashboard</span></a>
                         </li>
                     @endif
+                        @if(Auth::user()->role=="Admin" || Auth::user()->role=="Manager")
+                            <li class="nav-item pcoded-hasmenu">
+                                <a href="{{route('dashboard.projects')}}" class="nav-link"><span class="pcoded-micon"><img class="nav-icons nav-icons-new" src="{{asset('assets/images/periods_icon.png')}}"><span class="nav_tooltip" data-toggle="tooltip" data-placement="right" title="Periods"><img class="nav-icons" src="{{asset('assets/images/periods_icon.png')}}"></span></span><span class="pcoded-mtext">Projects</span></a>
+                            </li>
+                        @endif
                     @if(Auth::user()->role=="Admin" || Auth::user()->role=="Manager")
                         <li class="nav-item pcoded-hasmenu">
                             <a href="{{route('dashboard.periods')}}" class="nav-link"><span class="pcoded-micon"><img class="nav-icons nav-icons-new" src="{{asset('assets/images/periods_icon.png')}}"><span class="nav_tooltip" data-toggle="tooltip" data-placement="right" title="Periods"><img class="nav-icons" src="{{asset('assets/images/periods_icon.png')}}"></span></span><span class="pcoded-mtext">Periods</span></a>

@@ -233,8 +233,12 @@
                                             <input type="submit" class="btn normal_btn save_and_submit text-white"
                                                    name="submit"
                                                    value="Save and Submit"/>
-                                            <a type="button" href="{{route('dashboard')}}"
-                                               class="btn normal_btn cancel_modal_btn text-white">Cancel</a>
+                                            @if(Auth::user()->role=="User")
+                                                <a type="button" href="{{route('dashboard')}}" class="btn normal_btn cancel_modal_btn text-white">Cancel</a>
+                                            @else
+                                                <a type="button" href="{{route('dashboard.streams', [$stream->form_id])}}" class="btn normal_btn cancel_modal_btn text-white">Cancel</a>
+                                            @endif
+
                                         </div>
                                     </div>
                                 </form>

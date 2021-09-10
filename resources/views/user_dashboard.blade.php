@@ -49,7 +49,7 @@
                                         <tbody>
                                         @forelse($streams as $stream)
                                             <tr>
-                                                <td class="form_anchor_text">{{$stream->stream_name}} </td>
+                                                <td style="color: black !important;">{{$stream->stream_name}} </td>
                                                 <td>{{$stream->form_name}}</td>
                                                 <td>
                                                     @php

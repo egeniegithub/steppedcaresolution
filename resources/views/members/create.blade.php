@@ -106,7 +106,7 @@
                                 <div class="card-header">Additional Info</div>
                                 <div class="container">
                                     <div class="row pt-4">
-                                        <div class="col-lg-6 col-x-6 col-md-6 col-12">
+                                        <div class="col-lg-4 col-xs-12 col-md-4 col-12">
                                             <div class="mb-4">
                                                 <label for="Type" class="form-label">Project *</label>
                                                 <select class="form-control form-select" name="project_id" id="project_id" aria-label="Default select example">
@@ -117,12 +117,12 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 col-x-6 col-md-6 col-12 stream_update_title">
+                                        {{--<div class="col-lg-6 col-x-6 col-md-6 col-12 stream_update_title">
                                             <div>
                                                 <b data-toggle="modal" data-target="#exampleModal"><a class="add_icon" style="cursor:pointer"><span><i class="fas fa-plus-circle"></i></span><span> Add Project</span></a></b>
                                             </div>
-                                        </div>
-                                        <div class="col-lg-6 col-x-6 col-md-6 col-12">
+                                        </div>--}}
+                                        <div class="col-lg-4 col-xs-12 col-md-4 col-12">
                                             <div class="mb-4">
                                                 <label for="Type" class="form-label">Type *</label>
                                                 <select class="form-control form-select" id="role" name="role" aria-label="Default select example" required>
@@ -134,7 +134,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 col-x-6 col-md-6 col-12">
+                                        <div class="col-lg-4 col-xs-12 col-md-4 col-12">
                                             <div class="mb-4">
                                                 <label for="Status" class="form-label">Status *</label>
                                                 <select class="form-control form-select" name="status" id="status" aria-label="Default select example" required>
@@ -176,7 +176,7 @@
                                                             <div class="row">
                                                                <div class="col-sm-9 col-xs-9 col-md-9">
                                                                    <label for="file-upload" class=" btn btn-light text-black custom-file-upload" >
-                                                                       <i class="fa fa-cloud-upload"></i> Upload Image 
+                                                                       <i class="fa fa-cloud-upload"></i> Upload Image
                                                                    </label>
                                                                    <input class="file_upload_custom" id="file-upload" name='project_image' type="file" style="display:none;">
                                                                 </div>

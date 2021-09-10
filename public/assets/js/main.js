@@ -15,6 +15,7 @@ $(document).ready(function(){
         $("#delete_modal").modal('show');
     })
 
+    // form delete modal
     $(".delete_form_modal").click(function(){
         $("#target_row_form").val($(this).attr('data-deleteForm'));
         $("#form_delete_modal").modal('show');
@@ -22,6 +23,16 @@ $(document).ready(function(){
     $(".form_delete_modal_btn").click(function(){
         window.location.href=$("#target_row_form").val();
     })
+
+    // project delete modal
+    $(".delete_project_modal").click(function(){
+        $("#target_row_project").val($(this).attr('data-deleteProject'));
+        $("#project_delete_modal").modal('show');
+    })
+    $(".project_delete_modal_btn").click(function(){
+        window.location.href=$("#target_row_project").val();
+    })
+
 
     $(".delete_period_modal").click(function(){
         $("#target_row_period").val($(this).attr('data-deleteForm'));

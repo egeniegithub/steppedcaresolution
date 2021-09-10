@@ -41,6 +41,13 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
     Route::post('save_graph',[HomeController::class,'saveGraph'])->name('dashboard.save_graph');
     Route::post('delete_graph',[HomeController::class,'deleteGraph'])->name('dashboard.delete_graph');
 
+    Route::group(['prefix' => 'projects',  'middleware' => 'auth'], function(){
+        Route::get('/', [App\Http\Controllers\ProjectController::class,'index'])->name('dashboard.projects');
+        Route::post('/store', [App\Http\Controllers\ProjectController::class,'store'])->name('dashboard.project.store');
+        Route::post('/update', [App\Http\Controllers\ProjectController::class,'update'])->name('dashboard.project.update');
+        Route::get('/project/{id?}', [App\Http\Controllers\ProjectController::class,'delete'])->name('dashboard.project.delete');
+    });
+
     Route::group(['prefix' => 'users',  'middleware' => 'auth'], function(){
         Route::get('/', [App\Http\Controllers\UserController::class,'index'])->name('dashboard.users');
         Route::get('/create', [App\Http\Controllers\UserController::class,'create'])->name('dashboard.user.create');
@@ -73,17 +80,6 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
         Route::post('/stream-post', [App\Http\Controllers\StreamController::class,'streamPost'])->name('dashboard.stream.stream_post');
         Route::post('/delete-field', [App\Http\Controllers\StreamController::class,'streamField'])->name('dashboard.stream.delete_field');
     });
-
-    Route::group(['prefix' => 'project',  'middleware' => 'auth'], function(){
-        Route::get('/', [App\Http\Controllers\ProjectController::class,'index'])->name('dashboard.projects');
-        Route::get('/create', [App\Http\Controllers\ProjectController::class,'create'])->name('dashboard.project.create');
-        Route::post('/store', [App\Http\Controllers\ProjectController::class,'store'])->name('dashboard.project.store');
-        Route::get('/edit', [App\Http\Controllers\ProjectController::class,'edit'])->name('dashboard.project.edit');
-        Route::post('/update', [App\Http\Controllers\ProjectController::class,'update'])->name('dashboard.project.update');
-        Route::get('/view', [App\Http\Controllers\ProjectController::class,'edit'])->name('dashboard.project.view');
-        Route::delete('/project/{id?}', [App\Http\Controllers\ProjectController::class,'delete'])->name('dashboard.project.delete');
-    });
-
 
     Route::group(['prefix' => 'periods',  'middleware' => 'auth'], function(){
         Route::get('/', [App\Http\Controllers\PeriodController::class,'index'])->name('dashboard.periods');

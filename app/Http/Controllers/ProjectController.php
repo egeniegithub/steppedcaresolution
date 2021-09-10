@@ -10,21 +10,22 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-    }
+        $search_keyword = $request->input('keyword') ?? null;
+        $perPage = $request->show_rows ?? 10;
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $projects = project::when($search_keyword, function ($query, $value) {
+            $query->where('name', 'like', '%' . $value . '%');
+        })
+            ->orderBy('id', 'DESC')
+            ->paginate($perPage);
+
+        $project_dropdown = project::all();
+        $row_show = $perPage;
+        return view('projects.index')->with(compact('projects', 'project_dropdown', 'row_show'));
     }
 
     /**
@@ -36,8 +37,8 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'project_name' => ['required', 'string', 'max:255'],
-            'project_image' => 'required|image|mimes:png,jpg,JPG,jpeg|max:2000',
+            'name' => ['required', 'string', 'max:255'],
+            'image' => 'required|image|mimes:png,jpg,JPG,jpeg|max:2000',
         ]);
 
         if ($validator->fails()) {
@@ -45,12 +46,12 @@ class ProjectController extends Controller
         }
 
         $params=$request->except('_token');
-        $params["name"]=$request->project_name;
-         //
-        if ($request->file('project_image')) {
-            $photo = $request->file('project_image');
+        $params["name"]=$request->name;
 
-            $image_name = time().'.'.$request->project_image->extension();
+        if ($request->file('image')) {
+            $photo = $request->file('image');
+
+            $image_name = time().'.'.$photo->extension();
             $photo->move(public_path('project_images'), $image_name);
             $params['image'] = $image_name;
         }
@@ -59,47 +60,48 @@ class ProjectController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\project  $project
-     * @return \Illuminate\Http\Response
-     */
-    public function show(project $project)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\project  $project
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(project $project)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\project  $project
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, project $project)
+    public function update(Request $request)
     {
-        //
+        //dd($request);
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+        ]);
+
+        if ($validator->fails()) {
+            return back() ->withErrors($validator)->withInput();
+        }
+
+        $params = $request->except('_token');
+        $id = $request->id;
+        $params["name"] = $request->name;
+
+        if ($request->file('image')) {
+            $photo = $request->file('image');
+
+            $image_name = time().'.'.$photo->extension();
+            $photo->move(public_path('project_images'), $image_name);
+            $params['image'] = $image_name;
+        }
+        project::where('id', $id)->update($params);
+        return back()->with('success','Project created successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\project  $project
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(project $project)
+    public function delete(Request $request)
     {
-        //
+        $id = decrypt($request->ref);
+        project::where('id', $id)->delete();
+        return back()->with('success', 'Project deleted successfully!');
     }
 }

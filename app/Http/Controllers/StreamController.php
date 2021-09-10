@@ -252,6 +252,8 @@ class StreamController extends Controller
         $user = auth()->user();
         $stream_id = $request->stream_id;
 
+        $form_id = Stream::where('id', $stream_id)->value('form_id');
+
         try {
             DB::beginTransaction();
 
@@ -343,7 +345,12 @@ class StreamController extends Controller
             \Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
             return back()->with('error', $e->getMessage());
         }
-        return redirect()->route('dashboard')->with('success', 'Data saved successfully!');
+
+        if ($user->role == 'User'){
+            return redirect()->route('dashboard')->with('success', 'Data saved successfully!');
+        }else{
+            return redirect()->route('dashboard.streams', [$form_id])->with('success', 'Data saved successfully!');
+        }
     }
 
     public function UpdateStatus(Request $request)
