@@ -188,7 +188,8 @@
             <div class="modal-footer">
                 <div id="model-footer">
                     <div>
-                        <a href="{{route('dashboard.reports.stream.pdf_download', $form->id)}}" class="btn btn-primary">Download</a>
+                        <a href="{{route('dashboard.reports.stream.pdf_download', $form->id)}}" class="btn btn-success">PDF Download</a>
+                        <a href="{{route('dashboard.reports.stream.doc_download', $form->id)}}" class="btn btn-primary">DOC Download</a>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
