@@ -7,10 +7,12 @@ use App\Models\Period;
 use App\Models\project;
 use App\Models\StreamField;
 use App\Models\StreamFieldGrid;
+use Exception;
 use App\Models\User;
 use Carbon\Carbon;
 use Dompdf\Dompdf;
 use Illuminate\Http\Request;
+use PhpOffice\PhpWord\PhpWord;
 
 class ReportController extends Controller
 {
@@ -75,7 +77,21 @@ class ReportController extends Controller
         $dompdf->render();
 
         // Output the generated PDF to Browser
-        $dompdf->stream();
+        $dompdf->stream($form->name.".pdf");
         return back()->with('success', 'Report has been successfully generated.');
+    }
+
+    public function generateWordDoc($form_id)
+    {
+        $form = Form::where('id', $form_id)->with(['streams'])->first();
+        $headers = array(
+            "Content-type"=>"text/html",
+            "Content-Disposition"=>"attachment;Filename=".$form->name.".doc"
+        );
+        $html_content = '<html><head><meta charset="utf-8"></head><body>';
+        $html_content .= view('Reports.partials.pdf_report', compact('form'))->render();
+        $html_content .= '</body></html>';
+
+        return \Response::make($html_content,200, $headers);
     }
 }
