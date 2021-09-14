@@ -40,7 +40,7 @@ if (!function_exists('created_BY')) {
     function created_BY($id)
     {
         //
-        $user = \DB::table("users")->select(DB::raw("CONCAT(firstname,lastname) as username"))->where("id", $id)->get()->first();
+        $user = \DB::table("users")->select(DB::raw("CONCAT(firstname,' ',lastname) as username"))->where("id", $id)->get()->first();
 
         if (!empty($user)) {
             return $user->username;
@@ -57,7 +57,7 @@ if (!function_exists('updated_BY')) {
     function updated_BY($id)
     {
         //
-        $user = \DB::table("users")->select(DB::raw("CONCAT(firstname,lastname) as username"))->where("id", $id)->get()->first();
+        $user = \DB::table("users")->select(DB::raw("CONCAT(firstname,' ',lastname) as username"))->where("id", $id)->get()->first();
         if (!empty($user)) {
             return $user->username;
         } else {

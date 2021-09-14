@@ -159,11 +159,11 @@
                                         <p class="user_details_font"> Updated By: {{updated_BY($user->updatedBy)}}</p>
                                         </div>
                                     </div>
-                                    <div class="row pt-4">
+                                    {{--<div class="row pt-4">
                                         <div class="col-lg-2 col-xl-2 col-md-4 col-sm-6 col-12">
                                             <p class="user_details_font">Last Login: {{\Carbon\Carbon::parse($user->last_login)}}</p>
                                         </div>
-                                    </div>
+                                    </div>--}}
                                 </div>
                             </div>
                             <button class="btn btn-primary">Save</button>
