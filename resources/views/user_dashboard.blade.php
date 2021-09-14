@@ -22,7 +22,7 @@
                                 <select class="form-control form-select white_input" name="period_id" aria-label="Default select example">
                                     {{--<option value="" selected>All</option>--}}
                                     @foreach($periods as $period)
-                                        <option value="{{$period->id}}" {{($current_period_id ? $current_period_id : request()->get('period_id')) == $period->id?"selected":""}}>{{$period->name}}</option>
+                                        <option value="{{$period->id}}" {{($current_period_id ? $current_period_id : request()->get('period_id')) == $period->id?"selected":""}}>{{$period->name}} ({{$period->start_date}} - {{$period->end_date}})</option>
                                     @endforeach
                                 </select>
                                 <button class="span_search span_mid"><i class="fas fa-search search_icon"></i></button>

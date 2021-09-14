@@ -38,7 +38,7 @@ class ProjectController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
-            'image' => 'required|image|mimes:png,jpg,JPG,jpeg|max:2000',
+            'image' => 'required|image|mimes:png,jpg,JPG,jpeg|max:4048',
         ]);
 
         if ($validator->fails()) {

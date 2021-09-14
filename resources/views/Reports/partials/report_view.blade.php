@@ -10,9 +10,18 @@
             </div>
             <div class="modal-body">
 
-                <div class="text-center">
-                    <img src="{{asset('project_images')}}/{{\App\Models\project::where('id', $form->project_id)->value('image')}}" height="300px" width="500px" alt="No Img">
-                </div>
+                @php
+                $image_name = \App\Models\project::where('id', $form->project_id)->value('image');
+                @endphp
+
+                @if($image_name)
+                    <div class="text-center">
+                        <img src="{{asset('project_images')}}/{{$image_name}}" height="300px" width="500px" alt="No Img">
+                    </div>
+                @else
+                    Project image not added
+                @endif
+
                 <div class="row">
                     <div class="col-sm-12 report_summary_col">
                          <b>Report Summary:</b> </br>
@@ -160,7 +169,7 @@
                                                                                     @php
                                                                                         $previous_cumulative_grid = \App\Models\StreamFieldGrid::where('id', $table->previous_id)->value('cumulative_value');
                                                                                     @endphp
-                                                                                    {{$previous_cumulative_grid ? json_decode($previous_cumulative_grid)[$i] : 0}}
+                                                                                    {{$previous_cumulative_grid ? json_decode($previous_cumulative_grid)[$i] : ($table->cumulative_value ? json_decode($table->cumulative_value)[$i] : 0)}}
                                                                                 </td>
                                                                             @endif
                                                                         @endfor
