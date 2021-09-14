@@ -10,9 +10,18 @@
             </div>
             <div class="modal-body">
 
-                <div class="text-center">
-                    <img src="{{asset('project_images')}}/{{\App\Models\project::where('id', $form->project_id)->value('image')}}" height="300px" width="500px" alt="No Img">
-                </div>
+                @php
+                $image_name = \App\Models\project::where('id', $form->project_id)->value('image');
+                @endphp
+
+                @if($image_name)
+                    <div class="text-center">
+                        <img src="{{asset('project_images')}}/{{$image_name}}" height="300px" width="500px" alt="No Img">
+                    </div>
+                @else
+                    Project image not added
+                @endif
+
                 <div class="row">
                     <div class="col-sm-12 report_summary_col">
                          <b>Report Summary:</b> </br>
