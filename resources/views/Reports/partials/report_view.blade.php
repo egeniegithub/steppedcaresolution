@@ -177,7 +177,6 @@
                                                     </div>
                                                 </div>
                                             @endif
-
                                         @break
 
                                         @default
