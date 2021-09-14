@@ -36,6 +36,21 @@ Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])-
 
 Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
 
+    Route::get('/csv', function() {
+        $table = \App\Models\Form::all();
+        $output='';
+        foreach ($table as $row) {
+            $output.=  implode(",",$row->toArray());
+        }
+
+        $headers = array(
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="ExportFileName.csv"',
+        );
+
+        return \Response::make(rtrim($output, "\n"), 200, $headers);
+    });
+
     Route::get('get-streams/{id}',[HomeController::class,'getFormStreams'])->name('dashboard.get_streams');
     //Route::get('get-forms/{id}',[HomeController::class,'getProjectForms'])->name('dashboard.get_forms');
     Route::get('get-fields/{id}',[HomeController::class,'getStreamFields'])->name('dashboard.get_fields');
@@ -98,6 +113,7 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
         Route::post('/stream/download', [App\Http\Controllers\ReportController::class,'downReport'])->name('dashboard.reports.stream.download');
         Route::get('/stream/pdf-download/{form_id}', [App\Http\Controllers\ReportController::class,'pdfReport'])->name('dashboard.reports.stream.pdf_download');
         Route::get('/stream/doc-download/{form_id}', [App\Http\Controllers\ReportController::class,'generateWordDoc'])->name('dashboard.reports.stream.doc_download');
+        Route::get('/stream/csv-download/{field_id}', [App\Http\Controllers\ReportController::class,'generateCsv'])->name('dashboard.reports.stream.csv_download');
     });
 
     Route::group(['prefix' => 'permissions',  'middleware' => 'auth'], function(){

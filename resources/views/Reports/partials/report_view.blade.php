@@ -167,6 +167,11 @@
                                                                     </tr>
                                                                 @endif
                                                             @endforeach
+                                                            <tr>
+                                                                <td colspan="{{$column_count}}">
+                                                                    <a href="{{route('dashboard.reports.stream.csv_download', $field->id)}}" class="btn btn-primary">CSV Download</a>
+                                                                </td>
+                                                            </tr>
                                                             </tbody>
                                                         </table>
                                                     </div>
