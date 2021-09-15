@@ -69,6 +69,7 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
         Route::get('/index/{form_id}', [App\Http\Controllers\StreamController::class,'index'])->name('dashboard.streams');
         Route::get('/create/{form_id}/{stream_id?}', [App\Http\Controllers\StreamController::class,'create'])->name('dashboard.stream.create');
         Route::post('/store', [App\Http\Controllers\StreamController::class,'store'])->name('dashboard.stream.store');
+        Route::get('/edit/{form_id}/{stream_id?}', [App\Http\Controllers\StreamController::class,'edit'])->name('dashboard.stream.edit');
         Route::post('/update', [App\Http\Controllers\StreamController::class,'update'])->name('dashboard.stream.update');
         Route::get('/stream/{id?}', [App\Http\Controllers\StreamController::class,'destroy'])->name('dashboard.stream.delete');
         Route::post('/add-update-stream-summary', [App\Http\Controllers\StreamController::class,'addUpdateStreamSummary'])->name('dashboard.form.add_update_stream_summary');

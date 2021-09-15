@@ -166,9 +166,15 @@ class StreamController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function edit(Stream $stream)
+    public function edit($form_id, $stream_id = null)
     {
-        //
+        $stream = null;
+        $fields = [];
+        if (!empty($stream_id)) {
+            $stream = Stream::where('id', $stream_id)->with(['getFields'])->first();
+            $fields = $stream->getFields;
+        }
+        return view('streams.edit')->with(compact('form_id', 'stream', 'fields'));
     }
 
     /**
@@ -384,6 +390,13 @@ class StreamController extends Controller
         $id = $request->id;
         StreamField::where('id',$id)->delete();
         return back()->with('success','Field has been successfully saved.');
+    }
+
+    public function deleteGridField(Request $request)
+    {
+        $id = $request->id;
+        StreamFieldGrid::where('id',$id)->delete();
+        return back()->with('success','Grid field has been successfully saved.');
     }
 
     // save stream order
