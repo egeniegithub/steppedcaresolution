@@ -238,7 +238,7 @@
                                                                         @php
                                                                             $previous_cumulative_grid = \App\Models\StreamFieldGrid::where('id', $table->previous_id)->value('cumulative_value');
                                                                         @endphp
-                                                                        {{$previous_cumulative_grid ? json_decode($previous_cumulative_grid)[$i] : 0}}
+                                                                        {{$previous_cumulative_grid ? json_decode($previous_cumulative_grid)[$i] : ($table->cumulative_value ? json_decode($table->cumulative_value)[$i] : 0)}}
                                                                     </td>
                                                                 @endif
                                                             @endfor
