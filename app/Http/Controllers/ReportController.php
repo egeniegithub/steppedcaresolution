@@ -69,6 +69,7 @@ class ReportController extends Controller
         $html_content = view('Reports.partials.pdf_report', compact('form'))->render();
 
         // instantiate and use the dompdf class
+        ini_set('max_execution_time', 0);
         $dompdf = new Dompdf();
         $dompdf->loadHtml($html_content);
 
