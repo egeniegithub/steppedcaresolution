@@ -92,7 +92,6 @@
                                                                 @break
 
                                                                 @case('file')
-                                                                <p>Image size should be less than 2MB</p>
                                                                 <input type="file" class="form-control white_input"
                                                                        src=""
                                                                        alt=""
