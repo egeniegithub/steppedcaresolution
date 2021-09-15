@@ -26,6 +26,7 @@
                                             <input type="file" id="file" name="image" accept="image/png, image/jpg, image/JPG, image/jpeg" value="{{$project->image}}" aria-label="File browser example">
                                             <span class="file-custom"></span>
                                         </label>
+                                        <p class="text-c-red">Image size should be less than 2MB</p>
                                     </div>
                                 </div>
                                 <br>

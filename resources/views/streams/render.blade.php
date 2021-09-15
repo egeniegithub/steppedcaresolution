@@ -92,11 +92,11 @@
                                                                 @break
 
                                                                 @case('file')
-                                                                <p>Image size should be less than 2MB</p>
                                                                 <input type="file" class="form-control white_input"
                                                                        src=""
                                                                        alt=""
                                                                        name="image[{{$field->id}}]" {{ $field->value ? "" : $required}}>
+                                                                <p class="text-c-red">Image size should be less than 2MB</p>
                                                                 <br>
                                                                 <div class="text-center">
                                                                     @if(isset($field->value))
