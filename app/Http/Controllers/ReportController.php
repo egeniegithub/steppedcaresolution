@@ -65,11 +65,10 @@ class ReportController extends Controller
     public function pdfReport($form_id)
     {
         $form = Form::where('id', $form_id)->with(['streams'])->first();
-        ini_set('max_execution_time', 0);
+        set_time_limit(300);
         $html_content = view('Reports.partials.pdf_report', compact('form'))->render();
 
         // instantiate and use the dompdf class
-        ini_set('max_execution_time', 0);
         $dompdf = new Dompdf();
         $dompdf->loadHtml($html_content);
 
