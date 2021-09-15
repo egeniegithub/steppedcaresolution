@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Add Stream')
+@section('title', 'Edit Stream')
 
 @section('content')
     <div class="pcoded-wrapper">
@@ -343,7 +343,7 @@
                                                             <tr class="hide_row">
                                                                 <td>
                                                                     <label class="radio_container">
-                                                                        <input type="radio" 
+                                                                        <input type="radio"
                                                                                name="tableDropdown" value="yes"
                                                                                onclick="tableDropDown('yes')">
                                                                         <span class="checkmark"></span>
@@ -430,7 +430,7 @@
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody class="ui-sortable" id="table-field-rows">
-                                
+
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -468,18 +468,18 @@
                                             </thead>
                                             <tbody class="ui-sortable" id="fields_table">
                                             <?php $myArr=[];
-                                                  $myTableArr=[] ;?> 
+                                                  $myTableArr=[] ;?>
+
                                                 @if(count($fields))
                                                 @foreach($fields as $fkey => $field)
                                                     @php
                                                         array_push($myArr,$field);
-                                                        
+
                                                         if($field['fieldType']=="table"){
                                                             $grids = \App\Models\StreamFieldGrid::where('stream_field_id', $field->id)->get();
-                                                            
+
                                                             $encoded_grid_data =urlencode($grids);
                                                             $fields[$fkey]["tableFieldData"] = $encoded_grid_data;
-                                                            
                                                         }
                                                     @endphp
                                                     <tr id="{{$field['orderCount']}}"
@@ -494,10 +494,9 @@
                                                             <div class="btn-group" role="group"
                                                                  aria-label="Basic example">
                                                                 <button type="button"
-                                                                        class="btn table_btn  update_btn text-white" onclick="updateFieldFromList( {{$field['orderCount']}} )" > 
+                                                                        class="btn table_btn  update_btn text-white" onclick="updateFieldFromList( {{$field['orderCount']}} )" >
                                                                     Update
                                                                 </button>
-                                                               
                                                                 <form action="{{route('dashboard.stream.delete_field')}}" method="POST">
                                                                     @csrf
                                                                     <input type="hidden" name="id" value="{{$field['id']}}">
@@ -531,9 +530,6 @@
                                                                value="{{$field['orderCount']}}">
                                                     </tr>
                                                 @endforeach
-                                                @php
-                                               
-                                                @endphp
                                             @endif
                                             </tbody>
                                         </table>         <!-- Modal -->
@@ -557,7 +553,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
                                 </div>
                                 <div class="row mt-2">
                                     <div class="col-sm-12">
@@ -587,7 +582,6 @@
            </script>
             <script type="text/javascript">
              var db_fields_data=<?php echo json_encode($myArr) ?>;
-           
              console.log("db_fields_data",db_fields_data);
              $( document ).ready(function() {
                 $("input[class=field_required][value=no]").prop('checked', true);
@@ -607,14 +601,13 @@
                 }else{
                     $(".hide_row").show();
                 }
-            }); 
-               
+            });
+
                 var tableData = [];
                 var recordData = [];
                 if(db_fields_data){
                     recordData = db_fields_data;
                  }
-               
                 console.log("tableData",tableData);
                 console.log("recordData",recordData);
                 function openCity(evt, cityName) {
@@ -769,7 +762,6 @@
                                     html += '</div>'
                                     html += '</td>'
                                     html += '</tr>';
-                                    
                               }else{
                                     html =   '<tr class="ui-sortable-handle table_rows_count" db_id="'+db_id+'" stream_field_id="'+stream_field_id+'"  id="table'+ value.order_count +'">'
                                     html += '<td scope="row"> ' + value.name + '</td>'
@@ -784,15 +776,11 @@
                                     html += '</tr>';
 
                               }
-                            
-
-
                                     $("#table-field-rows").append(html)
                                     // tableData.push(data);
                             });
                            break;
                     }
-                  
                 }
 
                 // Get the element with id="defaultOpen" and click on it
@@ -818,7 +806,7 @@
                     helper: fixHelperModified,
                     stop: updateIndex
                 }).disableSelection();
-                
+
                 $("#myTableTwo tbody").sortable({
                     helper: fixHelperModified,
                     stop: updateIndex
@@ -848,7 +836,7 @@
                     console.log("add field function");
                     console.log('recordData ',recordData)
                     console.log("table data",tableData);
-                    
+
                     let fieldType = $("#field_type").val();
                     let selector = (fieldType == 'select') ? '#drop_field_name' : (fieldType == 'table') ? '#table_name' : '#field_name'
                     let fieldName = $(selector).val();
@@ -863,10 +851,10 @@
                         field_ordercount = textarea_hidden;
                     }else if(dropdown_hidden){
                         field_ordercount = dropdown_hidden;
-                    }else{ 
+                    }else{
                         field_ordercount = tablefieldhidden;
                         console.log("table field hidden id",field_ordercount);
-                    }       
+                    }
                     console.log("ordercount",field_ordercount);
                     let fieldOptions = $("#field_options").val() ;
                     let isRequired = $('input[name=field_required]:checked').val();
@@ -903,7 +891,6 @@
                        }
                     }
                     console.log('tableData ',tableData);
-                  
                    let data={
                         fieldType,
                         fieldName,
@@ -926,7 +913,6 @@
                            $("input[name=table_cumulative_value][value=no]").prop('checked',true);
                            return false;
                          }
-                         
                          data.orderCount = field_ordercount
                         let newRow = '<td scope="row"> ' + fieldName + '</td>'
                             newRow += '<td> ' + fieldType + ' </td>'
@@ -1030,7 +1016,6 @@
                     let table_data_db_id=$("#table_data_db_id").val();
                     let stream_field_id= $("#stream_field_id").val();
                     console.log("step 1");
-               
                     if (!name && !tableHiddenId) {
                         toastr.error('Field name is required')
                         return false
@@ -1050,9 +1035,7 @@
                     let orderCount = $(".table_rows_count")
                     orderCount = orderCount.length + 1
                     let rowId = 'table' + orderCount;
-                   
                     let data = {
-                       
                         order_count: tableHiddenId?.length > 0 ? tableHiddenId : orderCount,
                         name,
                         type,
@@ -1113,7 +1096,6 @@
                     $('#table' + id).remove();
                     console.log(tableData.length);
                     clear_table_fields_on_delete();
-                    
                 }
                 const updateFieldFromList = (record) => {
                     console.log("updateFieldFromList function");
@@ -1125,14 +1107,13 @@
                     if (selected.fieldType=="table") {
                          console.log("a gya ");
                          console.log('selected',selected);
-                        
                     //  if(selected.tableData){
                     //     let ff = decodeURIComponent(selected.tableData);
                     //  }
                       console.log("selected.tableFieldData",selected.tableFieldData);
                      let ff = decodeURIComponent(selected.tableFieldData);
                     ff = JSON.parse(ff);
-                    tableData = ff;   
+                    tableData = ff;
                     }
                     openCity(null,selected.fieldType);
                     // $("#field_name").val(selected.fieldName);
@@ -1181,7 +1162,6 @@
                     // if (data.tableDropdown == 'yes') {
                     //     $("input[name=tableDropdown][value='yes']").prop("checked", true);
                     //     $(".table-dropdown-switch").show();
-                     
                     // } else {
                     //     $("input[name=tableDropdown][value='no']").prop("checked", true);
                     // }
@@ -1243,7 +1223,6 @@
                 $("input[name=tableDropdown][value=no]").prop('checked',true);
                 $("#table-field-name").val('');
                 $("#table_hidden_id").val('');
-              
             }
             </script>
 
