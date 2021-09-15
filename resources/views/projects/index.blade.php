@@ -38,7 +38,7 @@
             user-select: none;
         }
         .file-custom:after {
-            content: "Choose file...";
+            content: "Choose image...";
         }
         .file-custom:before {
             position: absolute;
@@ -95,7 +95,7 @@
                                                     <div class="custom-file mb-3">
                                                         <label>Image *</label><br>
                                                         <label class="file">
-                                                            <input class="file-upload" type="file" id="file" name="image" aria-label="File browser example">
+                                                            <input class="file-upload" type="file" id="file" accept="image/png, image/jpg, image/JPG, image/jpeg" name="image" aria-label="File browser example">
                                                             <span class="file-custom"></span>
                                                         </label>
                                                         {{--<div class="row">

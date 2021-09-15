@@ -18,6 +18,8 @@
                     <div class="col-sm-12">
                         <div class="table_div_padding">
                             @include('layouts.flash-message')
+                            <h5>Select Period first, before selecting project to get accurate result</h5>
+                            <br>
                             <form method="POST" action="{{ route('dashboard.permission.store') }}">
                                 @csrf
                                 <div class="container">

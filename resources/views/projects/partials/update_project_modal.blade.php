@@ -23,7 +23,7 @@
                                     <div class="custom-file mb-3">
                                         <label>Image *</label><br>
                                         <label class="file">
-                                            <input type="file" id="file" name="image" value="{{$project->image}}" aria-label="File browser example">
+                                            <input type="file" id="file" name="image" accept="image/png, image/jpg, image/JPG, image/jpeg" value="{{$project->image}}" aria-label="File browser example">
                                             <span class="file-custom"></span>
                                         </label>
                                     </div>
