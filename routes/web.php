@@ -79,6 +79,7 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
         Route::get('/render/{id}', [App\Http\Controllers\StreamController::class,'render'])->name('dashboard.stream.render');
         Route::post('/stream-post', [App\Http\Controllers\StreamController::class,'streamPost'])->name('dashboard.stream.stream_post');
         Route::post('/delete-field', [App\Http\Controllers\StreamController::class,'streamField'])->name('dashboard.stream.delete_field');
+        Route::post('/delete-grid-field', [App\Http\Controllers\StreamController::class,'deleteGridField'])->name('dashboard.stream.delete_grid_field');
     });
 
     Route::group(['prefix' => 'periods',  'middleware' => 'auth'], function(){
