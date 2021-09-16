@@ -22,8 +22,7 @@
                     <div class="col-sm-12">
                         <div class="table_div_padding">
                             @include('layouts.flash-message')
-                            <form method="POST" action="{{ route('dashboard.stream.store') }}"
-                                  enctype="multipart/form-data">
+                            <form method="POST" action="{{ route('dashboard.stream.update') }}" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
                                     <div class="col-xl-5 col-lg-6 col-md-6 col-12">
@@ -49,19 +48,19 @@
                                             <div class="tab">
                                                 <button type="button" class="tablinks li_light_border tab-text"
                                                         onclick="openCity(event, 'text')" id="defaultOpen"><img class="image_black"
-                                                                                               src="{{url('/assets/images/text_black.png')}}"/>
+                                                                                                                src="{{url('/assets/images/text_black.png')}}"/>
                                                     <img class="image_white "
                                                          src="{{url('/assets/images/text_white.png')}}"/> <span
                                                         class="light_grey_text">Text</span></button>
                                                 <button type="button" class="tablinks li_light_border tab-textarea"
                                                         onclick="openCity(event, 'textarea')"><img class="image_black"
-                                                                                                    src="{{url('/assets/images/long_text_black.png')}}"/>
+                                                                                                   src="{{url('/assets/images/long_text_black.png')}}"/>
                                                     <img class="image_white"
                                                          src="{{url('/assets/images/long_text_white.png')}}"/> <span
                                                         class="light_grey_text">Long Text</span></button>
                                                 <button type="button" class="tablinks li_light_border numeric_white tab-number"
                                                         onclick="openCity(event, 'number')"><img class="image_black"
-                                                                                                  src="{{url('/assets/images/numeric_black.png')}}"/>
+                                                                                                 src="{{url('/assets/images/numeric_black.png')}}"/>
                                                     <img class="image_white"
                                                          src="{{url('/assets/images/numeric_white.png')}}"/> <span
                                                         class="light_grey_text">Numeric</span></button>
@@ -73,7 +72,7 @@
                                                         class="light_grey_text">Date</span></button>
                                                 <button type="button" class="tablinks li_light_border tab-file"
                                                         onclick="openCity(event, 'file')"><img class="image_black"
-                                                                                                src="{{url('/assets/images/image_black.png')}}"/>
+                                                                                               src="{{url('/assets/images/image_black.png')}}"/>
                                                     <img class="image_white"
                                                          src="{{url('/assets/images/image_white.png')}}"/> <span
                                                         class="light_grey_text"> Image</span></button>
@@ -110,6 +109,7 @@
                                                             <input type="text" class="form-control white_input"
                                                                    id="field_name" aria-describedby="emailHelp">
                                                             <input type="text" name="orderCount" class="order_count" hidden>
+                                                            <input type="text" name="text_db_id" class="text_db_id" hidden>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -213,6 +213,7 @@
                                                             <input type="text" class="form-control white_input"
                                                                    id="drop_field_name" aria-describedby="emailHelp">
                                                             <input type="text" class="dropdown_hidden_text" value="" hidden/>
+                                                            <input type="text" class="dropdown_db_id" value="" hidden/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -288,6 +289,7 @@
                                                                    id="table_name"
                                                                    aria-describedby="emailHelp">
                                                             <input type="text" class="tablehiddenfield" value="" hidden/>
+                                                            <input type="text" class="table_id_from_db" value="" hidden/>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-12 col-lg-6 cumulative_table">
@@ -313,8 +315,7 @@
                                                         </table>
                                                     </div>
                                                     <div class="col-sm-12 col-lg-6 add_tables_margin">
-                                                        <b class=""><a class="add_icon"
-                                                                      ><span> Build Table</span></a></b>
+                                                        <b class=""><a class="add_icon"><span> Build Table</span></a></b>
                                                     </div>
                                                 </div>
                                                 <div class="row row_adjusted">
@@ -431,7 +432,6 @@
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody class="ui-sortable" id="table-field-rows">
-
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -462,23 +462,20 @@
                                                 <td> Required</td>
                                                 <td> Duplicate</td>
                                                 <td> Cumulative Value</td>
-                                                <td> Order <img class="arrow_icon_adj"
-                                                                src="{{url('/assets/images/doubleArrow.png')}}"/></td>
+                                                <td> Order <img class="arrow_icon_adj" src="{{url('/assets/images/doubleArrow.png')}}"/></td>
                                                 <td class="add_stream_btn_two"> Actions</td>
                                             </tr>
                                             </thead>
                                             <tbody class="ui-sortable" id="fields_table">
                                             <?php $myArr=[];
-                                                  $myTableArr=[] ;?>
+                                            $myTableArr=[] ;?>
 
-                                                @if(count($fields))
+                                            @if(count($fields))
                                                 @foreach($fields as $fkey => $field)
                                                     @php
                                                         array_push($myArr,$field);
-
                                                         if($field['fieldType']=="table"){
                                                             $grids = \App\Models\StreamFieldGrid::where('stream_field_id', $field->id)->get();
-
                                                             $encoded_grid_data =urlencode($grids);
                                                             $fields[$fkey]["tableFieldData"] = $encoded_grid_data;
                                                         }
@@ -529,27 +526,33 @@
                                                         <input type="hidden"
                                                                name="fields[{{$field['orderCount']}}][orderCount]"
                                                                value="{{$field['orderCount']}}">
+
+                                                        @if($field['fieldType'] == 'table')
+                                                            <input type="hidden"
+                                                                   name="fields[{{$field['orderCount']}}][tableData]"
+                                                                   value="{{$encoded_grid_data}}">
+                                                        @endif
                                                     </tr>
                                                 @endforeach
                                             @endif
                                             </tbody>
                                         </table>         <!-- Modal -->
-                                            <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                             <div class="modal-dialog" role="document">
+                                        <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    Are you sure you want to delete this field from database ?
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                    <button type="button" class="btn btn-primary">Save changes</button>
-                                                </div>
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure you want to delete this field from database ?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -576,39 +579,38 @@
             <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
                     integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
 
-           <script>
-               $( document ).ready(function() {
-                 $("input[class=dropdown_required][value=no]").prop('checked', true);
-               });
-           </script>
+            <script>
+                $( document ).ready(function() {
+                    $("input[class=dropdown_required][value=no]").prop('checked', true);
+                });
+            </script>
             <script type="text/javascript">
-             var db_fields_data=<?php echo json_encode($myArr) ?>;
-             console.log("db_fields_data",db_fields_data);
-             $( document ).ready(function() {
-                $("input[class=field_required][value=no]").prop('checked', true);
-             });
-            $('input[name="tableFieldType"]').click(function(){
-                var val=$('input[name="tableFieldType"]:checked').val();
-                var dropdowntable_val=$('input[name="tableDropdown"]:checked').val();
-                console.log(dropdowntable_val);
-                if(val=="row"){
-                    $(".hide_row").hide();
-                    $(".table-dropdown-switch").hide();
-                }else if(val=="row" && dropdowntable_val=="yes" ){
-                    $(".table-dropdown-switch").hide();
-                }else if(val=="column" && dropdowntable_val=="yes"){
-                    $(".table-dropdown-switch").show();
-                    $(".hide_row").show();
-                }else{
-                    $(".hide_row").show();
-                }
-            });
-
+                var db_fields_data=<?php echo json_encode($myArr) ?>;
+                console.log("db_fields_data",db_fields_data);
+                $( document ).ready(function() {
+                    $("input[class=field_required][value=no]").prop('checked', true);
+                });
+                $('input[name="tableFieldType"]').click(function(){
+                    var val=$('input[name="tableFieldType"]:checked').val();
+                    var dropdowntable_val=$('input[name="tableDropdown"]:checked').val();
+                    console.log(dropdowntable_val);
+                    if(val=="row"){
+                        $(".hide_row").hide();
+                        $(".table-dropdown-switch").hide();
+                    }else if(val=="row" && dropdowntable_val=="yes" ){
+                        $(".table-dropdown-switch").hide();
+                    }else if(val=="column" && dropdowntable_val=="yes"){
+                        $(".table-dropdown-switch").show();
+                        $(".hide_row").show();
+                    }else{
+                        $(".hide_row").show();
+                    }
+                });
                 var tableData = [];
                 var recordData = [];
                 if(db_fields_data){
                     recordData = db_fields_data;
-                 }
+                }
                 console.log("tableData",tableData);
                 console.log("recordData",recordData);
                 function openCity(evt, cityName) {
@@ -673,6 +675,7 @@
                             $("input[name=field_duplicate][value="+obj.isDuplicate+"]").prop("checked",true);
                             $(".order_count").val(obj.orderCount);
                             $(".textarea_addbtn").text("Update");
+                            $(".text_db_id").val(obj.id);
                             // $('.tab-text').addClass('active');
                             break;
                         case 'textarea':
@@ -681,6 +684,7 @@
                             $("input[name=field_duplicate][value="+obj.isDuplicate+"]").prop("checked",true);
                             $(".order_count").val(obj.orderCount);
                             $(".textarea_addbtn").text("Update");
+                            $(".text_db_id").val(obj.id);
                             // $('.tab-textarea').addClass('active');
                             break;
                         case 'date':
@@ -689,6 +693,7 @@
                             $("input[name=field_duplicate][value="+obj.isDuplicate+"]").prop("checked",true);
                             $(".order_count").val(obj.orderCount);
                             $(".textarea_addbtn").text("Update");
+                            $(".text_db_id").val(obj.id);
                             // $('.tab-date').addClass('active');
                             break;
                         case 'file':
@@ -697,6 +702,7 @@
                             $("input[name=field_duplicate][value="+obj.isDuplicate+"]").prop("checked",true);
                             $(".order_count").val(obj.orderCount);
                             $(".textarea_addbtn").text("Update");
+                            $(".text_db_id").val(obj.id);
                             // $('.tab-img').addClass('active');
                             break;
                         case 'number':
@@ -706,6 +712,7 @@
                             $("input[name=field_cumulative][value="+obj.isCumulative+"]").prop("checked",true);
                             $(".order_count").val(obj.orderCount);
                             $(".textarea_addbtn").text("Update");
+                            $(".text_db_id").val(obj.id);
                             // $('.tab-numeric').addClass('active');
                             break;
                         case 'select':
@@ -715,11 +722,13 @@
                             $('.tab-select').addClass('active');
                             $(".dropdown_hidden_text").val(obj.orderCount);
                             $(".dropdown_addbtn").text("Update");
+                            $(".dropdown_db_id").val(obj.id);
                             break;
                         case 'table':
                             $("#table-field-rows").empty();
                             $(".table_addbtn").text("Update Table");
                             $(".tablehiddenfield").val(obj.orderCount);
+                            $(".table_id_from_db").val(obj.id);
                             console.log("I am in table ");
                             if(obj.tableData){
                                 var decodevalue= decodeURIComponent(obj.tableData);
@@ -734,20 +743,20 @@
                             var table_name=$("#table_name").val();
                             if(!table_name){
                                 $("#table_name").val(obj.fieldName);
-                              }
+                            }
                             tablevalues.forEach((value,key)=>{
-                              console.log("value",value);
-                              let db_id = "";
-                              let stream_field_id="";
-                              if(value.id){
-                                  db_id = value.id ;
-                              }
-                              if(value.stream_field_id){
-                                stream_field_id = value.stream_field_id;
-                              }
-                              console.log("key",key);
-                              let   html = ""
-                              if(db_id){
+                                console.log("value",value);
+                                let db_id = "";
+                                let stream_field_id="";
+                                if(value.id){
+                                    db_id = value.id ;
+                                }
+                                if(value.stream_field_id){
+                                    stream_field_id = value.stream_field_id;
+                                }
+                                console.log("key",key);
+                                let   html = ""
+                                if(db_id){
                                     html =   '<tr class="ui-sortable-handle table_rows_count" db_id="'+db_id+'" stream_field_id="'+stream_field_id+'"  id="table'+ value.order_count +'">'
                                     html += '<td scope="row"> ' + value.name + '</td>'
                                     html += '<td> ' + value.type + '</td>'
@@ -763,7 +772,7 @@
                                     html += '</div>'
                                     html += '</td>'
                                     html += '</tr>';
-                              }else{
+                                }else{
                                     html =   '<tr class="ui-sortable-handle table_rows_count" db_id="'+db_id+'" stream_field_id="'+stream_field_id+'"  id="table'+ value.order_count +'">'
                                     html += '<td scope="row"> ' + value.name + '</td>'
                                     html += '<td> ' + value.type + '</td>'
@@ -775,15 +784,13 @@
                                     html += '</div>'
                                     html += '</td>'
                                     html += '</tr>';
-
-                              }
-                                    $("#table-field-rows").append(html)
-                                    // tableData.push(data);
+                                }
+                                $("#table-field-rows").append(html)
+                                // tableData.push(data);
                             });
-                           break;
+                            break;
                     }
                 }
-
                 // Get the element with id="defaultOpen" and click on it
                 document.getElementById("defaultOpen").click();
                 var fixHelperModified = function (e, tr) {
@@ -802,17 +809,14 @@
                             $(this).val(i + 1);
                         });
                     };
-
                 $("#myTable tbody").sortable({
                     helper: fixHelperModified,
                     stop: updateIndex
                 }).disableSelection();
-
                 $("#myTableTwo tbody").sortable({
                     helper: fixHelperModified,
                     stop: updateIndex
                 }).disableSelection();
-
                 $("tbody").sortable({
                     distance: 5,
                     delay: 100,
@@ -832,11 +836,27 @@
                     var iframe_height = parseInt($('html').height());
                     window.parent.postMessage(iframe_height, 'https://bootsnipp.com');
                 });
-
                 const addField = () => {
                     console.log("add field function");
                     console.log('recordData ',recordData)
                     console.log("table data",tableData);
+                    var get_db_text_id =$(".text_db_id").val();
+                    var get_db_dropdown_id =$(".dropdown_db_id").val();
+                    var get_db_table_id =$(".table_id_from_db").val();
+                    let id_from_db=null;
+                    if(get_db_text_id){
+                        id_from_db = get_db_text_id;
+                        console.log("get_db_text_id",id_from_db);
+                    }else if(get_db_dropdown_id){
+                        id_from_db=get_db_dropdown_id;
+                        console.log("get_db_dropdown_id",id_from_db);
+                    }else if(get_db_table_id){
+                        id_from_db=get_db_table_id ;
+                        console.log("get_db_table_id",id_from_db);
+                    }else{
+                        id_from_db =null;
+                        console.log("id_from_db",id_from_db);
+                    }
 
                     let fieldType = $("#field_type").val();
                     let selector = (fieldType == 'select') ? '#drop_field_name' : (fieldType == 'table') ? '#table_name' : '#field_name'
@@ -878,21 +898,21 @@
                     }
                     if(fieldType == 'table'){
                         for (let i = 0; i < recordData.length; i++) {
-                        if (recordData[i].fieldName == fieldName && !tablefieldhidden){
-                            toastr.error("This field is already exist!")
-                            return false;
-                         }
-                       }
+                            if (recordData[i].fieldName == fieldName && !tablefieldhidden){
+                                toastr.error("This field is already exist!")
+                                return false;
+                            }
+                        }
                     }else{
                         for (let i = 0; i < recordData.length; i++) {
-                        if (recordData[i].fieldName == fieldName && !field_ordercount){
-                            toastr.error("This field is already exist!")
-                            return false;
-                         }
-                       }
+                            if (recordData[i].fieldName == fieldName && !field_ordercount){
+                                toastr.error("This field is already exist!")
+                                return false;
+                            }
+                        }
                     }
                     console.log('tableData ',tableData);
-                   let data={
+                    let data={
                         fieldType,
                         fieldName,
                         fieldOptions,
@@ -900,66 +920,67 @@
                         isDuplicate,
                         isCumulative,
                         orderCount,
+                        id:id_from_db,
                         tableFieldData:fieldType == 'table' ? encodeURIComponent(JSON.stringify(tableData)) : '',
                     };
-                      console.log('field_ordercount ',field_ordercount);
-                      console.log("field data type",fieldType);
-                      if(field_ordercount){
-                         if(fieldType == 'table' && tableData.length==0 ){
-                           console.log("table length is zero");
-                           recordData.splice(field_ordercount-1,1);
-                           $('#'+ field_ordercount).remove();
-                           $("#table_name").val('');
-                           $(".tablehiddenfield").val('');
-                           $("input[name=table_cumulative_value][value=no]").prop('checked',true);
-                           return false;
-                         }
-                         data.orderCount = field_ordercount
+                    console.log('field_ordercount ',field_ordercount);
+                    console.log("field data type",fieldType);
+                    if(field_ordercount){
+                        if(fieldType == 'table' && tableData.length==0 ){
+                            console.log("table length is zero");
+                            recordData.splice(field_ordercount-1,1);
+                            $('#'+ field_ordercount).remove();
+                            $("#table_name").val('');
+                            $(".tablehiddenfield").val('');
+                            $("input[name=table_cumulative_value][value=no]").prop('checked',true);
+                            return false;
+                        }
+                        data.orderCount = field_ordercount
                         let newRow = '<td scope="row"> ' + fieldName + '</td>'
-                            newRow += '<td> ' + fieldType + ' </td>'
-                            newRow += '<td> ' + isRequired + ' </td>'
-                            newRow += '<td> ' + isDuplicate + ' </td>'
-                            newRow += '<td> ' + isCumulative + ' </td>'
-                            newRow += '<td class="index">' + field_ordercount + '</td>'
-                            newRow += '<td>'
-                            newRow += '<div class="btn-group" role="group" aria-label="Basic example">'
-                            newRow += '<button type="button" class="btn table_btn  update_btn text-white" onclick="updateFieldFromList(' + field_ordercount + ')">Update</button>'
-                            newRow += '<button type="button" class="btn  table_btn delete_btn text-white" onclick="removeFieldFromList(' + field_ordercount + ')">Delete</button>'
-                            newRow += '</div>'
-                            newRow += '</td>'
-                            newRow += '<input type="hidden" name="fields[' + field_ordercount + '][fieldName]"  value="' + fieldName + '" >'
-                            newRow += '<input type="hidden" name="fields[' + field_ordercount + '][fieldType]"  value="' + fieldType + '" >'
-                            newRow += '<input type="hidden" name="fields[' + field_ordercount + '][isRequired]"  value="' + isRequired + '" >'
-                            newRow += '<input type="hidden" name="fields[' + field_ordercount + '][isDuplicate]"  value="' + isDuplicate + '" >'
-                            newRow += '<input type="hidden" name="fields[' + field_ordercount + '][isCumulative]"  value="' + isCumulative + '" >'
-                            newRow += '<input type="hidden" name="fields[' + field_ordercount + '][orderCount]"  value="' + field_ordercount + '" >'
-                            if (fieldType == 'select') {
-                                newRow += '<input type="hidden" name="fields[' + field_ordercount + '][fieldOptions]"  value="' + fieldOptions + '" >'
-                            }
-                            if (fieldType == 'table') {
-                                console.log("I am in the table field");
-                                tableFieldData = JSON.stringify(tableData)
-                                tableFieldData = encodeURIComponent(tableFieldData)
-                                newRow += '<input type="hidden" name="fields[' + field_ordercount + '][tableData]"  value="' + tableFieldData + '" >'
-                            }
-
+                        newRow += '<td> ' + fieldType + ' </td>'
+                        newRow += '<td> ' + isRequired + ' </td>'
+                        newRow += '<td> ' + isDuplicate + ' </td>'
+                        newRow += '<td> ' + isCumulative + ' </td>'
+                        newRow += '<td class="index">' + field_ordercount + '</td>'
+                        newRow += '<td>'
+                        newRow += '<div class="btn-group" role="group" aria-label="Basic example">'
+                        newRow += '<button type="button" class="btn table_btn  update_btn text-white" onclick="updateFieldFromList(' + field_ordercount + ')">Update</button>'
+                        newRow += '<button type="button" class="btn  table_btn delete_btn text-white" onclick="removeFieldFromList(' + field_ordercount + ')">Delete</button>'
+                        newRow += '</div>'
+                        newRow += '</td>'
+                        newRow += '<input type="hidden" name="fields[' + field_ordercount + '][id]"  value="' + id_from_db + '" >'
+                        newRow += '<input type="hidden" name="fields[' + field_ordercount + '][fieldName]"  value="' + fieldName + '" >'
+                        newRow += '<input type="hidden" name="fields[' + field_ordercount + '][fieldType]"  value="' + fieldType + '" >'
+                        newRow += '<input type="hidden" name="fields[' + field_ordercount + '][isRequired]"  value="' + isRequired + '" >'
+                        newRow += '<input type="hidden" name="fields[' + field_ordercount + '][isDuplicate]"  value="' + isDuplicate + '" >'
+                        newRow += '<input type="hidden" name="fields[' + field_ordercount + '][isCumulative]"  value="' + isCumulative + '" >'
+                        newRow += '<input type="hidden" name="fields[' + field_ordercount + '][orderCount]"  value="' + field_ordercount + '" >'
+                        if (fieldType == 'select') {
+                            newRow += '<input type="hidden" name="fields[' + field_ordercount + '][fieldOptions]"  value="' + fieldOptions + '" >'
+                        }
+                        if (fieldType == 'table') {
+                            console.log("I am in the table field");
+                            tableFieldData = JSON.stringify(tableData)
+                            tableFieldData = encodeURIComponent(tableFieldData)
+                            newRow += '<input type="hidden" name="fields[' + field_ordercount + '][tableData]"  value="' + tableFieldData + '" >'
+                        }
                         console.log('recordData ',recordData)
                         console.log('data ',data)
                         $("#"+field_ordercount).html(newRow);
                         recordData[field_ordercount - 1] = data;
                         console.log('recordData ',recordData)
-                   }else{
-                       if(fieldType == 'table' && tableData.length==0 ){
-                           $("#table_name").val('');
-                           $(".tablehiddenfield").val('');
-                           $("input[name=table_cumulative_value][value=no]").prop('checked',true);
-                           console.log("table length is zero and field_ordercount is zero");
-                           console.log("recordData",recordData);
-                        //    recordData.splice(recordData.length-1,1);
-                           console.log("recordData",recordData);
-                           $('#'+ field_ordercount).remove();
-                           return false;
-                         }
+                    }else{
+                        if(fieldType == 'table' && tableData.length==0 ){
+                            $("#table_name").val('');
+                            $(".tablehiddenfield").val('');
+                            $("input[name=table_cumulative_value][value=no]").prop('checked',true);
+                            console.log("table length is zero and field_ordercount is zero");
+                            console.log("recordData",recordData);
+                            //    recordData.splice(recordData.length-1,1);
+                            console.log("recordData",recordData);
+                            $('#'+ field_ordercount).remove();
+                            return false;
+                        }
                         let newRow = '<tr id="' + orderCount + '" class="ui-sortable-handle fields_table">'
                         newRow += '<td scope="row"> ' + fieldName + '</td>'
                         newRow += '<td> ' + fieldType + ' </td>'
@@ -973,6 +994,7 @@
                         newRow += '<button type="button" class="btn  table_btn delete_btn text-white" onclick="removeFieldFromList(' + orderCount + ')">Delete</button>'
                         newRow += '</div>'
                         newRow += '</td>'
+                        newRow += '<input type="hidden" name="fields[' + orderCount + '][id]"  value="' + id_from_db + '" >'
                         newRow += '<input type="hidden" name="fields[' + orderCount + '][fieldName]"  value="' + fieldName + '" >'
                         newRow += '<input type="hidden" name="fields[' + orderCount + '][fieldType]"  value="' + fieldType + '" >'
                         newRow += '<input type="hidden" name="fields[' + orderCount + '][isRequired]"  value="' + isRequired + '" >'
@@ -990,10 +1012,10 @@
                         newRow += '</tr>';
                         $("#fields_table").append(newRow);
                         recordData.push(data);
-                   }
-                   $(".order_count").val('')
-                   $(".tablehiddenfield").val('');
-                   $(".dropdown_hidden_text").val('');
+                    }
+                    $(".order_count").val('')
+                    $(".tablehiddenfield").val('');
+                    $(".dropdown_hidden_text").val('');
                     $(selector).val('')
                     $("#field_options").val('')
                     for (let i = 0; i < tableData.length; i++) {
@@ -1001,9 +1023,11 @@
                     }
                     console.log("record data",recordData);
                     tableData = [];
+                    $(".text_db_id").val('');
+                    $(".dropdown_db_id").val('');
+                    $(".table_id_from_db").val('');
                     clear_table_fields();
                 }
-
                 const addTableField = () => {
                     console.log("addTableField function");
                     console.log("data in addTableField",tableData);
@@ -1021,9 +1045,7 @@
                         toastr.error('Field name is required')
                         return false
                     }
-
                     for (let i = 0; i < tableData.length; i++) {
-
                         // if (table_name){
                         //     tableData[i].table_name=table_name;
                         // }
@@ -1042,9 +1064,8 @@
                         type,
                         is_dropdown,
                         field_options,
-                        id:table_data_db_id ? table_data_db_id : '',
+                        id:table_data_db_id ? table_data_db_id : 'null',
                         stream_field_id:stream_field_id ? stream_field_id : '',
-
                     }
                     console.log("step 3");
                     console.log("addTableField function data object",data);
@@ -1081,11 +1102,9 @@
                     $("#table_data_db_id").val('');
                     $("#stream_field_id").val('');
                 }
-
                 const removeFieldFromList = (id) => {
                     $('#' + id).remove()
                 }
-
                 const removeFieldFromTableList = (id) => {
                     console.log("I am in removeFieldFromTableList");
                     console.log("table data in removeFieldFromTableList",tableData);
@@ -1106,15 +1125,15 @@
                     console.log("selected",selected);
                     updateValues(selected,selected.fieldType);
                     if (selected.fieldType=="table") {
-                         console.log("a gya ");
-                         console.log('selected',selected);
-                    //  if(selected.tableData){
-                    //     let ff = decodeURIComponent(selected.tableData);
-                    //  }
-                      console.log("selected.tableFieldData",selected.tableFieldData);
-                     let ff = decodeURIComponent(selected.tableFieldData);
-                    ff = JSON.parse(ff);
-                    tableData = ff;
+                        console.log("a gya ");
+                        console.log('selected',selected);
+                        //  if(selected.tableData){
+                        //     let ff = decodeURIComponent(selected.tableData);
+                        //  }
+                        console.log("selected.tableFieldData",selected.tableFieldData);
+                        let ff = decodeURIComponent(selected.tableFieldData);
+                        ff = JSON.parse(ff);
+                        tableData = ff;
                     }
                     openCity(null,selected.fieldType);
                     // $("#field_name").val(selected.fieldName);
@@ -1149,13 +1168,13 @@
                         $(".table-dropdown-switch").show();
                         $(".hide_row").show();
                         if (tableDropdown == 'yes') {
-                                $("input[name=tableDropdown][value='yes']").prop("checked", true);
-                                $(".table-dropdown-switch").show();
-                            } else {
-                                $("input[name=tableDropdown][value='no']").prop("checked", true);
-                                $(".table-dropdown-switch").hide();
-                                $("#table_field_options").val('');
-                            }
+                            $("input[name=tableDropdown][value='yes']").prop("checked", true);
+                            $(".table-dropdown-switch").show();
+                        } else {
+                            $("input[name=tableDropdown][value='no']").prop("checked", true);
+                            $(".table-dropdown-switch").hide();
+                            $("#table_field_options").val('');
+                        }
                     }else{
                         $(".table-dropdown-switch").hide();
                         $(".hide_row").hide();
@@ -1172,7 +1191,6 @@
                         $("input[name=tableFieldType][value='column']").prop("checked", true);
                     }
                 }
-
                 const tableDropDown = (type) => {
                     if (type == 'yes') {
                         $(".table-dropdown-switch").css('display', 'block')
@@ -1194,38 +1212,38 @@
                     $("input[name=tableFieldType][value='column']").prop("checked", true);
                     $("input[name=tableDropdown][value='no']").prop("checked", true);
                 })
-
-            function textarea_reset(){
-                $("#field_name").val("");
-                $("input[class=field_required][value='no']").prop("checked",true);
-                $("input[name=field_duplicate][value='no']").prop("checked",true);
-                $(".order_count").val("");
-            }
-            function select_reset(){
-                $("#drop_field_name").val("");
-                $("input[class=dropdown_required][value='no']").prop("checked",true);
-                $("#field_options").val("");
-                $(".dropdown_hidden_text").val("");
-            }
-            function clear_table_fields(){
-                $("#table_name").val('');
-                $(".tablehiddenfield").val('');
-                $("input[name=table_cumulative_value][value=no]").prop('checked',true);
-                $("input[name=tableFieldType][value=column]").prop('checked',true);
-                $("input[name=tableDropdown][value=no]").prop('checked',true);
-                $("#table-field-name").val('');
-                $("#table_hidden_id").val('');
-                $("#table-field-rows").empty();
-            }
-            function clear_table_fields_on_delete(){
-                // $("#table_name").val('');
-                // $("input[name=table_cumulative_value][value=no]").prop('checked',true);
-                $("input[name=tableFieldType][value=column]").prop('checked',true);
-                $("input[name=tableDropdown][value=no]").prop('checked',true);
-                $("#table-field-name").val('');
-                $("#table_hidden_id").val('');
-            }
+                function textarea_reset(){
+                    $(".text_db_id").val('');
+                    $("#field_name").val("");
+                    $("input[class=field_required][value='no']").prop("checked",true);
+                    $("input[name=field_duplicate][value='no']").prop("checked",true);
+                    $(".order_count").val("");
+                }
+                function select_reset(){
+                    $(".dropdown_db_id").val('');
+                    $("#drop_field_name").val("");
+                    $("input[class=dropdown_required][value='no']").prop("checked",true);
+                    $("#field_options").val("");
+                    $(".dropdown_hidden_text").val("");
+                }
+                function clear_table_fields(){
+                    $(".table_id_from_db").val('');
+                    $("#table_name").val('');
+                    $(".tablehiddenfield").val('');
+                    $("input[name=table_cumulative_value][value=no]").prop('checked',true);
+                    $("input[name=tableFieldType][value=column]").prop('checked',true);
+                    $("input[name=tableDropdown][value=no]").prop('checked',true);
+                    $("#table-field-name").val('');
+                    $("#table_hidden_id").val('');
+                    $("#table-field-rows").empty();
+                }
+                function clear_table_fields_on_delete(){
+                    // $("#table_name").val('');
+                    // $("input[name=table_cumulative_value][value=no]").prop('checked',true);
+                    $("input[name=tableFieldType][value=column]").prop('checked',true);
+                    $("input[name=tableDropdown][value=no]").prop('checked',true);
+                    $("#table-field-name").val('');
+                    $("#table_hidden_id").val('');
+                }
             </script>
-
-
 @endsection
