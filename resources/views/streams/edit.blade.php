@@ -608,15 +608,6 @@
             $("#hidden_delete_id").val(id);
             //   hidden_delete_id
             $('#DeleteModal').modal('show');
-
-            //   swal({
-            //         title: "Warning",
-            //         text: " Are you Sure you want to delete this field ? All added data will be lost",
-            //         type: "warning",
-            //         showConfirmButton: true
-            //     }, function(){
-            //        console.log("hhh");
-            //     });
         }
         var db_fields_data=<?php echo json_encode($myArr) ?>;
         console.log("db_fields_data",db_fields_data);
