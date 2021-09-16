@@ -238,13 +238,12 @@ class StreamController extends Controller
                         $grid_data = json_decode(urldecode($field['tableData']));
                         foreach ($grid_data as $grid) {
                             $table_fields = array(
-                                'name' => $grid->fieldName,
+                                'name' => $grid->name,
                                 'type' => $grid->type,
-                                'is_dropdown' => $grid->tableDropdown == 'no' ? 0 : 1,
-                                'field_options' => $grid->tableFieldOptions,
-                                'order_count' => $grid->orderCount,
-                                'stream_field_id' => $stream_field->id,
-                                'cumulative_value' => null
+                                'is_dropdown' => $grid->is_dropdown == 'no' ? 0 : 1,
+                                'field_options' => $grid->field_options,
+                                'order_count' => $grid->order_count,
+                                'stream_field_id' => $stream_field->id
                             );
                             StreamFieldGrid::create($table_fields);
                         }
