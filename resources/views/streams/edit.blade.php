@@ -495,14 +495,10 @@
                                                                         class="btn table_btn  update_btn text-white" onclick="updateFieldFromList( {{$field['orderCount']}} )" >
                                                                     Update
                                                                 </button>
-                                                                <form action="{{route('dashboard.stream.delete_field')}}" method="POST">
-                                                                    @csrf
-                                                                    <input type="hidden" name="id" value="{{$field['id']}}">
-                                                                    <button type="submit"
-                                                                            class="btn  table_btn delete_btn text-white" >
-                                                                        Delete
-                                                                    </button>
-                                                                </form>
+                                                                <button type="button"
+                                                                        class="btn  table_btn delete_btn text-white" onclick="delete_on_popup({{$field['id']}})" >
+                                                                    Delete
+                                                                </button>
                                                             </div>
                                                         </td>
                                                         <input type="hidden"
@@ -541,17 +537,18 @@
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                                        <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
                                                         Are you sure you want to delete this field from database ?
+                                                        <input id="hidden_delete_id" hidden>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                                        <button type="button" class="btn btn-secondary" onclick="remove_field_with_modal()" data-dismiss="modal">Yes</button>
+                                                        <button type="button" class="btn btn-primary">No</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -573,677 +570,722 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-2.2.4.js"
+            integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+            integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
 
-            <script src="https://code.jquery.com/jquery-2.2.4.js"
-                    integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
-            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
-                    integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
+    <script>
+        $( document ).ready(function() {
+            $("input[class=dropdown_required][value=no]").prop('checked', true);
+        });
+    </script>
+    <script type="text/javascript">
+        function remove_field_with_modal(){
+            console.log("remove_field_with_modal");
+            var delete_id=$("#hidden_delete_id").val();
+            console.log("delete_id",delete_id);
 
-            <script>
-                $( document ).ready(function() {
-                    $("input[class=dropdown_required][value=no]").prop('checked', true);
-                });
-            </script>
-            <script type="text/javascript">
-                var db_fields_data=<?php echo json_encode($myArr) ?>;
-                console.log("db_fields_data",db_fields_data);
-                $( document ).ready(function() {
-                    $("input[class=field_required][value=no]").prop('checked', true);
-                });
-                $('input[name="tableFieldType"]').click(function(){
-                    var val=$('input[name="tableFieldType"]:checked').val();
-                    var dropdowntable_val=$('input[name="tableDropdown"]:checked').val();
-                    console.log(dropdowntable_val);
-                    if(val=="row"){
-                        $(".hide_row").hide();
-                        $(".table-dropdown-switch").hide();
-                    }else if(val=="row" && dropdowntable_val=="yes" ){
-                        $(".table-dropdown-switch").hide();
-                    }else if(val=="column" && dropdowntable_val=="yes"){
-                        $(".table-dropdown-switch").show();
-                        $(".hide_row").show();
-                    }else{
-                        $(".hide_row").show();
-                    }
-                });
-                var tableData = [];
-                var recordData = [];
-                if(db_fields_data){
-                    recordData = db_fields_data;
+            $.ajax({
+                type:"POST",
+                url:"{{route('dashboard.stream.delete_field')}}",
+                data: {
+                    "id": delete_id,
+                    "_token": "{{ csrf_token() }}",
+                },
+                success:function(response)
+                {
+                    location.reload();
+                    $("#hidden_delete_id").val('');
                 }
-                console.log("tableData",tableData);
-                console.log("recordData",recordData);
-                function openCity(evt, cityName) {
-                    console.log("openCity function");
-                    let headingText = '';
-                    let cardId = cityName === 'table' ? "table" : 'textarea';
-                    if (cityName === 'table') {
-                        cardId = 'table'
-                    } else if (cityName === 'select') {
-                        cardId = 'select'
-                    } else {
-                        cardId = 'textarea';
-                    }
-                    if (cityName == 'number'){
-                        $('#only-for-number').css('display','block')
-                    }else{
-                        $('#only-for-number').css('display','none')
-                    }
-                    switch (cityName) {
-                        case 'text':
-                            headingText = "Text Field";
-                            break;
-                        case 'textarea':
-                            headingText = "Long Text Field";
-                            break;
-                        case 'date':
-                            headingText = "Date Field";
-                            break;
-                        case 'file':
-                            headingText = "Image Field";
-                            break;
-                        case 'number':
-                            headingText = "Numeric Field";
-                            break;
-                    }
-                    $("#field_type").val(cityName);
-                    $("#field-card-heading").text(headingText);
-                    var i, tabcontent, tablinks;
-                    tabcontent = document.getElementsByClassName("tabcontent");
-                    for (i = 0; i < tabcontent.length; i++) {
-                        tabcontent[i].style.display = "none";
-                    }
-                    tablinks = document.getElementsByClassName("tablinks");
-                    for (i = 0; i < tablinks.length; i++) {
-                        tablinks[i].className = tablinks[i].className.replace(" active", "");
-                    }
-                    document.getElementById(cardId).style.display = "block";
-                    if (evt) {
-                        evt.currentTarget.className += " active";
-                    }else{
-                        $('.tab-'+cityName).addClass('active');
-                    }
-                }
-                function updateValues(obj , cityName) {
-                    console.log("updateValues function");
-                    console.log("obj",obj);
-                    console.log(cityName);
-                    switch (cityName) {
-                        case 'text':
-                            $("#field_name").val(obj.fieldName);
-                            $("input[class=field_required][value="+obj.isRequired+"]").prop("checked",true);
-                            $("input[name=field_duplicate][value="+obj.isDuplicate+"]").prop("checked",true);
-                            $(".order_count").val(obj.orderCount);
-                            $(".textarea_addbtn").text("Update");
-                            $(".text_db_id").val(obj.id);
-                            // $('.tab-text').addClass('active');
-                            break;
-                        case 'textarea':
-                            $("#field_name").val(obj.fieldName);
-                            $("input[class=field_required][value="+obj.isRequired+"]").prop("checked",true);
-                            $("input[name=field_duplicate][value="+obj.isDuplicate+"]").prop("checked",true);
-                            $(".order_count").val(obj.orderCount);
-                            $(".textarea_addbtn").text("Update");
-                            $(".text_db_id").val(obj.id);
-                            // $('.tab-textarea').addClass('active');
-                            break;
-                        case 'date':
-                            $("#field_name").val(obj.fieldName);
-                            $("input[class=field_required][value="+obj.isRequired+"]").prop("checked",true);
-                            $("input[name=field_duplicate][value="+obj.isDuplicate+"]").prop("checked",true);
-                            $(".order_count").val(obj.orderCount);
-                            $(".textarea_addbtn").text("Update");
-                            $(".text_db_id").val(obj.id);
-                            // $('.tab-date').addClass('active');
-                            break;
-                        case 'file':
-                            $("#field_name").val(obj.fieldName);
-                            $("input[class=field_required][value="+obj.isRequired+"]").prop("checked",true);
-                            $("input[name=field_duplicate][value="+obj.isDuplicate+"]").prop("checked",true);
-                            $(".order_count").val(obj.orderCount);
-                            $(".textarea_addbtn").text("Update");
-                            $(".text_db_id").val(obj.id);
-                            // $('.tab-img').addClass('active');
-                            break;
-                        case 'number':
-                            $("#field_name").val(obj.fieldName);
-                            $("input[class=field_required][value="+obj.isRequired+"]").prop("checked",true);
-                            $("input[name=field_duplicate][value="+obj.isDuplicate+"]").prop("checked",true);
-                            $("input[name=field_cumulative][value="+obj.isCumulative+"]").prop("checked",true);
-                            $(".order_count").val(obj.orderCount);
-                            $(".textarea_addbtn").text("Update");
-                            $(".text_db_id").val(obj.id);
-                            // $('.tab-numeric').addClass('active');
-                            break;
-                        case 'select':
-                            $("#drop_field_name").val(obj.fieldName);
-                            $("input[class=dropdown_required][value="+obj.isRequired+"]").prop("checked",true);
-                            $("#field_options").val(obj.fieldOptions);
-                            $('.tab-select').addClass('active');
-                            $(".dropdown_hidden_text").val(obj.orderCount);
-                            $(".dropdown_addbtn").text("Update");
-                            $(".dropdown_db_id").val(obj.id);
-                            break;
-                        case 'table':
-                            $("#table-field-rows").empty();
-                            $(".table_addbtn").text("Update Table");
-                            $(".tablehiddenfield").val(obj.orderCount);
-                            $(".table_id_from_db").val(obj.id);
-                            console.log("I am in table ");
-                            if(obj.tableData){
-                                var decodevalue= decodeURIComponent(obj.tableData);
-                            }
-                            if(obj.tableFieldData){
-                                var decodevalue= decodeURIComponent(obj.tableFieldData);
-                            }
-                            console.log("decode value",decodevalue);
-                            var tablevalues=JSON.parse(decodevalue);
-                            // var tablevalues=JSON.parse(decodevalue.trim().replace(/"$/, '').replace(/^"/,''));
-                            console.log("tablevalues",tablevalues);
-                            var table_name=$("#table_name").val();
-                            if(!table_name){
-                                $("#table_name").val(obj.fieldName);
-                            }
-                            tablevalues.forEach((value,key)=>{
-                                console.log("value",value);
-                                let db_id = "";
-                                let stream_field_id="";
-                                if(value.id){
-                                    db_id = value.id ;
-                                }
-                                if(value.stream_field_id){
-                                    stream_field_id = value.stream_field_id;
-                                }
-                                console.log("key",key);
-                                let   html = ""
-                                if(db_id){
-                                    html =   '<tr class="ui-sortable-handle table_rows_count" db_id="'+db_id+'" stream_field_id="'+stream_field_id+'"  id="table'+ value.order_count +'">'
-                                    html += '<td scope="row"> ' + value.name + '</td>'
-                                    html += '<td> ' + value.type + '</td>'
-                                    html += '<td class="index"> ' + value.order_count + '</td>'
-                                    html += '<td>'
-                                    html += '<div class="btn-group" role="group" aria-label="Basic example">'
-                                    html += '<button type="button" class="btn table_btn  update_btn text-white" onclick="updateTableField(' + value.order_count + ')" > Update </button>'
-                                    html += '<form action="{{route('dashboard.stream.delete_grid_field')}}" method="POST">'
-                                    html +=  '@csrf'
-                                    html +=  '<input type="hidden" name="id" value="'+db_id+'">'
-                                    html +=  '<button type="submit" class="btn  table_btn delete_btn text-white" > Delete</button>'
-                                    html +=  '</form>'
-                                    html += '</div>'
-                                    html += '</td>'
-                                    html += '</tr>';
-                                }else{
-                                    html =   '<tr class="ui-sortable-handle table_rows_count" db_id="'+db_id+'" stream_field_id="'+stream_field_id+'"  id="table'+ value.order_count +'">'
-                                    html += '<td scope="row"> ' + value.name + '</td>'
-                                    html += '<td> ' + value.type + '</td>'
-                                    html += '<td class="index"> ' + value.order_count + '</td>'
-                                    html += '<td>'
-                                    html += '<div class="btn-group" role="group" aria-label="Basic example">'
-                                    html += '<button type="button" class="btn table_btn  update_btn text-white" onclick="updateTableField(' + value.order_count + ')" > Update </button>'
-                                    html += '<button type="button" class="btn  table_btn delete_btn text-white" onclick="removeFieldFromTableList(' + value.order_count + ')">Delete</button>'
-                                    html += '</div>'
-                                    html += '</td>'
-                                    html += '</tr>';
-                                }
-                                $("#table-field-rows").append(html)
-                                // tableData.push(data);
-                            });
-                            break;
-                    }
-                }
-                // Get the element with id="defaultOpen" and click on it
-                document.getElementById("defaultOpen").click();
-                var fixHelperModified = function (e, tr) {
-                        var $originals = tr.children();
-                        var $helper = tr.clone();
-                        $helper.children().each(function (index) {
-                            $(this).width($originals.eq(index).width())
-                        });
-                        return $helper;
-                    },
-                    updateIndex = function (e, ui) {
-                        $('td.index', ui.item.parent()).each(function (i) {
-                            $(this).html(i + 1);
-                        });
-                        $('input[type=text]', ui.item.parent()).each(function (i) {
-                            $(this).val(i + 1);
-                        });
-                    };
-                $("#myTable tbody").sortable({
-                    helper: fixHelperModified,
-                    stop: updateIndex
-                }).disableSelection();
-                $("#myTableTwo tbody").sortable({
-                    helper: fixHelperModified,
-                    stop: updateIndex
-                }).disableSelection();
-                $("tbody").sortable({
-                    distance: 5,
-                    delay: 100,
-                    opacity: 0.6,
-                    cursor: 'move',
-                    update: function () {
-                    }
-                });
-                window.alert = function () {
-                };
-                var defaultCSS = document.getElementById('bootstrap-css');
-                function changeCSS(css) {
-                    if (css) $('head > link').filter(':first').replaceWith('<link rel="stylesheet" href="' + css + '" type="text/css" />');
-                    else $('head > link').filter(':first').replaceWith(defaultCSS);
-                }
-                $(document).ready(function () {
-                    var iframe_height = parseInt($('html').height());
-                    window.parent.postMessage(iframe_height, 'https://bootsnipp.com');
-                });
-                const addField = () => {
-                    console.log("add field function");
-                    console.log('recordData ',recordData)
-                    console.log("table data",tableData);
-                    var get_db_text_id =$(".text_db_id").val();
-                    var get_db_dropdown_id =$(".dropdown_db_id").val();
-                    var get_db_table_id =$(".table_id_from_db").val();
-                    let id_from_db=null;
-                    if(get_db_text_id){
-                        id_from_db = get_db_text_id;
-                        console.log("get_db_text_id",id_from_db);
-                    }else if(get_db_dropdown_id){
-                        id_from_db=get_db_dropdown_id;
-                        console.log("get_db_dropdown_id",id_from_db);
-                    }else if(get_db_table_id){
-                        id_from_db=get_db_table_id ;
-                        console.log("get_db_table_id",id_from_db);
-                    }else{
-                        id_from_db =null;
-                        console.log("id_from_db",id_from_db);
-                    }
+            })
+        }
+        function delete_on_popup(request_id){
+            var id = request_id;
+            console.log("delete_on_popup",id);
+            $("#hidden_delete_id").val(id);
+            //   hidden_delete_id
+            $('#DeleteModal').modal('show');
 
-                    let fieldType = $("#field_type").val();
-                    let selector = (fieldType == 'select') ? '#drop_field_name' : (fieldType == 'table') ? '#table_name' : '#field_name'
-                    let fieldName = $(selector).val();
-                    console.log("field_name selector",fieldName);
-                    let field_ordercount= "";
-                    var textarea_hidden=$(".order_count").val();
-                    var tablefieldhidden=$(".tablehiddenfield").val();
-                    console.log("textarea_hidden",textarea_hidden);
-                    var dropdown_hidden=$(".dropdown_hidden_text").val();
-                    console.log("dropdown_hideen",dropdown_hidden);
-                    if(textarea_hidden){
-                        field_ordercount = textarea_hidden;
-                    }else if(dropdown_hidden){
-                        field_ordercount = dropdown_hidden;
-                    }else{
-                        field_ordercount = tablefieldhidden;
-                        console.log("table field hidden id",field_ordercount);
+            //   swal({
+            //         title: "Warning",
+            //         text: " Are you Sure you want to delete this field ? All added data will be lost",
+            //         type: "warning",
+            //         showConfirmButton: true
+            //     }, function(){
+            //        console.log("hhh");
+            //     });
+        }
+        var db_fields_data=<?php echo json_encode($myArr) ?>;
+        console.log("db_fields_data",db_fields_data);
+        $( document ).ready(function() {
+            $("input[class=field_required][value=no]").prop('checked', true);
+        });
+        $('input[name="tableFieldType"]').click(function(){
+            var val=$('input[name="tableFieldType"]:checked').val();
+            var dropdowntable_val=$('input[name="tableDropdown"]:checked').val();
+            console.log(dropdowntable_val);
+            if(val=="row"){
+                $(".hide_row").hide();
+                $(".table-dropdown-switch").hide();
+            }else if(val=="row" && dropdowntable_val=="yes" ){
+                $(".table-dropdown-switch").hide();
+            }else if(val=="column" && dropdowntable_val=="yes"){
+                $(".table-dropdown-switch").show();
+                $(".hide_row").show();
+            }else{
+                $(".hide_row").show();
+            }
+        });
+        var tableData = [];
+        var recordData = [];
+        if(db_fields_data){
+            recordData = db_fields_data;
+        }
+        console.log("tableData",tableData);
+        console.log("recordData",recordData);
+        function openCity(evt, cityName) {
+            console.log("openCity function");
+            let headingText = '';
+            let cardId = cityName === 'table' ? "table" : 'textarea';
+            if (cityName === 'table') {
+                cardId = 'table'
+            } else if (cityName === 'select') {
+                cardId = 'select'
+            } else {
+                cardId = 'textarea';
+            }
+            if (cityName == 'number'){
+                $('#only-for-number').css('display','block')
+            }else{
+                $('#only-for-number').css('display','none')
+            }
+            switch (cityName) {
+                case 'text':
+                    headingText = "Text Field";
+                    break;
+                case 'textarea':
+                    headingText = "Long Text Field";
+                    break;
+                case 'date':
+                    headingText = "Date Field";
+                    break;
+                case 'file':
+                    headingText = "Image Field";
+                    break;
+                case 'number':
+                    headingText = "Numeric Field";
+                    break;
+            }
+            $("#field_type").val(cityName);
+            $("#field-card-heading").text(headingText);
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(cardId).style.display = "block";
+            if (evt) {
+                evt.currentTarget.className += " active";
+            }else{
+                $('.tab-'+cityName).addClass('active');
+            }
+        }
+        function updateValues(obj , cityName) {
+            console.log("updateValues function");
+            console.log("obj",obj);
+            console.log(cityName);
+            switch (cityName) {
+                case 'text':
+                    $("#field_name").val(obj.fieldName);
+                    $("input[class=field_required][value="+obj.isRequired+"]").prop("checked",true);
+                    $("input[name=field_duplicate][value="+obj.isDuplicate+"]").prop("checked",true);
+                    $(".order_count").val(obj.orderCount);
+                    $(".textarea_addbtn").text("Update");
+                    $(".text_db_id").val(obj.id);
+                    // $('.tab-text').addClass('active');
+                    break;
+                case 'textarea':
+                    $("#field_name").val(obj.fieldName);
+                    $("input[class=field_required][value="+obj.isRequired+"]").prop("checked",true);
+                    $("input[name=field_duplicate][value="+obj.isDuplicate+"]").prop("checked",true);
+                    $(".order_count").val(obj.orderCount);
+                    $(".textarea_addbtn").text("Update");
+                    $(".text_db_id").val(obj.id);
+                    // $('.tab-textarea').addClass('active');
+                    break;
+                case 'date':
+                    $("#field_name").val(obj.fieldName);
+                    $("input[class=field_required][value="+obj.isRequired+"]").prop("checked",true);
+                    $("input[name=field_duplicate][value="+obj.isDuplicate+"]").prop("checked",true);
+                    $(".order_count").val(obj.orderCount);
+                    $(".textarea_addbtn").text("Update");
+                    $(".text_db_id").val(obj.id);
+                    // $('.tab-date').addClass('active');
+                    break;
+                case 'file':
+                    $("#field_name").val(obj.fieldName);
+                    $("input[class=field_required][value="+obj.isRequired+"]").prop("checked",true);
+                    $("input[name=field_duplicate][value="+obj.isDuplicate+"]").prop("checked",true);
+                    $(".order_count").val(obj.orderCount);
+                    $(".textarea_addbtn").text("Update");
+                    $(".text_db_id").val(obj.id);
+                    // $('.tab-img').addClass('active');
+                    break;
+                case 'number':
+                    $("#field_name").val(obj.fieldName);
+                    $("input[class=field_required][value="+obj.isRequired+"]").prop("checked",true);
+                    $("input[name=field_duplicate][value="+obj.isDuplicate+"]").prop("checked",true);
+                    $("input[name=field_cumulative][value="+obj.isCumulative+"]").prop("checked",true);
+                    $(".order_count").val(obj.orderCount);
+                    $(".textarea_addbtn").text("Update");
+                    $(".text_db_id").val(obj.id);
+                    // $('.tab-numeric').addClass('active');
+                    break;
+                case 'select':
+                    $("#drop_field_name").val(obj.fieldName);
+                    $("input[class=dropdown_required][value="+obj.isRequired+"]").prop("checked",true);
+                    $("#field_options").val(obj.fieldOptions);
+                    $('.tab-select').addClass('active');
+                    $(".dropdown_hidden_text").val(obj.orderCount);
+                    $(".dropdown_addbtn").text("Update");
+                    $(".dropdown_db_id").val(obj.id);
+                    break;
+                case 'table':
+                    $("#table-field-rows").empty();
+                    $(".table_addbtn").text("Update Table");
+                    $(".tablehiddenfield").val(obj.orderCount);
+                    $(".table_id_from_db").val(obj.id);
+                    console.log("I am in table ");
+                    if(obj.tableData){
+                        var decodevalue= decodeURIComponent(obj.tableData);
                     }
-                    console.log("ordercount",field_ordercount);
-                    let fieldOptions = $("#field_options").val() ;
-                    let isRequired = $('input[name=field_required]:checked').val();
-                    let isDuplicate = $('input[name=field_duplicate]:checked').val();
-                    let isCumulative = $('input[name=field_cumulative]:checked').val();
-                    let isTableCumulative = $('input[name=table_cumulative_value]:checked').val();
-                    isCumulative = fieldType == 'table' ? isTableCumulative : isCumulative ;
-                    let orderCount = $(".fields_table");
-                    orderCount = orderCount.length + 1;
-                    let tableFieldData = '';
-                    if (!fieldName && !field_ordercount) {
-                        toastr.error('Field name is required')
+                    if(obj.tableFieldData){
+                        var decodevalue= decodeURIComponent(obj.tableFieldData);
+                    }
+                    console.log("decode value",decodevalue);
+                    var tablevalues=JSON.parse(decodevalue);
+                    // var tablevalues=JSON.parse(decodevalue.trim().replace(/"$/, '').replace(/^"/,''));
+                    console.log("tablevalues",tablevalues);
+                    var table_name=$("#table_name").val();
+                    if(!table_name){
+                        $("#table_name").val(obj.fieldName);
+                    }
+                    tablevalues.forEach((value,key)=>{
+                        console.log("value",value);
+                        let db_id = "";
+                        let stream_field_id="";
+                        if(value.id){
+                            db_id = value.id ;
+                        }
+                        if(value.stream_field_id){
+                            stream_field_id = value.stream_field_id;
+                        }
+                        console.log("key",key);
+                        let   html = ""
+                        if(db_id){
+                            html =   '<tr class="ui-sortable-handle table_rows_count" db_id="'+db_id+'" stream_field_id="'+stream_field_id+'"  id="table'+ value.order_count +'">'
+                            html += '<td scope="row"> ' + value.name + '</td>'
+                            html += '<td> ' + value.type + '</td>'
+                            html += '<td class="index"> ' + value.order_count + '</td>'
+                            html += '<td>'
+                            html += '<div class="btn-group" role="group" aria-label="Basic example">'
+                            html += '<button type="button" class="btn table_btn  update_btn text-white" onclick="updateTableField(' + value.order_count + ')" > Update </button>'
+                            html += '<form action="{{route('dashboard.stream.delete_grid_field')}}" method="POST">'
+                            html +=  '@csrf'
+                            html +=  '<input type="hidden" name="id" value="'+db_id+'">'
+                            html +=  '<button type="submit" class="btn  table_btn delete_btn text-white" > Delete</button>'
+                            html +=  '</form>'
+                            html += '</div>'
+                            html += '</td>'
+                            html += '</tr>';
+                        }else{
+                            html =   '<tr class="ui-sortable-handle table_rows_count" db_id="'+db_id+'" stream_field_id="'+stream_field_id+'"  id="table'+ value.order_count +'">'
+                            html += '<td scope="row"> ' + value.name + '</td>'
+                            html += '<td> ' + value.type + '</td>'
+                            html += '<td class="index"> ' + value.order_count + '</td>'
+                            html += '<td>'
+                            html += '<div class="btn-group" role="group" aria-label="Basic example">'
+                            html += '<button type="button" class="btn table_btn  update_btn text-white" onclick="updateTableField(' + value.order_count + ')" > Update </button>'
+                            html += '<button type="button" class="btn  table_btn delete_btn text-white" onclick="removeFieldFromTableList(' + value.order_count + ')">Delete</button>'
+                            html += '</div>'
+                            html += '</td>'
+                            html += '</tr>';
+                        }
+                        $("#table-field-rows").append(html)
+                        // tableData.push(data);
+                    });
+                    break;
+            }
+        }
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+        var fixHelperModified = function (e, tr) {
+                var $originals = tr.children();
+                var $helper = tr.clone();
+                $helper.children().each(function (index) {
+                    $(this).width($originals.eq(index).width())
+                });
+                return $helper;
+            },
+            updateIndex = function (e, ui) {
+                $('td.index', ui.item.parent()).each(function (i) {
+                    $(this).html(i + 1);
+                });
+                $('input[type=text]', ui.item.parent()).each(function (i) {
+                    $(this).val(i + 1);
+                });
+            };
+        $("#myTable tbody").sortable({
+            helper: fixHelperModified,
+            stop: updateIndex
+        }).disableSelection();
+        $("#myTableTwo tbody").sortable({
+            helper: fixHelperModified,
+            stop: updateIndex
+        }).disableSelection();
+        $("tbody").sortable({
+            distance: 5,
+            delay: 100,
+            opacity: 0.6,
+            cursor: 'move',
+            update: function () {
+            }
+        });
+        window.alert = function () {
+        };
+        var defaultCSS = document.getElementById('bootstrap-css');
+        function changeCSS(css) {
+            if (css) $('head > link').filter(':first').replaceWith('<link rel="stylesheet" href="' + css + '" type="text/css" />');
+            else $('head > link').filter(':first').replaceWith(defaultCSS);
+        }
+        $(document).ready(function () {
+            var iframe_height = parseInt($('html').height());
+            window.parent.postMessage(iframe_height, 'https://bootsnipp.com');
+        });
+        const addField = () => {
+            console.log("add field function");
+            console.log('recordData ',recordData)
+            console.log("table data",tableData);
+            var get_db_text_id =$(".text_db_id").val();
+            var get_db_dropdown_id =$(".dropdown_db_id").val();
+            var get_db_table_id =$(".table_id_from_db").val();
+            let id_from_db=null;
+            if(get_db_text_id){
+                id_from_db = get_db_text_id;
+                console.log("get_db_text_id",id_from_db);
+            }else if(get_db_dropdown_id){
+                id_from_db=get_db_dropdown_id;
+                console.log("get_db_dropdown_id",id_from_db);
+            }else if(get_db_table_id){
+                id_from_db=get_db_table_id ;
+                console.log("get_db_table_id",id_from_db);
+            }else{
+                id_from_db =null;
+                console.log("id_from_db",id_from_db);
+            }
+
+            let fieldType = $("#field_type").val();
+            let selector = (fieldType == 'select') ? '#drop_field_name' : (fieldType == 'table') ? '#table_name' : '#field_name'
+            let fieldName = $(selector).val();
+            console.log("field_name selector",fieldName);
+            let field_ordercount= "";
+            var textarea_hidden=$(".order_count").val();
+            var tablefieldhidden=$(".tablehiddenfield").val();
+            console.log("textarea_hidden",textarea_hidden);
+            var dropdown_hidden=$(".dropdown_hidden_text").val();
+            console.log("dropdown_hideen",dropdown_hidden);
+            if(textarea_hidden){
+                field_ordercount = textarea_hidden;
+            }else if(dropdown_hidden){
+                field_ordercount = dropdown_hidden;
+            }else{
+                field_ordercount = tablefieldhidden;
+                console.log("table field hidden id",field_ordercount);
+            }
+            console.log("ordercount",field_ordercount);
+            let fieldOptions = $("#field_options").val() ;
+            let isRequired = $('input[name=field_required]:checked').val();
+            let isDuplicate = $('input[name=field_duplicate]:checked').val();
+            let isCumulative = $('input[name=field_cumulative]:checked').val();
+            let isTableCumulative = $('input[name=table_cumulative_value]:checked').val();
+            isCumulative = fieldType == 'table' ? isTableCumulative : isCumulative ;
+            let orderCount = $(".fields_table");
+            orderCount = orderCount.length + 1;
+            let tableFieldData = '';
+            if (!fieldName && !field_ordercount) {
+                toastr.error('Field name is required')
+                return false;
+            }
+            if (fieldType == 'select') {
+                if (!fieldOptions) {
+                    toastr.error("Select options are required.")
+                    return false;
+                }
+            }
+            if(fieldType == 'table'){
+                for (let i = 0; i < recordData.length; i++) {
+                    if (recordData[i].fieldName == fieldName && !tablefieldhidden){
+                        toastr.error("This field is already exist!")
                         return false;
                     }
-                    if (fieldType == 'select') {
-                        if (!fieldOptions) {
-                            toastr.error("Select options are required.")
-                            return false;
-                        }
-                    }
-                    if(fieldType == 'table'){
-                        for (let i = 0; i < recordData.length; i++) {
-                            if (recordData[i].fieldName == fieldName && !tablefieldhidden){
-                                toastr.error("This field is already exist!")
-                                return false;
-                            }
-                        }
-                    }else{
-                        for (let i = 0; i < recordData.length; i++) {
-                            if (recordData[i].fieldName == fieldName && !field_ordercount){
-                                toastr.error("This field is already exist!")
-                                return false;
-                            }
-                        }
-                    }
-                    console.log('tableData ',tableData);
-                    let data={
-                        fieldType,
-                        fieldName,
-                        fieldOptions,
-                        isRequired,
-                        isDuplicate,
-                        isCumulative,
-                        orderCount,
-                        id:id_from_db,
-                        tableFieldData:fieldType == 'table' ? encodeURIComponent(JSON.stringify(tableData)) : '',
-                    };
-                    console.log('field_ordercount ',field_ordercount);
-                    console.log("field data type",fieldType);
-                    if(field_ordercount){
-                        if(fieldType == 'table' && tableData.length==0 ){
-                            console.log("table length is zero");
-                            recordData.splice(field_ordercount-1,1);
-                            $('#'+ field_ordercount).remove();
-                            $("#table_name").val('');
-                            $(".tablehiddenfield").val('');
-                            $("input[name=table_cumulative_value][value=no]").prop('checked',true);
-                            return false;
-                        }
-                        data.orderCount = field_ordercount
-                        let newRow = '<td scope="row"> ' + fieldName + '</td>'
-                        newRow += '<td> ' + fieldType + ' </td>'
-                        newRow += '<td> ' + isRequired + ' </td>'
-                        newRow += '<td> ' + isDuplicate + ' </td>'
-                        newRow += '<td> ' + isCumulative + ' </td>'
-                        newRow += '<td class="index">' + field_ordercount + '</td>'
-                        newRow += '<td>'
-                        newRow += '<div class="btn-group" role="group" aria-label="Basic example">'
-                        newRow += '<button type="button" class="btn table_btn  update_btn text-white" onclick="updateFieldFromList(' + field_ordercount + ')">Update</button>'
-                        newRow += '<button type="button" class="btn  table_btn delete_btn text-white" onclick="removeFieldFromList(' + field_ordercount + ')">Delete</button>'
-                        newRow += '</div>'
-                        newRow += '</td>'
-                        newRow += '<input type="hidden" name="fields[' + field_ordercount + '][id]"  value="' + id_from_db + '" >'
-                        newRow += '<input type="hidden" name="fields[' + field_ordercount + '][fieldName]"  value="' + fieldName + '" >'
-                        newRow += '<input type="hidden" name="fields[' + field_ordercount + '][fieldType]"  value="' + fieldType + '" >'
-                        newRow += '<input type="hidden" name="fields[' + field_ordercount + '][isRequired]"  value="' + isRequired + '" >'
-                        newRow += '<input type="hidden" name="fields[' + field_ordercount + '][isDuplicate]"  value="' + isDuplicate + '" >'
-                        newRow += '<input type="hidden" name="fields[' + field_ordercount + '][isCumulative]"  value="' + isCumulative + '" >'
-                        newRow += '<input type="hidden" name="fields[' + field_ordercount + '][orderCount]"  value="' + field_ordercount + '" >'
-                        if (fieldType == 'select') {
-                            newRow += '<input type="hidden" name="fields[' + field_ordercount + '][fieldOptions]"  value="' + fieldOptions + '" >'
-                        }
-                        if (fieldType == 'table') {
-                            console.log("I am in the table field");
-                            tableFieldData = JSON.stringify(tableData)
-                            tableFieldData = encodeURIComponent(tableFieldData)
-                            newRow += '<input type="hidden" name="fields[' + field_ordercount + '][tableData]"  value="' + tableFieldData + '" >'
-                        }
-                        console.log('recordData ',recordData)
-                        console.log('data ',data)
-                        $("#"+field_ordercount).html(newRow);
-                        recordData[field_ordercount - 1] = data;
-                        console.log('recordData ',recordData)
-                    }else{
-                        if(fieldType == 'table' && tableData.length==0 ){
-                            $("#table_name").val('');
-                            $(".tablehiddenfield").val('');
-                            $("input[name=table_cumulative_value][value=no]").prop('checked',true);
-                            console.log("table length is zero and field_ordercount is zero");
-                            console.log("recordData",recordData);
-                            //    recordData.splice(recordData.length-1,1);
-                            console.log("recordData",recordData);
-                            $('#'+ field_ordercount).remove();
-                            return false;
-                        }
-                        let newRow = '<tr id="' + orderCount + '" class="ui-sortable-handle fields_table">'
-                        newRow += '<td scope="row"> ' + fieldName + '</td>'
-                        newRow += '<td> ' + fieldType + ' </td>'
-                        newRow += '<td> ' + isRequired + ' </td>'
-                        newRow += '<td> ' + isDuplicate + ' </td>'
-                        newRow += '<td> ' + isCumulative + ' </td>'
-                        newRow += '<td class="index">' + orderCount + '</td>'
-                        newRow += '<td>'
-                        newRow += '<div class="btn-group" role="group" aria-label="Basic example">'
-                        newRow += '<button type="button" class="btn table_btn  update_btn text-white" onclick="updateFieldFromList(' + orderCount + ')">Update</button>'
-                        newRow += '<button type="button" class="btn  table_btn delete_btn text-white" onclick="removeFieldFromList(' + orderCount + ')">Delete</button>'
-                        newRow += '</div>'
-                        newRow += '</td>'
-                        newRow += '<input type="hidden" name="fields[' + orderCount + '][id]"  value="' + id_from_db + '" >'
-                        newRow += '<input type="hidden" name="fields[' + orderCount + '][fieldName]"  value="' + fieldName + '" >'
-                        newRow += '<input type="hidden" name="fields[' + orderCount + '][fieldType]"  value="' + fieldType + '" >'
-                        newRow += '<input type="hidden" name="fields[' + orderCount + '][isRequired]"  value="' + isRequired + '" >'
-                        newRow += '<input type="hidden" name="fields[' + orderCount + '][isDuplicate]"  value="' + isDuplicate + '" >'
-                        newRow += '<input type="hidden" name="fields[' + orderCount + '][isCumulative]"  value="' + isCumulative + '" >'
-                        newRow += '<input type="hidden" name="fields[' + orderCount + '][orderCount]"  value="' + orderCount + '" >'
-                        if (fieldType == 'select') {
-                            newRow += '<input type="hidden" name="fields[' + orderCount + '][fieldOptions]"  value="' + fieldOptions + '" >'
-                        }
-                        if (fieldType == 'table') {
-                            tableFieldData = JSON.stringify(tableData)
-                            tableFieldData = encodeURIComponent(tableFieldData)
-                            newRow += '<input type="hidden" name="fields[' + orderCount + '][tableData]"  value="' + tableFieldData + '" >'
-                        }
-                        newRow += '</tr>';
-                        $("#fields_table").append(newRow);
-                        recordData.push(data);
-                    }
-                    $(".order_count").val('')
-                    $(".tablehiddenfield").val('');
-                    $(".dropdown_hidden_text").val('');
-                    $(selector).val('')
-                    $("#field_options").val('')
-                    for (let i = 0; i < tableData.length; i++) {
-                        $('#table' + tableData[i].orderCount).remove();
-                    }
-                    console.log("record data",recordData);
-                    tableData = [];
-                    $(".text_db_id").val('');
-                    $(".dropdown_db_id").val('');
-                    $(".table_id_from_db").val('');
-                    clear_table_fields();
                 }
-                const addTableField = () => {
-                    console.log("addTableField function");
-                    console.log("data in addTableField",tableData);
-                    let table_name     =    $("#table_name").val();
-                    let cumulative_value = $("input[name=table_cumulative_value]").val();
-                    let type = $('input[name=tableFieldType]:checked').val()
-                    let name = $("#table-field-name").val();
-                    let is_dropdown = $('input[name=tableDropdown]:checked').val()
-                    let field_options = $("#table_field_options").val();
-                    let tableHiddenId = $("#table_hidden_id").val();
-                    let table_data_db_id=$("#table_data_db_id").val();
-                    let stream_field_id= $("#stream_field_id").val();
-                    console.log("step 1");
-                    if (!name && !tableHiddenId) {
-                        toastr.error('Field name is required')
-                        return false
-                    }
-                    for (let i = 0; i < tableData.length; i++) {
-                        // if (table_name){
-                        //     tableData[i].table_name=table_name;
-                        // }
-                        if (tableData[i]?.name == name && !tableHiddenId){
-                            toastr.error('This field is already exist');
-                            return false
-                        }
-                    }
-                    console.log("step 2");
-                    let orderCount = $(".table_rows_count")
-                    orderCount = orderCount.length + 1
-                    let rowId = 'table' + orderCount;
-                    let data = {
-                        order_count: tableHiddenId?.length > 0 ? tableHiddenId : orderCount,
-                        name,
-                        type,
-                        is_dropdown,
-                        field_options,
-                        id:table_data_db_id ? table_data_db_id : 'null',
-                        stream_field_id:stream_field_id ? stream_field_id : '',
-                    }
-                    console.log("step 3");
-                    console.log("addTableField function data object",data);
-                    if (tableHiddenId) {
-                        let html = '<td scope="row"> ' + name + '</td>'
-                        html += '<td> ' + type + '</td>'
-                        html += '<td class="index"> ' + tableHiddenId + '</td>'
-                        html += '<td>'
-                        html += '<div class="btn-group" role="group" aria-label="Basic example">'
-                        html += '<button type="button" class="btn table_btn  update_btn text-white" onclick="updateTableField(' + tableHiddenId + ')" > Update </button>'
-                        html += '<button type="button" class="btn  table_btn delete_btn text-white" onclick="removeFieldFromTableList(' + tableHiddenId + ')">Delete</button>'
-                        html += '</div>'
-                        html += '</td>'
-                        $("#table"+tableHiddenId).html(html);
-                        tableData[tableHiddenId - 1] = data;
-                    } else {
-                        let html = '<tr class="ui-sortable-handle table_rows_count" id="' + rowId + '">'
-                        html += '<td scope="row"> ' + name + '</td>'
-                        html += '<td> ' + type + '</td>'
-                        html += '<td class="index"> ' + orderCount + '</td>'
-                        html += '<td>'
-                        html += '<div class="btn-group" role="group" aria-label="Basic example">'
-                        html += '<button type="button" class="btn table_btn  update_btn text-white" onclick="updateTableField(' + orderCount + ')" > Update </button>'
-                        html += '<button type="button" class="btn  table_btn delete_btn text-white" onclick="removeFieldFromTableList(' + orderCount + ')">Delete</button>'
-                        html += '</div>'
-                        html += '</td>'
-                        html += '</tr>';
-                        $("#table-field-rows").append(html)
-                        tableData.push(data)
-                    }
-                    $("#table-field-name").val('');
-                    $("#table_field_options").val('');
-                    $("#table_hidden_id").val('');
-                    $("#table_data_db_id").val('');
-                    $("#stream_field_id").val('');
-                }
-                const removeFieldFromList = (id) => {
-                    $('#' + id).remove()
-                }
-                const removeFieldFromTableList = (id) => {
-                    console.log("I am in removeFieldFromTableList");
-                    console.log("table data in removeFieldFromTableList",tableData);
-                    for (let i = 0; i < tableData.length; i++) {
-                        if (tableData[i].order_count == id) {
-                            tableData.splice(i, 1);
-                        }
-                    }
-                    $('#table' + id).remove();
-                    console.log(tableData.length);
-                    clear_table_fields_on_delete();
-                }
-                const updateFieldFromList = (record) => {
-                    console.log("updateFieldFromList function");
-                    console.log('record', record);
-                    console.log('record data', recordData);
-                    let selected = recordData[record - 1];
-                    console.log("selected",selected);
-                    updateValues(selected,selected.fieldType);
-                    if (selected.fieldType=="table") {
-                        console.log("a gya ");
-                        console.log('selected',selected);
-                        //  if(selected.tableData){
-                        //     let ff = decodeURIComponent(selected.tableData);
-                        //  }
-                        console.log("selected.tableFieldData",selected.tableFieldData);
-                        let ff = decodeURIComponent(selected.tableFieldData);
-                        ff = JSON.parse(ff);
-                        tableData = ff;
-                    }
-                    openCity(null,selected.fieldType);
-                    // $("#field_name").val(selected.fieldName);
-                    // $("input[class=field_required][value="+selected.isRequired+"]").prop("checked",true);
-                    // $("input[name=field_duplicate][value="+selected.isDuplicate+"]").prop("checked",true);
-                }
-                const updateTableField = (orderCount) => {
-                    console.log("I am in updateTableField");
-                    let selector = parseInt(orderCount) - 1 ;
-                    console.log("selector",selector);
-                    console.log("table data in updateTableField",tableData);
-                    let data = tableData[selector];
-                    console.log("table-data",data);
-                    if(data.cumulative_value==null){
-                        data.cumulative_value="no";
-                    }
-                    // $("#table_name").val(data.table_name);
-                    $("input[name=table_cumulative_value][value="+data.cumulative_value+"]").prop("checked",true);
-                    $("#table-field-name").val(data.name);
-                    $("#table_field_options").val(data.field_options);
-                    $("#table_data_db_id").val(data.id);
-                    $("#stream_field_id").val(data.stream_field_id);
-                    $("#table_hidden_id").val(orderCount);
-                    let tableDropdown = data.is_dropdown;
-                    if(tableDropdown== 0){
-                        tableDropdown="no" ;
-                    }else if(tableDropdown==1){
-                        tableDropdown="yes" ;
-                    }
-                    let tableFieldType = data.tableFieldType;
-                    if(data.type=="column"){
-                        $(".table-dropdown-switch").show();
-                        $(".hide_row").show();
-                        if (tableDropdown == 'yes') {
-                            $("input[name=tableDropdown][value='yes']").prop("checked", true);
-                            $(".table-dropdown-switch").show();
-                        } else {
-                            $("input[name=tableDropdown][value='no']").prop("checked", true);
-                            $(".table-dropdown-switch").hide();
-                            $("#table_field_options").val('');
-                        }
-                    }else{
-                        $(".table-dropdown-switch").hide();
-                        $(".hide_row").hide();
-                    }
-                    // if (data.tableDropdown == 'yes') {
-                    //     $("input[name=tableDropdown][value='yes']").prop("checked", true);
-                    //     $(".table-dropdown-switch").show();
-                    // } else {
-                    //     $("input[name=tableDropdown][value='no']").prop("checked", true);
-                    // }
-                    if (data.type == 'row'){
-                        $("input[name=tableFieldType][value='row']").prop("checked", true);
-                    } else {
-                        $("input[name=tableFieldType][value='column']").prop("checked", true);
+            }else{
+                for (let i = 0; i < recordData.length; i++) {
+                    if (recordData[i].fieldName == fieldName && !field_ordercount){
+                        toastr.error("This field is already exist!")
+                        return false;
                     }
                 }
-                const tableDropDown = (type) => {
-                    if (type == 'yes') {
-                        $(".table-dropdown-switch").css('display', 'block')
-                    } else {
-                        $(".table-dropdown-switch").css('display', 'none')
-                    }
-                }
-                $(".tablinks").click(function(){
-                    $(".dropdown_addbtn").text("Add");
-                    $(".textarea_addbtn").text("Add");
-                    $(".table_addbtn").text("Add to Table");
-                    $("#field_name").val("");
-                    $("input[class=field_required][value='no']").prop("checked",true);
-                    $("input[name=field_duplicate][value='no']").prop("checked",true);
-                    $("input[name=field_cumulative][value='no']").prop("checked",true);
-                    // $("input[class=dropdown_required][value='no']").prop("checked",true);
-                    $("#field_options").val("");
-                    $("#drop_field_name").val("");
-                    $("input[name=tableFieldType][value='column']").prop("checked", true);
-                    $("input[name=tableDropdown][value='no']").prop("checked", true);
-                })
-                function textarea_reset(){
-                    $(".text_db_id").val('');
-                    $("#field_name").val("");
-                    $("input[class=field_required][value='no']").prop("checked",true);
-                    $("input[name=field_duplicate][value='no']").prop("checked",true);
-                    $(".order_count").val("");
-                }
-                function select_reset(){
-                    $(".dropdown_db_id").val('');
-                    $("#drop_field_name").val("");
-                    $("input[class=dropdown_required][value='no']").prop("checked",true);
-                    $("#field_options").val("");
-                    $(".dropdown_hidden_text").val("");
-                }
-                function clear_table_fields(){
-                    $(".table_id_from_db").val('');
+            }
+            console.log('tableData ',tableData);
+            let data={
+                fieldType,
+                fieldName,
+                fieldOptions,
+                isRequired,
+                isDuplicate,
+                isCumulative,
+                orderCount,
+                id:id_from_db,
+                tableFieldData:fieldType == 'table' ? encodeURIComponent(JSON.stringify(tableData)) : '',
+            };
+            console.log('field_ordercount ',field_ordercount);
+            console.log("field data type",fieldType);
+            if(field_ordercount){
+                if(fieldType == 'table' && tableData.length==0 ){
+                    console.log("table length is zero");
+                    recordData.splice(field_ordercount-1,1);
+                    $('#'+ field_ordercount).remove();
                     $("#table_name").val('');
                     $(".tablehiddenfield").val('');
                     $("input[name=table_cumulative_value][value=no]").prop('checked',true);
-                    $("input[name=tableFieldType][value=column]").prop('checked',true);
-                    $("input[name=tableDropdown][value=no]").prop('checked',true);
-                    $("#table-field-name").val('');
-                    $("#table_hidden_id").val('');
-                    $("#table-field-rows").empty();
+                    return false;
                 }
-                function clear_table_fields_on_delete(){
-                    // $("#table_name").val('');
-                    // $("input[name=table_cumulative_value][value=no]").prop('checked',true);
-                    $("input[name=tableFieldType][value=column]").prop('checked',true);
-                    $("input[name=tableDropdown][value=no]").prop('checked',true);
-                    $("#table-field-name").val('');
-                    $("#table_hidden_id").val('');
+                data.orderCount = field_ordercount
+                let newRow = '<td scope="row"> ' + fieldName + '</td>'
+                newRow += '<td> ' + fieldType + ' </td>'
+                newRow += '<td> ' + isRequired + ' </td>'
+                newRow += '<td> ' + isDuplicate + ' </td>'
+                newRow += '<td> ' + isCumulative + ' </td>'
+                newRow += '<td class="index">' + field_ordercount + '</td>'
+                newRow += '<td>'
+                newRow += '<div class="btn-group" role="group" aria-label="Basic example">'
+                newRow += '<button type="button" class="btn table_btn  update_btn text-white" onclick="updateFieldFromList(' + field_ordercount + ')">Update</button>'
+                newRow += '<button type="button" class="btn  table_btn delete_btn text-white" onclick="removeFieldFromList(' + field_ordercount + ')">Delete</button>'
+                newRow += '</div>'
+                newRow += '</td>'
+                newRow += '<input type="hidden" name="fields[' + field_ordercount + '][id]"  value="' + id_from_db + '" >'
+                newRow += '<input type="hidden" name="fields[' + field_ordercount + '][fieldName]"  value="' + fieldName + '" >'
+                newRow += '<input type="hidden" name="fields[' + field_ordercount + '][fieldType]"  value="' + fieldType + '" >'
+                newRow += '<input type="hidden" name="fields[' + field_ordercount + '][isRequired]"  value="' + isRequired + '" >'
+                newRow += '<input type="hidden" name="fields[' + field_ordercount + '][isDuplicate]"  value="' + isDuplicate + '" >'
+                newRow += '<input type="hidden" name="fields[' + field_ordercount + '][isCumulative]"  value="' + isCumulative + '" >'
+                newRow += '<input type="hidden" name="fields[' + field_ordercount + '][orderCount]"  value="' + field_ordercount + '" >'
+                if (fieldType == 'select') {
+                    newRow += '<input type="hidden" name="fields[' + field_ordercount + '][fieldOptions]"  value="' + fieldOptions + '" >'
                 }
-            </script>
+                if (fieldType == 'table') {
+                    console.log("I am in the table field");
+                    tableFieldData = JSON.stringify(tableData)
+                    tableFieldData = encodeURIComponent(tableFieldData)
+                    newRow += '<input type="hidden" name="fields[' + field_ordercount + '][tableData]"  value="' + tableFieldData + '" >'
+                }
+                console.log('recordData ',recordData)
+                console.log('data ',data)
+                $("#"+field_ordercount).html(newRow);
+                recordData[field_ordercount - 1] = data;
+                console.log('recordData ',recordData)
+            }else{
+                if(fieldType == 'table' && tableData.length==0 ){
+                    $("#table_name").val('');
+                    $(".tablehiddenfield").val('');
+                    $("input[name=table_cumulative_value][value=no]").prop('checked',true);
+                    console.log("table length is zero and field_ordercount is zero");
+                    console.log("recordData",recordData);
+                    //    recordData.splice(recordData.length-1,1);
+                    console.log("recordData",recordData);
+                    $('#'+ field_ordercount).remove();
+                    return false;
+                }
+                let newRow = '<tr id="' + orderCount + '" class="ui-sortable-handle fields_table">'
+                newRow += '<td scope="row"> ' + fieldName + '</td>'
+                newRow += '<td> ' + fieldType + ' </td>'
+                newRow += '<td> ' + isRequired + ' </td>'
+                newRow += '<td> ' + isDuplicate + ' </td>'
+                newRow += '<td> ' + isCumulative + ' </td>'
+                newRow += '<td class="index">' + orderCount + '</td>'
+                newRow += '<td>'
+                newRow += '<div class="btn-group" role="group" aria-label="Basic example">'
+                newRow += '<button type="button" class="btn table_btn  update_btn text-white" onclick="updateFieldFromList(' + orderCount + ')">Update</button>'
+                newRow += '<button type="button" class="btn  table_btn delete_btn text-white" onclick="removeFieldFromList(' + orderCount + ')">Delete</button>'
+                newRow += '</div>'
+                newRow += '</td>'
+                newRow += '<input type="hidden" name="fields[' + orderCount + '][id]"  value="' + id_from_db + '" >'
+                newRow += '<input type="hidden" name="fields[' + orderCount + '][fieldName]"  value="' + fieldName + '" >'
+                newRow += '<input type="hidden" name="fields[' + orderCount + '][fieldType]"  value="' + fieldType + '" >'
+                newRow += '<input type="hidden" name="fields[' + orderCount + '][isRequired]"  value="' + isRequired + '" >'
+                newRow += '<input type="hidden" name="fields[' + orderCount + '][isDuplicate]"  value="' + isDuplicate + '" >'
+                newRow += '<input type="hidden" name="fields[' + orderCount + '][isCumulative]"  value="' + isCumulative + '" >'
+                newRow += '<input type="hidden" name="fields[' + orderCount + '][orderCount]"  value="' + orderCount + '" >'
+                if (fieldType == 'select') {
+                    newRow += '<input type="hidden" name="fields[' + orderCount + '][fieldOptions]"  value="' + fieldOptions + '" >'
+                }
+                if (fieldType == 'table') {
+                    tableFieldData = JSON.stringify(tableData)
+                    tableFieldData = encodeURIComponent(tableFieldData)
+                    newRow += '<input type="hidden" name="fields[' + orderCount + '][tableData]"  value="' + tableFieldData + '" >'
+                }
+                newRow += '</tr>';
+                $("#fields_table").append(newRow);
+                recordData.push(data);
+            }
+            $(".order_count").val('')
+            $(".tablehiddenfield").val('');
+            $(".dropdown_hidden_text").val('');
+            $(selector).val('')
+            $("#field_options").val('')
+            for (let i = 0; i < tableData.length; i++) {
+                $('#table' + tableData[i].orderCount).remove();
+            }
+            console.log("record data",recordData);
+            tableData = [];
+            $(".text_db_id").val('');
+            $(".dropdown_db_id").val('');
+            $(".table_id_from_db").val('');
+            clear_table_fields();
+        }
+        const addTableField = () => {
+            console.log("addTableField function");
+            console.log("data in addTableField",tableData);
+            let table_name     =    $("#table_name").val();
+            let cumulative_value = $("input[name=table_cumulative_value]").val();
+            let type = $('input[name=tableFieldType]:checked').val()
+            let name = $("#table-field-name").val();
+            let is_dropdown = $('input[name=tableDropdown]:checked').val()
+            let field_options = $("#table_field_options").val();
+            let tableHiddenId = $("#table_hidden_id").val();
+            let table_data_db_id=$("#table_data_db_id").val();
+            let stream_field_id= $("#stream_field_id").val();
+            console.log("step 1");
+            if (!name && !tableHiddenId) {
+                toastr.error('Field name is required')
+                return false
+            }
+            for (let i = 0; i < tableData.length; i++) {
+                // if (table_name){
+                //     tableData[i].table_name=table_name;
+                // }
+                if (tableData[i]?.name == name && !tableHiddenId){
+                    toastr.error('This field is already exist');
+                    return false
+                }
+            }
+            console.log("step 2");
+            let orderCount = $(".table_rows_count")
+            orderCount = orderCount.length + 1
+            let rowId = 'table' + orderCount;
+            let data = {
+                order_count: tableHiddenId?.length > 0 ? tableHiddenId : orderCount,
+                name,
+                type,
+                is_dropdown,
+                field_options,
+                id:table_data_db_id ? table_data_db_id : 'null',
+                stream_field_id:stream_field_id ? stream_field_id : '',
+            }
+            console.log("step 3");
+            console.log("addTableField function data object",data);
+            if (tableHiddenId) {
+                let html = '<td scope="row"> ' + name + '</td>'
+                html += '<td> ' + type + '</td>'
+                html += '<td class="index"> ' + tableHiddenId + '</td>'
+                html += '<td>'
+                html += '<div class="btn-group" role="group" aria-label="Basic example">'
+                html += '<button type="button" class="btn table_btn  update_btn text-white" onclick="updateTableField(' + tableHiddenId + ')" > Update </button>'
+                html += '<button type="button" class="btn  table_btn delete_btn text-white" onclick="removeFieldFromTableList(' + tableHiddenId + ')">Delete</button>'
+                html += '</div>'
+                html += '</td>'
+                $("#table"+tableHiddenId).html(html);
+                tableData[tableHiddenId - 1] = data;
+            } else {
+                let html = '<tr class="ui-sortable-handle table_rows_count" id="' + rowId + '">'
+                html += '<td scope="row"> ' + name + '</td>'
+                html += '<td> ' + type + '</td>'
+                html += '<td class="index"> ' + orderCount + '</td>'
+                html += '<td>'
+                html += '<div class="btn-group" role="group" aria-label="Basic example">'
+                html += '<button type="button" class="btn table_btn  update_btn text-white" onclick="updateTableField(' + orderCount + ')" > Update </button>'
+                html += '<button type="button" class="btn  table_btn delete_btn text-white" onclick="removeFieldFromTableList(' + orderCount + ')">Delete</button>'
+                html += '</div>'
+                html += '</td>'
+                html += '</tr>';
+                $("#table-field-rows").append(html)
+                tableData.push(data)
+            }
+            $("#table-field-name").val('');
+            $("#table_field_options").val('');
+            $("#table_hidden_id").val('');
+            $("#table_data_db_id").val('');
+            $("#stream_field_id").val('');
+        }
+        const removeFieldFromList = (id) => {
+            $('#' + id).remove()
+        }
+        const removeFieldFromTableList = (id) => {
+            console.log("I am in removeFieldFromTableList");
+            console.log("table data in removeFieldFromTableList",tableData);
+            for (let i = 0; i < tableData.length; i++) {
+                if (tableData[i].order_count == id) {
+                    tableData.splice(i, 1);
+                }
+            }
+            $('#table' + id).remove();
+            console.log(tableData.length);
+            clear_table_fields_on_delete();
+        }
+        const updateFieldFromList = (record) => {
+            $(".text_db_id").val('');
+            $(".dropdown_db_id").val('');
+            $(".table_id_from_db").val('');
+            console.log("updateFieldFromList function");
+            console.log('record', record);
+            console.log('record data', recordData);
+            let selected = recordData[record - 1];
+            console.log("selected",selected);
+            updateValues(selected,selected.fieldType);
+            if (selected.fieldType=="table") {
+                console.log("a gya ");
+                console.log('selected',selected);
+                //  if(selected.tableData){
+                //     let ff = decodeURIComponent(selected.tableData);
+                //  }
+                console.log("selected.tableFieldData",selected.tableFieldData);
+                let ff = decodeURIComponent(selected.tableFieldData);
+                ff = JSON.parse(ff);
+                tableData = ff;
+            }
+            openCity(null,selected.fieldType);
+            // $("#field_name").val(selected.fieldName);
+            // $("input[class=field_required][value="+selected.isRequired+"]").prop("checked",true);
+            // $("input[name=field_duplicate][value="+selected.isDuplicate+"]").prop("checked",true);
+        }
+        const updateTableField = (orderCount) => {
+            console.log("I am in updateTableField");
+            let selector = parseInt(orderCount) - 1 ;
+            console.log("selector",selector);
+            console.log("table data in updateTableField",tableData);
+            let data = tableData[selector];
+            console.log("table-data",data);
+            if(data.cumulative_value==null){
+                data.cumulative_value="no";
+            }
+            // $("#table_name").val(data.table_name);
+            $("input[name=table_cumulative_value][value="+data.cumulative_value+"]").prop("checked",true);
+            $("#table-field-name").val(data.name);
+            $("#table_field_options").val(data.field_options);
+            $("#table_data_db_id").val(data.id);
+            $("#stream_field_id").val(data.stream_field_id);
+            $("#table_hidden_id").val(orderCount);
+            let tableDropdown = data.is_dropdown;
+            if(tableDropdown== 0){
+                tableDropdown="no" ;
+            }else if(tableDropdown==1){
+                tableDropdown="yes" ;
+            }
+            let tableFieldType = data.tableFieldType;
+            if(data.type=="column"){
+                $(".table-dropdown-switch").show();
+                $(".hide_row").show();
+                if (tableDropdown == 'yes') {
+                    $("input[name=tableDropdown][value='yes']").prop("checked", true);
+                    $(".table-dropdown-switch").show();
+                } else {
+                    $("input[name=tableDropdown][value='no']").prop("checked", true);
+                    $(".table-dropdown-switch").hide();
+                    $("#table_field_options").val('');
+                }
+            }else{
+                $(".table-dropdown-switch").hide();
+                $(".hide_row").hide();
+            }
+            // if (data.tableDropdown == 'yes') {
+            //     $("input[name=tableDropdown][value='yes']").prop("checked", true);
+            //     $(".table-dropdown-switch").show();
+            // } else {
+            //     $("input[name=tableDropdown][value='no']").prop("checked", true);
+            // }
+            if (data.type == 'row'){
+                $("input[name=tableFieldType][value='row']").prop("checked", true);
+            } else {
+                $("input[name=tableFieldType][value='column']").prop("checked", true);
+            }
+        }
+        const tableDropDown = (type) => {
+            if (type == 'yes') {
+                $(".table-dropdown-switch").css('display', 'block')
+            } else {
+                $(".table-dropdown-switch").css('display', 'none')
+            }
+        }
+        $(".tablinks").click(function(){
+            $(".dropdown_addbtn").text("Add");
+            $(".textarea_addbtn").text("Add");
+            $(".table_addbtn").text("Add to Table");
+            $("#field_name").val("");
+            $("input[class=field_required][value='no']").prop("checked",true);
+            $("input[name=field_duplicate][value='no']").prop("checked",true);
+            $("input[name=field_cumulative][value='no']").prop("checked",true);
+            $("#field_options").val("");
+            $("#drop_field_name").val("");
+            $("input[name=tableFieldType][value='column']").prop("checked", true);
+            $("input[name=tableDropdown][value='no']").prop("checked", true);
+            $(".text_db_id").val('');
+            $(".dropdown_db_id").val('');
+            $(".table_id_from_db").val('');
+            $(".order_count").val('');
+            $(".dropdown_hidden_text").val('');
+            $(".tablehiddenfield").val('');
+        })
+
+        function textarea_reset(){
+            $(".text_db_id").val('');
+            $("#field_name").val("");
+            $("input[class=field_required][value='no']").prop("checked",true);
+            $("input[name=field_duplicate][value='no']").prop("checked",true);
+            $(".order_count").val("");
+        }
+        function select_reset(){
+            $(".dropdown_db_id").val('');
+            $("#drop_field_name").val("");
+            $("input[class=dropdown_required][value='no']").prop("checked",true);
+            $("#field_options").val("");
+            $(".dropdown_hidden_text").val("");
+        }
+        function clear_table_fields(){
+            $(".table_id_from_db").val('');
+            $("#table_name").val('');
+            $(".tablehiddenfield").val('');
+            $("input[name=table_cumulative_value][value=no]").prop('checked',true);
+            $("input[name=tableFieldType][value=column]").prop('checked',true);
+            $("input[name=tableDropdown][value=no]").prop('checked',true);
+            $("#table-field-name").val('');
+            $("#table_hidden_id").val('');
+            $("#table-field-rows").empty();
+        }
+        function clear_table_fields_on_delete(){
+            // $("#table_name").val('');
+            // $("input[name=table_cumulative_value][value=no]").prop('checked',true);
+            $("input[name=tableFieldType][value=column]").prop('checked',true);
+            $("input[name=tableDropdown][value=no]").prop('checked',true);
+            $("#table-field-name").val('');
+            $("#table_hidden_id").val('');
+        }
+    </script>
 @endsection
