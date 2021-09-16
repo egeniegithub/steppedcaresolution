@@ -21,6 +21,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="table_div_padding">
+                            @include('layouts.flash-message')
                             <form method="POST" action="{{ route('dashboard.stream.store') }}"
                                   enctype="multipart/form-data">
                                 @csrf

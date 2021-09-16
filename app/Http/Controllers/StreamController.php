@@ -185,9 +185,107 @@ class StreamController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function update(Request $request, Stream $stream)
+    public function update(Request $request)
     {
-        //
+        //dd($request);
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        try {
+            $stream_id = $request->stream_id;
+            $user = auth()->user();
+            $input = $request->input();
+
+            $stream = array(
+                'name' => $input['name'],
+                'form_id' => $input['form_id'],
+                'fields' => null,
+                'status' => 'Draft'
+            );
+
+            DB::beginTransaction();
+            Stream::where('id', $stream_id)->update($stream);
+
+            $fields = [];
+            foreach ($input['fields'] as $field) {
+
+                $fields[] = [
+                    'id' => !empty($field['id']) ? $field['id'] : null,
+                    'stream_id' => $stream_id,
+                    'form_id' => $input['form_id'],
+                    'user_id' => $user->id,
+                    'isRequired' => $field['isRequired'],
+                    'fieldName' => $field['fieldName'],
+                    'fieldType' => $field['fieldType'],
+                    'isDuplicate' => $field['isDuplicate'],
+                    'isCumulative' => $field['isCumulative'],
+                    'orderCount' => $field['orderCount'],
+                    'fieldOptions' => $field['fieldOptions'] ?? '',
+                    'tableData' => $field['tableData'] ?? '',
+                ];
+            }
+            foreach ($fields as $field) {
+
+                if (!empty($field['id'])){
+                    StreamField::where('id',$field['id'])->update($field);
+
+                    if (!empty($field['tableData'])){
+
+                        $grid_data = json_decode(urldecode($field['tableData']));
+
+                        foreach ($grid_data as $grid) {
+                            $table_fields = array(
+                                'id' => !empty($grid->id) ? $grid->id : null,
+                                'name' => $grid->fieldName,
+                                'type' => $grid->type,
+                                'is_dropdown' => $grid->tableDropdown == 'no' ? 0 : 1,
+                                'field_options' => $grid->tableFieldOptions,
+                                'order_count' => $grid->orderCount,
+                                'stream_field_id' => $stream_field->id,
+                                'cumulative_value' => null
+                            );
+
+                            if (!empty($grid->id)){
+                                StreamFieldGrid::where('id',$grid->id)->update($field);
+                            }else{
+                                StreamFieldGrid::create($table_fields);
+                            }
+                        }
+                    }
+                }else{
+                    $stream_field = StreamField::create($field);
+
+                    if (!empty($field['tableData'])){
+
+                        $grid_data = json_decode(urldecode($field['tableData']));
+
+                        foreach ($grid_data as $grid) {
+                            $table_fields = array(
+                                'name' => $grid->fieldName,
+                                'type' => $grid->type,
+                                'is_dropdown' => $grid->tableDropdown == 'no' ? 0 : 1,
+                                'field_options' => $grid->tableFieldOptions,
+                                'order_count' => $grid->orderCount,
+                                'stream_field_id' => $stream_field->id,
+                                'cumulative_value' => null
+                            );
+                            StreamFieldGrid::create($table_fields);
+                        }
+                    }
+                }
+            }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+            return back()->with('error', $e->getMessage());
+        }
+        return redirect()->route('dashboard.streams', [$request->form_id])->with('success', 'Stream saved successfully!');
     }
 
     public function stream_update()
@@ -388,15 +486,16 @@ class StreamController extends Controller
     public function streamField(Request $request)
     {
         $id = $request->id;
+        StreamFieldGrid::where('stream_field_id',$id)->delete();
         StreamField::where('id',$id)->delete();
-        return back()->with('success','Field has been successfully saved.');
+        return back()->with('success','Field has been successfully deleted.');
     }
 
     public function deleteGridField(Request $request)
     {
         $id = $request->id;
         StreamFieldGrid::where('id',$id)->delete();
-        return back()->with('success','Grid field has been successfully saved.');
+        return back()->with('success','Grid field deleted successfully.');
     }
 
     // save stream order
@@ -404,6 +503,6 @@ class StreamController extends Controller
     {
         $id = $request->stream_id;
         Stream::where('id',$id)->update(['order_count' => $request->value]);
-        return back()->with('success','Field has been successfully saved.');
+        return back()->with('success','Field deleted successfully.');
     }
 }
