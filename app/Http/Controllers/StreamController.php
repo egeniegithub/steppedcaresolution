@@ -124,6 +124,7 @@ class StreamController extends Controller
                         $grid_data = json_decode(urldecode($field['tableData']));
 
                         foreach ($grid_data as $grid) {
+
                             $table_fields = array(
                                 'name' => $grid->fieldName,
                                 'type' => $grid->type,
@@ -230,40 +231,11 @@ class StreamController extends Controller
                 ];
             }
             foreach ($fields as $field) {
-
-                if (!empty($field['id'])){
-                    StreamField::where('id',$field['id'])->update($field);
-
-                    if (!empty($field['tableData'])){
-
-                        $grid_data = json_decode(urldecode($field['tableData']));
-
-                        foreach ($grid_data as $grid) {
-                            $table_fields = array(
-                                'id' => !empty($grid->id) ? $grid->id : null,
-                                'name' => $grid->fieldName,
-                                'type' => $grid->type,
-                                'is_dropdown' => $grid->tableDropdown == 'no' ? 0 : 1,
-                                'field_options' => $grid->tableFieldOptions,
-                                'order_count' => $grid->orderCount,
-                                'stream_field_id' => $stream_field->id,
-                                'cumulative_value' => null
-                            );
-
-                            if (!empty($grid->id)){
-                                StreamFieldGrid::where('id',$grid->id)->update($field);
-                            }else{
-                                StreamFieldGrid::create($table_fields);
-                            }
-                        }
-                    }
-                }else{
+                if ($field['id'] == "null"){
                     $stream_field = StreamField::create($field);
-
                     if (!empty($field['tableData'])){
 
                         $grid_data = json_decode(urldecode($field['tableData']));
-
                         foreach ($grid_data as $grid) {
                             $table_fields = array(
                                 'name' => $grid->fieldName,
@@ -275,6 +247,27 @@ class StreamController extends Controller
                                 'cumulative_value' => null
                             );
                             StreamFieldGrid::create($table_fields);
+                        }
+                    }
+                }else{
+                    StreamField::where('id',$field['id'])->update($field);
+                    if (!empty($field['tableData'])){
+                        $grid_data = json_decode(urldecode($field['tableData']));
+                        foreach ($grid_data as $grid) {
+                            $table_fields = array(
+                                'id' => !empty($grid->id) ? $grid->id : null,
+                                'name' => $grid->name,
+                                'type' => $grid->type,
+                                'is_dropdown' => $grid->is_dropdown == 'no' ? 0 : 1,
+                                'field_options' => $grid->field_options,
+                                'order_count' => $grid->order_count,
+                                'stream_field_id' => $field['id']
+                            );
+                            if ($grid->id == "null"){
+                                StreamFieldGrid::create($table_fields);
+                            }else{
+                                StreamFieldGrid::where('id',$grid->id)->update($table_fields);
+                            }
                         }
                     }
                 }
