@@ -225,7 +225,7 @@
                                                                     <label class="radio_container">
                                                                         <input type="radio"  checked="checked"
                                                                                class="dropdown_required"
-                                                                               name="field_required" value="yes"
+                                                                               name="dropdown_field_required" value="yes"
                                                                                id="field_required">
                                                                         <span class="checkmark"></span>
                                                                         Yes
@@ -235,7 +235,7 @@
                                                                     <label class="radio_container">No
                                                                         <input type="radio"  checked="checked"
                                                                                class="dropdown_required"
-                                                                               name="field_required" value="no"
+                                                                               name="dropdown_field_required" value="no"
                                                                                id="field_required">
                                                                         <span class="checkmark"></span>
                                                                     </label>

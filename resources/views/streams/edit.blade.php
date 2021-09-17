@@ -226,8 +226,8 @@
                                                                     <label class="radio_container">
                                                                         <input type="radio"  checked="checked"
                                                                                class="dropdown_required"
-                                                                               name="field_required" value="yes"
-                                                                               id="field_required">
+                                                                               name="dropdown_field_required" value="yes"
+                                                                        >
                                                                         <span class="checkmark"></span>
                                                                         Yes
                                                                     </label>
@@ -236,8 +236,8 @@
                                                                     <label class="radio_container">No
                                                                         <input type="radio"  checked="checked"
                                                                                class="dropdown_required"
-                                                                               name="field_required" value="no"
-                                                                               id="field_required">
+                                                                               name="dropdown_field_required" value="no"
+                                                                        >
                                                                         <span class="checkmark"></span>
                                                                     </label>
                                                                 </td>
@@ -533,11 +533,11 @@
                                             @endif
                                             </tbody>
                                         </table>         <!-- Modal -->
-                                        <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog"  aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
+                                                        <h5 class="modal-title" id="DeleteModal">Delete</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
@@ -548,7 +548,27 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" onclick="remove_field_with_modal()" data-dismiss="modal">Yes</button>
-                                                        <button type="button" class="btn btn-primary">No</button>
+                                                        <button type="button" class="btn btn-primary" onclick="close_the_modal()">No</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal fade" id="DeleteTableField" tabindex="-1" role="dialog"  aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="DeleteTableField">Delete</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure you want to delete this field from database ?
+                                                        <input id="hidden_delete_id_field" hidden>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" onclick="remove_table_field_with_modal()" data-dismiss="modal">Yes</button>
+                                                        <button type="button" class="btn btn-primary" onclick="close_the_field_modal()">No</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -583,6 +603,12 @@
         });
     </script>
     <script type="text/javascript">
+        function close_the_modal(){
+            $('#DeleteModal').modal('hide');
+        }
+        function close_the_field_modal(){
+            $('#DeleteTableField').modal('hide');
+        }
         function remove_field_with_modal(){
             console.log("remove_field_with_modal");
             var delete_id=$("#hidden_delete_id").val();
@@ -602,12 +628,36 @@
                 }
             })
         }
+        function remove_table_field_with_modal(){
+            console.log("remove_field_with_modal");
+            var delete_id=$("#hidden_delete_id_field").val();
+            console.log("delete_id",delete_id);
+            $.ajax({
+                type:"POST",
+                url:"{{route('dashboard.stream.delete_grid_field')}}",
+                data: {
+                    "id": delete_id,
+                    "_token": "{{ csrf_token() }}",
+                },
+                success:function(response)
+                {
+                    console.log("remove_table_field_with_modal success");
+                    location.reload();
+                    $("#hidden_delete_id_field").val('');
+                }
+            })
+        }
+        function delete_table_field_bymodal(request_id){
+            var id = request_id;
+            console.log("delete_on_popup",id);
+            $("#hidden_delete_id_field").val(id);
+            $('#DeleteTableField').modal('show');
+        }
         function delete_on_popup(request_id){
             var id = request_id;
             console.log("delete_on_popup",id);
             $("#hidden_delete_id").val(id);
-            //   hidden_delete_id
-            $('#DeleteModal').modal('show');
+            $('#DeleteModal').modal();
         }
         var db_fields_data=<?php echo json_encode($myArr) ?>;
         console.log("db_fields_data",db_fields_data);
@@ -751,6 +801,7 @@
                 case 'table':
                     $("#table-field-rows").empty();
                     $(".table_addbtn").text("Update Table");
+                    $("input[name=table_cumulative_value][value="+obj.isCumulative+"]").prop("checked",true);
                     $(".tablehiddenfield").val(obj.orderCount);
                     $(".table_id_from_db").val(obj.id);
                     console.log("I am in table ");
@@ -788,11 +839,7 @@
                             html += '<td>'
                             html += '<div class="btn-group" role="group" aria-label="Basic example">'
                             html += '<button type="button" class="btn table_btn  update_btn text-white" onclick="updateTableField(' + value.order_count + ')" > Update </button>'
-                            html += '<form action="{{route('dashboard.stream.delete_grid_field')}}" method="POST">'
-                            html +=  '@csrf'
-                            html +=  '<input type="hidden" name="id" value="'+db_id+'">'
-                            html +=  '<button type="submit" class="btn  table_btn delete_btn text-white" > Delete</button>'
-                            html +=  '</form>'
+                            html +=  '<button type="button" class="btn  table_btn delete_btn text-white" onclick="delete_table_field_bymodal('+db_id+')" > Delete</button>'
                             html += '</div>'
                             html += '</td>'
                             html += '</tr>';
@@ -820,12 +867,14 @@
         var fixHelperModified = function (e, tr) {
                 var $originals = tr.children();
                 var $helper = tr.clone();
+
                 $helper.children().each(function (index) {
                     $(this).width($originals.eq(index).width())
                 });
                 return $helper;
             },
             updateIndex = function (e, ui) {
+                console.log(ui);
                 $('td.index', ui.item.parent()).each(function (i) {
                     $(this).html(i + 1);
                 });
@@ -837,10 +886,12 @@
             helper: fixHelperModified,
             stop: updateIndex
         }).disableSelection();
+
         $("#myTableTwo tbody").sortable({
             helper: fixHelperModified,
             stop: updateIndex
         }).disableSelection();
+
         $("tbody").sortable({
             distance: 5,
             delay: 100,
@@ -881,7 +932,6 @@
                 id_from_db =null;
                 console.log("id_from_db",id_from_db);
             }
-
             let fieldType = $("#field_type").val();
             let selector = (fieldType == 'select') ? '#drop_field_name' : (fieldType == 'table') ? '#table_name' : '#field_name'
             let fieldName = $(selector).val();

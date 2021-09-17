@@ -71,7 +71,7 @@
                                                                     </div>
                                                                     <div class="col-md-6" style="margin-top: -30px">
                                                                         @php
-                                                                        $previous_cumulative = \App\Models\StreamField::where('id', $field->previous_id)->value('cumulative_value');
+                                                                            $previous_cumulative = \App\Models\StreamField::where('id', $field->previous_id)->value('cumulative_value');
                                                                         @endphp
 
                                                                         @if($field->isCumulative == 'yes')
@@ -140,13 +140,13 @@
                                                                                 @foreach($tableData as $table)
                                                                                     @if($table->type == 'column')
                                                                                         @php
-                                                                                        if ($table->is_dropdown == 1){
-                                                                                            array_push($column_dropdown, $column_count);
-                                                                                            $table_options[$column_count] = explode(',',$table->field_options);
-                                                                                        }
-                                                                                        $column_count++;
+                                                                                            if ($table->is_dropdown == 1){
+                                                                                                array_push($column_dropdown, $column_count);
+                                                                                                $table_options[$column_count] = explode(',',$table->field_options);
+                                                                                            }
+                                                                                            $column_count++;
 
-                                                                                        $check_cumulative = \App\Models\StreamField::where('id', $table->stream_field_id)->value('isCumulative');
+                                                                                            $check_cumulative = \App\Models\StreamField::where('id', $table->stream_field_id)->value('isCumulative');
                                                                                         @endphp
                                                                                         @if($loop->iteration == 1)
                                                                                             <td></td>
@@ -214,7 +214,7 @@
                                                                         </table>
                                                                     </div>
                                                                 @endif
-                                                            </div>
+                                                        </div>
                                                         @break
 
                                                         @default
@@ -222,8 +222,8 @@
                                                         @endswitch
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endforeach
+                                    </div>
+                                    @endforeach
                                     @endif
 
                                     <div class="row three_btn_margin">
@@ -276,16 +276,30 @@
             var new_pastedData = event.originalEvent.clipboardData.getData('text');
 
             var new_myArr = new_pastedData.split("\r\n");
-            new_myArr.pop()
+            if(new_myArr.length ==1){
+                new_myArr = new_pastedData.split(/\W+/);
+            }
             console.log(new_myArr);
             var num_value =counter_second ;
 
             new_myArr.forEach((value, key) => {
+                if(value !=""){
+                    $("#current_value_"+ num_value +" ").val(value);
+                    var value = parseInt($("#current_value_"+num_value).val());
+                    var cumulative = parseInt($("#for_sum"+num_value).val());
+                    var total = value+cumulative;
+                    if(isNaN(total)){
+                        $("#cumulative_"+num_value).val(cumulative);
+                    }else{
+                        $("#cumulative_"+num_value).val(total);
+                    }
+                    num_value = +num_value+10;
+                }
 
-                $("#current_value_"+ num_value +" ").val(value);
-                num_value = +num_value+10;
             });
         });
+
+        // set cumulative for table
 
         // set cumulative for table
         $(".editable_table_coloumn").focusout(function (e) {
