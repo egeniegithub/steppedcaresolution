@@ -33,7 +33,7 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <p class="report_modal_dark_font">{{$stream->name}}</p>
-                            <b>Stream Summary:</b> </br>
+                            <b>Form Summary:</b> </br>
                             <span class="report_over_flow_fix">{!! $stream->summary !!}</span>
                         </div>
                     </div>

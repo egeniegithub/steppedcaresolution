@@ -145,7 +145,7 @@ class StreamController extends Controller
             \Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
             return back()->with('error', $e->getMessage());
         }
-        return redirect()->route('dashboard.streams', [$request->form_id])->with('success', 'Stream saved successfully!');
+        return redirect()->route('dashboard.streams', [$request->form_id])->with('success', 'Form saved successfully!');
     }
 
     /**
@@ -164,7 +164,7 @@ class StreamController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param \App\Models\Stream $stream
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
 
     public function edit($form_id, $stream_id = null)
@@ -183,7 +183,7 @@ class StreamController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Stream $stream
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
 
     public function update(Request $request)
@@ -277,17 +277,7 @@ class StreamController extends Controller
             \Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
             return back()->with('error', $e->getMessage());
         }
-        return redirect()->route('dashboard.streams', [$request->form_id])->with('success', 'Stream saved successfully!');
-    }
-
-    public function stream_update()
-    {
-        return view('streams.stream_update');
-    }
-
-    public function stream_update_two()
-    {
-        return view('streams.stream_update_two');
+        return redirect()->route('dashboard.streams', [$request->form_id])->with('success', 'Form saved successfully!');
     }
 
     /**
@@ -304,7 +294,7 @@ class StreamController extends Controller
             StreamChangeLog::where('stream_id', $id)->delete();
             StreamField::where('stream_id', $id)->delete();
             Stream::where('id', $id)->delete();
-            return back()->with('success', "Stream has been successfully deleted");
+            return back()->with('success', "Form has deleted successfully ");
         } catch (\Exception $e) {
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             return back()->with('error', "Something went wrong");
@@ -480,7 +470,7 @@ class StreamController extends Controller
         $id = $request->id;
         StreamFieldGrid::where('stream_field_id',$id)->delete();
         StreamField::where('id',$id)->delete();
-        return back()->with('success','Field has been successfully deleted.');
+        return back()->with('success','Field deleted successfully.');
     }
 
     public function deleteGridField(Request $request)
@@ -495,6 +485,6 @@ class StreamController extends Controller
     {
         $id = $request->stream_id;
         Stream::where('id',$id)->update(['order_count' => $request->value]);
-        return back()->with('success','Field deleted successfully.');
+        return back()->with('success','Order Saved successfully.');
     }
 }

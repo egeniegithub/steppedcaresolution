@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'List Form')
+@section('title', 'Update Data')
 
 @section('content')
     <div class="pcoded-wrapper">
@@ -19,12 +19,12 @@
                             </h3>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-md-4 col-lg-4 px-0">
+                    {{--<div class="col-sm-6 col-md-4 col-lg-4 px-0">
                         <div class="top-header pt-2 update_stream_right_align">
                             <a class="btn update_status_btn text-white" href="{{route('dashboard')}}">Go to Stream
                                 List</a>
                         </div>
-                    </div>
+                    </div>--}}
                 </div>
                 <div class="row">
                     <div class="col-sm-12">

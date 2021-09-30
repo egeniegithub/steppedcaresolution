@@ -63,7 +63,7 @@
                                         <thead>
                                         <tr>
                                             <td class="forward_icon_td"></td>
-                                            <td> Form</td>
+                                            <td> Stream</td>
                                             <td> Status</td>
                                             <td> Actions</td>
                                         </tr>
@@ -109,7 +109,7 @@
                                                             <thead style="background-color: #EFEFEF;">
                                                             <tr>
                                                                 <td style="font-weight: 700;color:black  !important;width:39%">
-                                                                    Stream
+                                                                    Form
                                                                 </td>
                                                                 <td style="font-weight: 700;color:black !important">
                                                                     Status
@@ -144,7 +144,7 @@
                                                                 </tr>
                                                             @empty
                                                                 <tr>
-                                                                    <td colspan="3">No Stream Added</td>
+                                                                    <td colspan="3">No Form Added</td>
                                                                 </tr>
                                                             @endforelse
                                                             </tbody>

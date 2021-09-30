@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Add Stream')
+@section('title', 'Add Form')
 
 @section('content')
     <div class="pcoded-wrapper">
@@ -14,7 +14,7 @@
                     </div>
                     <div class="col-sm-12 px-0">
                         <div class="top-header pt-2 blue-border-bottom">
-                            <h4 class="margin-page-title">Add Stream</h4>
+                            <h4 class="margin-page-title">Add Form</h4>
                         </div>
                     </div>
                 </div>
@@ -27,7 +27,7 @@
                                 <div class="row">
                                     <div class="col-xl-5 col-lg-6 col-md-6 col-12">
                                         <div class="mb-3">
-                                            <label for="stream-name" class="form-label">Stream Name</label>
+                                            <label for="stream-name" class="form-label">Form Name</label>
                                             <input type="text" id="stream-name" class="form-control white_input"
                                                    name="name"
                                                    value="{{old('name') ?? $stream->name ?? null}}" required/>
@@ -441,7 +441,7 @@
                                                 <div class="btn-group btn_group_padding">
                                                     <button class="btn stream_btn btn-primary text-white"
                                                             type="button" onclick="addField()">
-                                                        Add Table to Stream
+                                                        Add Table to Form
                                                     </button>
                                                 </div>
                                             </div>
