@@ -24,7 +24,7 @@
                                 $('#form_id').append('<option value="'+selected_form_id+'" selected>'+selected_form_name+'</option>');
                             }else {
                                 $('#form_id').empty();
-                                $('#form_id').append('<option value="">Select Form</option>');
+                                $('#form_id').append('<option value="">Select Stream</option>');
                                 $.each(response,function(key,value){
                                     $('#form_id').append('<option value="'+key+'">'+value+'</option>');
                                 });
@@ -84,7 +84,7 @@
                                 /*$('#stream_id').append('<option value="'+selected_stream_id+'" selected>'+selected_stream_name+'</option>');*/
                             }else {
                                 $('#stream_id').empty();
-                                $('#stream_id').append('<option value="">Select Stream</option>');
+                                $('#stream_id').append('<option value="">Select Form</option>');
                                 $.each(response,function(key,value){
                                     $('#stream_id').append('<option value="'+key+'">'+value+'</option>');
                                 });

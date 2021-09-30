@@ -33,7 +33,7 @@
                     @endif
                     @if(Auth::user()->role=="Admin" || Auth::user()->role=="Manager" || Auth::user()->role=="User")
                         <li class="nav-item pcoded-hasmenu">
-                            <a href="{{route('dashboard.forms')}}" class="nav-link"><span class="pcoded-micon"> <img class="nav-icons nav-icons-new" src="{{asset('assets/images/Forms_icon.png')}}"> <span class="nav_tooltip" data-toggle="tooltip" data-placement="right" title="Forms"><img class="nav-icons" src="{{asset('assets/images/Forms_icon.png')}}"></span></span><span class="pcoded-mtext">Forms</span></a>
+                            <a href="{{route('dashboard.forms')}}" class="nav-link"><span class="pcoded-micon"> <img class="nav-icons nav-icons-new" src="{{asset('assets/images/Forms_icon.png')}}"> <span class="nav_tooltip" data-toggle="tooltip" data-placement="right" title="Stream"><img class="nav-icons" src="{{asset('assets/images/Forms_icon.png')}}"></span></span><span class="pcoded-mtext">Streams</span></a>
                         </li>
                     @endif
                     @if(Auth::user()->role=="Admin" || Auth::user()->role=="Manager")

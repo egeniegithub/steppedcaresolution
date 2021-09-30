@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'List Form')
+@section('title', 'List Stream')
 
 @section('content')
     <div class="pcoded-wrapper">
@@ -9,7 +9,7 @@
                 <div class="row">
                     <div class="col-sm-12 px-0">
                         <div class="top-header pt-2 blue-border-bottom">
-                            <h3 class="margin-page-title">Forms</h3>
+                            <h3 class="margin-page-title">Streams</h3>
                         </div>
                     </div>
                 </div>
@@ -21,11 +21,11 @@
                                 <form method="POST" action="{{ route('dashboard.form.store') }}" enctype="multipart/form-data">
                                     @csrf
                                     <div class="container">
-                                        <h4>Create Form</h4>
+                                        <h4>Create Stream</h4>
                                         <div class="row report_row_top">
                                             <div class="col-xl-5 col-lg-5 col-md-5 col-12">
                                                 <div class="mb-3">
-                                                    <label for="newform" class="form-label">Form Name *</label>
+                                                    <label for="newform" class="form-label">Name *</label>
                                                     <input type="text" class="form-control" id="newform" name="name" value="{{ old('name') }}" required placeholder="Month 1" aria-describedby="newform">
                                                 </div>
                                             </div>
@@ -46,7 +46,7 @@
                                                 </div>
                                             @endif
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-12">
-                                                <label for="newform" class="form-label hide-on-mobile" style="visibility: hidden;display: block;">Create New Form</label>
+                                                <label for="newform" class="form-label hide-on-mobile" style="visibility: hidden;display: block;">Create New Stream</label>
                                                 <button class="btn btn-primary">Save</button>
                                             </div>
                                         </div>
@@ -56,7 +56,7 @@
                             <div class="card pt-3">
                                 <form method="get" action="">
                                     <div class="container">
-                                        <h4>Search Form</h4>
+                                        <h4>Search Stream</h4>
                                         <div class="row report_row_top ">
                                             <div class="col-xl-5 col-lg-5 col-md-6 col-12">
                                                 <div>
@@ -88,7 +88,7 @@
                                         <thead>
                                             <tr>
                                                 <td style="width: 10%">No</td>
-                                                <td>Form</td>
+                                                <td>Stream</td>
                                                 <td>Project</td>
                                                 <td>Period</td>
                                                 <td>Actions</td>
@@ -105,14 +105,14 @@
                                                     <div class="btn-group" role="group" aria-label="Basic example">
                                                         <button data-toggle="modal" data-target="#editFormModal{{$form->form_id}}" class="btn table_btn update_btn text-white">Update</button>
                                                         <button type="button" class="btn table_btn delete_btn text-white delete_form_modal" data-toggle="modal" data-deleteForm="{{route('dashboard.form.delete')}}{{'?ref='.encrypt($form->form_id)}}">Delete</button>
-                                                        <a type="button" href="{{ route('dashboard.streams', [$form->form_id]) }}" class="btn stream_button_new table_btn text-white">Streams</a>
+                                                        <a type="button" href="{{ route('dashboard.streams', [$form->form_id]) }}" class="btn stream_button_new table_btn text-white">Forms</a>
                                                     </div>
                                                     @include('forms.partials.update_form_modal')
                                                 </td>
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="4" class="text-center">No form added</td>
+                                                <td colspan="4" class="text-center">No stream added</td>
                                             </tr>
                                         @endforelse
                                         </tbody>

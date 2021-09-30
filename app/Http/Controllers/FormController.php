@@ -89,7 +89,7 @@ class FormController extends Controller
             if (!empty($current_period)){
                 $period_id = $current_period->id;
             }else{
-                return back()->with('error', 'Add period which contains current date before adding form!');
+                return back()->with('error', 'Add period which contains current date before adding stream!');
             }
 
             $input = $request->except('_token');
@@ -103,7 +103,7 @@ class FormController extends Controller
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             return back()->with('error', $e->getMessage());
         }
-        return back()->with('success', 'Form created successfully!');
+        return back()->with('success', 'Stream created successfully!');
     }
 
     public function update(Request $request){
@@ -127,7 +127,7 @@ class FormController extends Controller
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             return back()->with('error', $e->getMessage());
         }
-        return back()->with('success', 'Form updated successfully!');
+        return back()->with('success', 'Stream updated successfully!');
     }
 
     public function delete(Request $request)
@@ -143,7 +143,7 @@ class FormController extends Controller
             Form::where('id', $id)->delete();
 
             DB::commit();
-            return back()->with('success', 'Form deleted successfully!');
+            return back()->with('success', 'Stream deleted successfully!');
         } catch (Exception $e) {
             DB::rollBack();
             return back()->with('error', $e->getMessage());

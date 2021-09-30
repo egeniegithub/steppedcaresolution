@@ -61,9 +61,9 @@
                                                     <input type="hidden" id="selected_form_name" value="{{$prefilled_data['form_name']}}">
                                                 @endif
 
-                                                <label for="FormGroup" class="form-label">Select Form *</label>
+                                                <label for="FormGroup" class="form-label">Select Stream *</label>
                                                 <select class="form-control form-select" id="form_id" name="form_id" required aria-label="Default select example">
-                                                    <option value="">Select Form</option>
+                                                    <option value="">Select Stream</option>
 
                                                     @if(!empty($forms))
                                                         @foreach($forms as $form)
@@ -81,9 +81,9 @@
                                                     <input type="hidden" id="selected_stream_name" value="{{$prefilled_data['stream_name']}}">
                                                 @endif
 
-                                                <label for="Stream" class="form-label">Select Stream *</label>
+                                                <label for="Stream" class="form-label">Select Form *</label>
                                                 <select class="form-control form-elect" id="stream_id" name="stream_id" required aria-label="Default select example">
-                                                    <option value="">Select Stream</option>
+                                                    <option value="">Select Form</option>
                                                     @if($prefilled_data['stream_id'])
                                                         <option value="{{$prefilled_data['stream_id']}}" selected>{{$prefilled_data['stream_name']}}</option>
                                                     @endif

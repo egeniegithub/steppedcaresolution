@@ -77,7 +77,7 @@ class ReportController extends Controller
 
         // Output the generated PDF to Browser
         $dompdf->stream($form->name.".pdf");
-        return back()->with('success', 'Report has been successfully generated.');
+        return back()->with('success', 'Report has generated successfully.');
     }
 
     public function generateWordDoc($form_id)

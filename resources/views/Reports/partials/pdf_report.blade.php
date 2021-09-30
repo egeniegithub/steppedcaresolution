@@ -54,7 +54,9 @@
     }
     .report_generated_table thead tr td{
         width: 20%;
-
+        white-space: normal !important;
+        font-family: "Mada", sans-serif;
+        font-size: 14px;
     }
     .report_generated_table tbody tr td{
         border-bottom: 2px solid black !important;
@@ -67,11 +69,15 @@
 
     .table-bordered tbody tr td {
         color: #9a9a9a !important;
+        font-size:10px !important;
     }
-
+    .report_generated_table tbody tr td{
+        font-size:12px !important;
+    }
     .report_sub_table .red_row td {
         color: white !important;
         text-align: center !important;
+        font-size:10px !important;
     }
 
     .red_row {
@@ -87,12 +93,12 @@
 
     <div class="text-center">
         {{--<img src="{{base_path().'/public/project_images/'.\App\Models\project::where('id', $form->project_id)->value('image')}}" height="300px" width="500px" alt="No Img">--}}
-        <img src="data:image/png;base64,{{ base64_encode(file_get_contents(base_path().'/public/project_images/'.\App\Models\project::where('id', $form->project_id)->value('image'))) }}" height="300px" width="500px" alt="No Img">
+        <img src="data:image/png;base64,{{ base64_encode(file_get_contents(base_path().'/public/project_images/'.\App\Models\project::where('id', $form->project_id)->value('image'))) }}" style="height:600px;width:100%" alt="No Img">
     </div>
     <div class="row">
         <div class="col-sm-12 report_summary_col">
-             <b>Report Summary:</b> <br>
-              <span class="report_over_flow_fix">{!! $form->summary !!}</span>
+            <b>Report Summary:</b> <br>
+            <span class="report_over_flow_fix">{!! $form->summary !!}</span>
         </div>
     </div>
 
@@ -115,7 +121,7 @@
                 <div class="row" style="white-space:normal">
                     <div class="col-sm-12">
                         <div class="form-group">
-                            <label for="exampleFormControlTextarea1"><b>{{$field->fieldName}}</b> : </label>
+                            <label for="exampleFormControlTextarea1"><b>{{$field->fieldName}}</b>: </label>
                             @switch($field->fieldType)
                                 @case('text')
                                 <span>{{$field->value}}</span>
@@ -151,7 +157,7 @@
                                 @case('file')
                                 <div class="text-center">
                                     @if(isset($field->value))
-                                        <img src="data:image/png;base64,{{ base64_encode(file_get_contents(base_path().'/public/stream_answer_image/'.$field->value)) }}" height="300px" width="500px" alt="No Img">
+                                        <img src="data:image/png;base64,{{ base64_encode(file_get_contents(base_path().'/public/stream_answer_image/'.$field->value)) }}" style="height:600px;width:100%" alt="No Img">
                                         {{--<img src="{{asset('stream_answer_image')}}/{{$field->value}}" height="300px" width="500px" alt="No Img">--}}
                                     @endif
                                 </div>
@@ -189,14 +195,14 @@
                                                                 $check_cumulative = \App\Models\StreamField::where('id', $table->stream_field_id)->value('isCumulative');
                                                             @endphp
                                                             @if($loop->iteration == 1)
-                                                                <td></td>
+                                                                <td style="font-size:10px"></td>
                                                             @endif
-                                                            <td class="text-white">
+                                                            <td class="text-white;font-size:10px">
                                                                 {{$table->name ?? ''}}
                                                             </td>
 
                                                             @if($check_cumulative == 'yes')
-                                                                <td>
+                                                                <td class="text-white;font-size:10px">
                                                                     {{$table->name ?? ''}} (Cumulative)
                                                                 </td>
                                                             @endif
@@ -251,10 +257,10 @@
                                     </div>
                                 @endif
 
-                            @break
+                                @break
 
-                            @default
-                            ..
+                                @default
+                                ..
                             @endswitch
                         </div>
                     </div>
