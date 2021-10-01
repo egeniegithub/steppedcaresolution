@@ -16,7 +16,7 @@
                 </div>
                 <form method="get" action="">
                     <div class="row report_row_top blue-border-bottom">
-                        <div class="col-xl-5 col-lg-5 col-md-6 col-12">
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-12">
                             <div class="select_project_width">
                                 <label for="FormGroup" class="form-label">Select Period</label>
                                 <select class="form-control form-select" name="period_id" id="period_id"
@@ -24,7 +24,7 @@
                                     <option value="">Select Period</option>
                                     @foreach($periods as $period)
                                         <option
-                                            value="{{$period->id}}" {{request()->get('period_id') == $period->id ? "selected" : ""}}>{{$period->name}}
+                                            value="{{$period->id}}" {{$period_id == $period->id ? "selected" : ""}}>{{$period->name}}
                                             ({{$period->start_date}} - {{$period->end_date}})
                                         </option>
                                     @endforeach
@@ -34,11 +34,11 @@
                         @if($active_user->role != 'Admin')
                             <input type="hidden" name="project_id" value="{{$active_user->project_id}}">
                         @else
-                            <div class="col-xl-5 col-lg-5 col-md-6 col-12 report_flex_row">
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-12 report_flex_row">
                                 <div class=" select_project_width">
                                     <label for="FormGroup" class="form-label">Select Project</label>
                                     <select class="form-control form-select" id="project_id" name="project_id" aria-label="Default select example">
-                                        <option value="all" selected>All</option>
+                                        {{--<option value="all" selected>All</option>--}}
                                         @foreach($projects as $project)
                                             <option
                                                 value="{{$project->id}}" {{request()->get('project_id') == $project->id ? "selected" : ""}}>{{$project->name}}</option>
@@ -46,7 +46,18 @@
                                     </select>
                                 </div>
                                 <div class="span_search_div">
-                                    <button class="report_search_icon span_mid"><i class="fas fa-search "></i></button>
+                                    <button class="report_search_icon span_mid"><i class="fas fa-search "></i></button>&nbsp;
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-12 report_flex_row">
+                                <div class="span_search_div">
+                                    @if(!empty($project_id))
+                                        <button type="button" data-toggle="modal"
+                                                data-target="#viewProjectReport{{$project_id}}"
+                                                class="btn  view_report_btn text-white">Project Report
+                                        </button>
+                                        @include('Reports.partials.project_report_view')
+                                    @endif
                                 </div>
                             </div>
                         @endif
