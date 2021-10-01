@@ -98,6 +98,8 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
         Route::post('/stream/download', [App\Http\Controllers\ReportController::class,'downReport'])->name('dashboard.reports.stream.download');
         Route::get('/stream/pdf-download/{form_id}', [App\Http\Controllers\ReportController::class,'pdfReport'])->name('dashboard.reports.stream.pdf_download');
         Route::get('/stream/doc-download/{form_id}', [App\Http\Controllers\ReportController::class,'generateWordDoc'])->name('dashboard.reports.stream.doc_download');
+        Route::get('/stream/project-pdf-download/{period_id}/{project_id}', [App\Http\Controllers\ReportController::class,'pdfProjectReport'])->name('dashboard.reports.stream.project_pdf_download');
+        Route::get('/stream/project-doc-download/{period_id}/{project_id}', [App\Http\Controllers\ReportController::class,'docProjectReport'])->name('dashboard.reports.stream.project_doc_download');
         Route::get('/stream/csv-download/{field_id}', [App\Http\Controllers\ReportController::class,'generateCsv'])->name('dashboard.reports.stream.csv_download');
     });
 

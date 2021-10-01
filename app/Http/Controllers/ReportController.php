@@ -26,8 +26,8 @@ class ReportController extends Controller
     {
         $perPage = $request->show_rows ?? 10;
         $active_user = User::where('id', auth()->user()->id)->first();
-        $project = $request->project_id ?? "all";
-        $projects = $this->projects_model->search_Projects($project);
+        $project_id = $request->project_id ?? "";
+        $projects = $this->projects_model->search_Projects($project_id);
         if (!empty($request->period_id)) {
             $period_id = $request->period_id;
         } else {
@@ -59,7 +59,12 @@ class ReportController extends Controller
         $row_show = $perPage;
         $periods = Period::all();
         $projects = project::all();
-        return view("Reports.index")->with(compact('form_streams', 'row_show', 'projects', 'periods', 'active_user'));
+        $report_data = Form::where('period_id', $period_id)
+            ->where('project_id', $project_id)
+            ->with(['streams'])
+            ->get();
+        return view("Reports.index")
+            ->with(compact('form_streams', 'row_show', 'projects', 'periods', 'active_user', 'period_id', 'project_id', 'report_data'));
     }
 
     public function pdfReport($form_id)
@@ -89,6 +94,40 @@ class ReportController extends Controller
         );
         $html_content = '<html><head><meta charset="utf-8"></head><body>';
         $html_content .= view('Reports.partials.pdf_report', compact('form'))->render();
+        $html_content .= '</body></html>';
+
+        return \Response::make($html_content,200, $headers);
+    }
+
+    public function pdfProjectReport($period_id, $project_id)
+    {
+        $project = project::where('id', $project_id)->first();
+        $report_data = Form::where('period_id', $period_id)->where('project_id', $project_id)->with(['streams'])->get();
+        set_time_limit(300);
+        $html_content = view('Reports.partials.project_pdf_report', compact('report_data', 'project'))->render();
+
+        // instantiate and use the dompdf class
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html_content);
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser
+        $dompdf->stream($project->name.".pdf");
+        return back()->with('success', 'Report has generated successfully.');
+    }
+
+    public function docProjectReport($period_id, $project_id)
+    {
+        $project = project::where('id', $project_id)->first();
+        $report_data = Form::where('period_id', $period_id)->where('project_id', $project_id)->with(['streams'])->get();
+        $headers = array(
+            "Content-type"=>"text/html",
+            "Content-Disposition"=>"attachment;Filename=".$project->name.".doc"
+        );
+        $html_content = '<html><head><meta charset="utf-8"></head><body>';
+        $html_content .= view('Reports.partials.project_pdf_report', compact('report_data', 'project'))->render();
         $html_content .= '</body></html>';
 
         return \Response::make($html_content,200, $headers);
