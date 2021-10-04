@@ -58,7 +58,8 @@ class FormController extends Controller
             })
 
             ->select('forms.id AS form_id', 'forms.name as form_name', 'forms.order_count', 'p.name as project_name', 'p.id as project_id', 'pe.name as period_name')
-            ->orderBy('form_id', 'DESC')
+            ->orderBy('project_id', 'DESC')
+            ->orderBy('order_count', 'ASC')
             ->paginate($perPage);
 
         $projects = project::all();
@@ -93,6 +94,11 @@ class FormController extends Controller
             }
 
             $input = $request->except('_token');
+
+            //previous order count
+            $previous_order_count = Form::where('period_id', $period_id)->where('project_id', $input['project_id'])->max('order_count');
+
+            $input['order_count'] = $previous_order_count+1;
             $input['period_id'] = $period_id;
             $input['created_by'] = auth()->user()->id;
 
