@@ -20,7 +20,6 @@ Route::get('/', function () {
     }else{
         return redirect('login');
     }
-
 });
 
 Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
