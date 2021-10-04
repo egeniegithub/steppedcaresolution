@@ -214,17 +214,16 @@
                                                                         </table>
                                                                     </div>
                                                                 @endif
+                                                            @break
+                                                            @default
+                                                            ..
+                                                            @endswitch
                                                         </div>
-                                                        @break
-                                                        @default
-                                                        ..
-                                                        @endswitch
                                                     </div>
                                                 </div>
+                                            @endforeach
+                                        @endif
                                     </div>
-                                    @endforeach
-                                    @endif
-
                                     <div class="row three_btn_margin">
                                         <div class="col-sm-12">
                                             <input type="submit" class="btn update_status_btn normal_btn text-white"
