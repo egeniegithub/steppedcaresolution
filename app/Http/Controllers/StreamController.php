@@ -30,7 +30,7 @@ class StreamController extends Controller
             ->select(
                 'streams.id as stream_id', 'streams.name as stream_name', 'streams.status as stream_status', 'f.name as form_name', 'p.name as project_name', 'streams.order_count'
             )
-            ->orderBy('stream_id', 'DESC')
+            ->orderBy('streams.order_count', 'ASC')
             ->get();
 
         $form = Form::where('id', $form_id)->first();
@@ -75,10 +75,12 @@ class StreamController extends Controller
         try {
             $user = auth()->user();
             $input = $request->input();
+            $previous_order_count = Stream::where('form_id', $input['form_id'])->max('order_count');
 
             $stream = array(
                 'name' => $input['name'],
                 'form_id' => $input['form_id'],
+                'order_count' => $previous_order_count+1,
                 'fields' => null,
                 'status' => 'Draft'
             );
