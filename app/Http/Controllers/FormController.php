@@ -97,7 +97,6 @@ class FormController extends Controller
 
             //previous order count
             $previous_order_count = Form::where('period_id', $period_id)->where('project_id', $input['project_id'])->max('order_count');
-
             $input['order_count'] = $previous_order_count+1;
             $input['period_id'] = $period_id;
             $input['created_by'] = auth()->user()->id;
