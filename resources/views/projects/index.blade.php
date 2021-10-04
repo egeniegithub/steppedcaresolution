@@ -98,7 +98,7 @@
                                                             <input class="file-upload" type="file" id="file" accept="image/png, image/jpg, image/JPG, image/jpeg" name="image" aria-label="File browser example">
                                                             <span class="file-custom"></span>
                                                         </label>
-                                                        <p class="text-c-red">Image size should be less than 2MB</p>
+                                                        <p class="text-c-red">Image size should be less than 2MB (Max dimensions, height: 3500px - width: 2500px)</p>
                                                         {{--<div class="row">
                                                             <div class="col-xl-6 col-lg-6 col-md-6 col-12">
                                                                 <input class="file_upload_custom file-upload" name="image" type="file">

@@ -116,3 +116,4 @@ Route::get('/get-streams/{id}', [\App\Http\Controllers\PermissionsController::cl
 Route::get('/get-permissioned-users/{period_id}/{project_id}/{form_id}/{stream_id}', [\App\Http\Controllers\PermissionsController::class, 'getPermissionedUsers']);
 
 Route::post('/stream-order', [\App\Http\Controllers\StreamController::class, 'streamOrder']);
+Route::post('/form-order', [\App\Http\Controllers\FormController::class, 'formOrder']);

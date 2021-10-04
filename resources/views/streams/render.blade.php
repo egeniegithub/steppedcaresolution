@@ -96,7 +96,7 @@
                                                                        src=""
                                                                        alt=""
                                                                        name="image[{{$field->id}}]" {{ $field->value ? "" : $required}}>
-                                                                <p class="text-c-red">Image size should be less than 2MB</p>
+                                                                <p class="text-c-red">Image size should be less than 2MB (Max dimensions, height: 3500px - width: 2500px)</p>
                                                                 <br>
                                                                 <div class="text-center">
                                                                     @if(isset($field->value))
