@@ -39,7 +39,7 @@
                                             <td>Project</td>
                                             <td>Status</td>
                                             <td >
-                                                <p> Order &nbsp;&nbsp; <span class="edit_button stream_view_icons"><i class="fas fa-pen-square" style="color:#4A90CB"></i></span></p>
+                                                <p> Order &nbsp;&nbsp; <br><span class="edit_button stream_view_icons"><i class="fas fa-pen-square" style="color:#4A90CB"></i></span></p>
 
                                                 {{--<span type="button" class="cancel_edit_button stream_view_icons"><i style="color:#bf1f28" class="fas fa-window-close"></i></span>
                                                 <span type="button" class="add_more_button stream_view_icons"><i style="color:#1b9c53" class="fas fa-plus-square"></i></span>--}}

@@ -28,7 +28,7 @@ class StreamController extends Controller
             ->leftjoin('projects as p', 'p.id', '=', 'f.project_id')
             ->where('form_id', $form_id)
             ->select(
-                'streams.id as stream_id', 'streams.name as stream_name', 'streams.status as stream_status', 'f.name as form_name', 'p.name as project_name', 'order_count'
+                'streams.id as stream_id', 'streams.name as stream_name', 'streams.status as stream_status', 'f.name as form_name', 'p.name as project_name', 'streams.order_count'
             )
             ->orderBy('stream_id', 'DESC')
             ->get();

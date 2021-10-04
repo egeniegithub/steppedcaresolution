@@ -177,14 +177,15 @@
                                                                         </tr>
                                                                     @endif
                                                                 @endforeach
-                                                                <tr>
+                                                                {{--<tr>
                                                                     <td colspan="{{$column_count}}">
-                                                                        <a href="{{route('dashboard.reports.stream.csv_download', $field->id)}}" class="btn btn-primary">CSV Download</a>
+
                                                                     </td>
-                                                                </tr>
+                                                                </tr>--}}
                                                                 </tbody>
                                                             </table>
-                                                        </div>
+                                                            <a href="{{route('dashboard.reports.stream.csv_download', $field->id)}}" class="btn btn-primary fa-pull-right">CSV Download</a>
+                                                          </div>
                                                     </div>
                                                 @endif
                                                 @break

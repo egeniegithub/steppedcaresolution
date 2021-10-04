@@ -96,7 +96,7 @@
                                                                        src=""
                                                                        alt=""
                                                                        name="image[{{$field->id}}]" {{ $field->value ? "" : $required}}>
-                                                                <p class="text-c-red">Image size should be less than 2MB</p>
+                                                                <p class="text-c-red">Image size should be less than 2MB (Max dimensions, height: 3500px - width: 2500px)</p>
                                                                 <br>
                                                                 <div class="text-center">
                                                                     @if(isset($field->value))
@@ -214,18 +214,16 @@
                                                                         </table>
                                                                     </div>
                                                                 @endif
+                                                            @break
+                                                            @default
+                                                            ..
+                                                            @endswitch
                                                         </div>
-                                                        @break
-
-                                                        @default
-                                                        ..
-                                                        @endswitch
                                                     </div>
                                                 </div>
+                                            @endforeach
+                                        @endif
                                     </div>
-                                    @endforeach
-                                    @endif
-
                                     <div class="row three_btn_margin">
                                         <div class="col-sm-12">
                                             <input type="submit" class="btn update_status_btn normal_btn text-white"

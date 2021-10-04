@@ -57,7 +57,7 @@ class FormController extends Controller
                 }
             })
 
-            ->select('forms.id AS form_id', 'forms.name as form_name', 'p.name as project_name', 'p.id as project_id', 'pe.name as period_name')
+            ->select('forms.id AS form_id', 'forms.name as form_name', 'forms.order_count', 'p.name as project_name', 'p.id as project_id', 'pe.name as period_name')
             ->orderBy('form_id', 'DESC')
             ->paginate($perPage);
 
@@ -171,5 +171,13 @@ class FormController extends Controller
             return back()->with('error', $e->getMessage());
         }
         return back()->with('success', 'Summary saved successfully!');
+    }
+
+    // save form order
+    public function formOrder(Request $request)
+    {
+        $id = $request->form_id;
+        Form::where('id',$id)->update(['order_count' => $request->value]);
+        return back()->with('success','Order Saved successfully.');
     }
 }
