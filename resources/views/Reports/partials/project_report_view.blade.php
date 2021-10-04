@@ -185,7 +185,7 @@
                                                                 </tbody>
                                                             </table>
                                                             <a href="{{route('dashboard.reports.stream.csv_download', $field->id)}}" class="btn btn-primary fa-pull-right">CSV Download</a>
-                                                        </div>
+                                                          </div>
                                                     </div>
                                                 @endif
                                                 @break
