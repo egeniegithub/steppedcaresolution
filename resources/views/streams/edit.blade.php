@@ -482,7 +482,7 @@
                                                     @endphp
                                                     <tr id="{{$field['orderCount']}}"
                                                         class="ui-sortable-handle fields_table">
-                                                        <td scope="row"> {{$field['fieldName']}}</td>
+                                                        <td scope="row"> {{$field['fieldName']}} </td>
                                                         <td> {{$field['fieldType']}} </td>
                                                         <td> {{$field['isRequired']}} </td>
                                                         <td> {{$field['isDuplicate']}} </td>
@@ -833,7 +833,7 @@
                         let   html = ""
                         if(db_id){
                             html =   '<tr class="ui-sortable-handle table_rows_count" db_id="'+db_id+'" stream_field_id="'+stream_field_id+'"  id="table'+ value.order_count +'">'
-                            html += '<td scope="row"> ' + value.name + '</td>'
+                            html += '<td scope="row"> ' + value.name.replace(/[+]/g," ") + '</td>'
                             html += '<td> ' + value.type + '</td>'
                             html += '<td class="index"> ' + value.order_count + '</td>'
                             html += '<td>'
@@ -1211,6 +1211,7 @@
                 let ff = decodeURIComponent(selected.tableFieldData);
                 ff = JSON.parse(ff);
                 tableData = ff;
+                console.log("tableData",tableData);
             }
             openCity(null,selected.fieldType);
             // $("#field_name").val(selected.fieldName);
@@ -1229,7 +1230,7 @@
             }
             // $("#table_name").val(data.table_name);
             $("input[name=table_cumulative_value][value="+data.cumulative_value+"]").prop("checked",true);
-            $("#table-field-name").val(data.name);
+            $("#table-field-name").val(data.name.replace(/[+]/g," "));
             $("#table_field_options").val(data.field_options);
             $("#table_data_db_id").val(data.id);
             $("#stream_field_id").val(data.stream_field_id);
