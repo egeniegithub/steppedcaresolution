@@ -34,7 +34,8 @@ class User extends Authenticatable
         'createdBy',
         'updatedBy',
         'last_login',
-        'role'
+        'role',
+        'vendor_id'
     ];
 
     /**

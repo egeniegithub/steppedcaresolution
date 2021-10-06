@@ -46,6 +46,13 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
         Route::get('/project/{id?}', [App\Http\Controllers\ProjectController::class,'delete'])->name('dashboard.project.delete');
     });
 
+    Route::group(['prefix' => 'vendors',  'middleware' => 'auth'], function(){
+        Route::get('/', [App\Http\Controllers\VendorController::class,'index'])->name('dashboard.vendors');
+        Route::post('/store', [App\Http\Controllers\VendorController::class,'store'])->name('dashboard.vendor.store');
+        Route::post('/update', [App\Http\Controllers\VendorController::class,'update'])->name('dashboard.vendor.update');
+        Route::get('/vendor/{id?}', [App\Http\Controllers\VendorController::class,'delete'])->name('dashboard.vendor.delete');
+    });
+
     Route::group(['prefix' => 'users',  'middleware' => 'auth'], function(){
         Route::get('/', [App\Http\Controllers\UserController::class,'index'])->name('dashboard.users');
         Route::get('/create', [App\Http\Controllers\UserController::class,'create'])->name('dashboard.user.create');
