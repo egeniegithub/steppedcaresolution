@@ -57,7 +57,7 @@ class FormController extends Controller
                 }
             })
 
-            ->select('forms.id AS form_id', 'forms.name as form_name', 'forms.order_count', 'p.name as project_name', 'p.id as project_id', 'pe.name as period_name')
+            ->select('forms.id AS form_id', 'forms.name as form_name', 'forms.order_count', 'p.name as project_name', 'p.id as project_id', 'pe.name as period_name', 'is_special')
             ->orderBy('project_id', 'DESC')
             ->orderBy('order_count', 'ASC')
             ->paginate($perPage);
@@ -71,6 +71,7 @@ class FormController extends Controller
 
     public function store(Request $request)
     {
+        //dd($request->input());
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
         ]);
@@ -93,6 +94,11 @@ class FormController extends Controller
                 return back()->with('error', 'Add period which contains current date before adding stream!');
             }
 
+            if ($request->has('is_special')){
+                $input['is_special'] = 1;
+            }else{
+                $input['is_special'] = null;
+            }
             $input = $request->except('_token');
 
             //previous order count

@@ -87,38 +87,46 @@
                                 <div class="card-header">Aditional Info</div>
                                 <div class="container">
                                     <div class="row pt-4">
-                                        <div class="col-lg-6 col-x-6 col-md-6 col-12">
+                                        <div class="col-lg-4 col-xs-12 col-md-4 col-12">
                                             <div class="mb-4">
                                                 <label for="Type" class="form-label">Project</label>
                                                 <select  class="form-control form-select" aria-label="Default select example" readonly disabled>
                                                     <option selected>Select Project</option>
                                                     @foreach($projects as $key=>$data)
-                                                    <option value="{{$data->id}}" {{$user->project_id==$data->id?"selected":""}}>{{$data->name}}</option>
+                                                        <option value="{{$data->id}}" {{$user->project_id==$data->id?"selected":""}}>{{$data->name}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row pt-4">
-                                        <div class="col-lg-6 col-x-6 col-md-6 col-12">
+                                        <div class="col-lg-4 col-xs-12 col-md-4 col-12">
                                         <div class="mb-4">
                                                 <label for="Type" class="form-label">Type</label>
                                                 <select class="form-control form-select" id="user_type" name="user_type" aria-label="Default select example" readonly disabled>
                                                     <option selected>Select Type</option>
                                                     @foreach(users_roles() as $data)
-                                                    <option value="{{ $data}}" {{$user->role==$data?"selected":""}}>{{ $data}}</option>
+                                                        <option value="{{ $data}}" {{$user->role==$data?"selected":""}}>{{ $data}}</option>
                                                     @endforeach
 
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 col-x-6 col-md-6 col-12">
+                                        <div class="col-lg-4 col-xs-12 col-md-4 col-12">
                                             <div class="mb-4">
                                                 <label for="Status" class="form-label">Status</label>
                                                 <select class="form-control form-select" disabled aria-label="Default select example" readonly disabled>
                                                     <option selected>Select Status</option>
                                                     @foreach(user_status() as $data)
-                                                    <option value="{{ $data}}"  {{$user->status==$data?"selected":""}}>{{ $data}}</option>
+                                                        <option value="{{ $data}}"  {{$user->status==$data?"selected":""}}>{{ $data}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-xs-12 col-md-4 col-12">
+                                            <div class="mb-4">
+                                                <label for="Type" class="form-label">Vendor</label>
+                                                <select class="form-control form-select" name="vendor_id" disabled id="vendor_id" aria-label="Default select example">
+                                                    @foreach($vendors as $key=>$data)
+                                                        <option value="{{$data->id}}" {{$user->vendor_id == $data->id ? "selected" :""}}>{{$data->name}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>

@@ -23,7 +23,7 @@
                                     <div class="container">
                                         <h4>Create Stream</h4>
                                         <div class="row report_row_top">
-                                            <div class="col-xl-5 col-lg-5 col-md-5 col-12">
+                                            <div class="col-xl-4 col-lg-4 col-md-4 col-12">
                                                 <div class="mb-3">
                                                     <label for="newform" class="form-label">Name *</label>
                                                     <input type="text" class="form-control" id="newform" name="name" value="{{ old('name') }}" required placeholder="Month 1" aria-describedby="newform">
@@ -33,7 +33,7 @@
                                             @if($active_user->role != 'Admin')
                                                 <input type="hidden" name="project_id" value="{{$active_user->project_id}}">
                                             @else
-                                                <div class="col-xl-5 col-lg-5 col-md-5 col-12">
+                                                <div class="col-xl-4 col-lg-4 col-md-4 col-12">
                                                     <div class="mb-3">
                                                         <label for="FormGroup" class="form-label">Select Project *</label>
                                                         <select class="form-control form-select" name="project_id" id="project_id" aria-label="Default select example" required>
@@ -45,6 +45,13 @@
                                                     </div>
                                                 </div>
                                             @endif
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-12">
+                                                <div class="mb-3" style="margin-top: 40px">
+                                                    <label for="newform" class="form-label">
+                                                        <input type="checkbox" name="is_special" value="1"> <b>Is special form</b>
+                                                    </label>
+                                                </div>
+                                            </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-12">
                                                 <label for="newform" class="form-label hide-on-mobile" style="visibility: hidden;display: block;">Create New Stream</label>
                                                 <button class="btn btn-primary">Save</button>
@@ -104,7 +111,7 @@
                                         @forelse($forms as $form)
                                             <tr>
                                                 <td>{{$loop->iteration}}</td>
-                                                <td><a type="button" href="{{ route('dashboard.streams', [$form->form_id]) }}" >{{$form->form_name}}</a></td>
+                                                <td><a type="button" href="{{ route('dashboard.streams', [$form->form_id]) }}" >{{$form->form_name}}</a> {{$form->is_special == 1 ? "(Special)" : ""}}</td>
                                                 <td>{{$form->project_name}}</td>
                                                 <td>{{$form->period_name}}</td>
                                                 <td class="stream_editable_coloumn">
@@ -112,9 +119,11 @@
                                                 </td>
                                                 <td>
                                                     <div class="btn-group" role="group" aria-label="Basic example">
-                                                        <button data-toggle="modal" data-target="#editFormModal{{$form->form_id}}" class="btn table_btn update_btn text-white">Update</button>
-                                                        <button type="button" class="btn table_btn delete_btn text-white delete_form_modal" data-toggle="modal" data-deleteForm="{{route('dashboard.form.delete')}}{{'?ref='.encrypt($form->form_id)}}">Delete</button>
-                                                        <a type="button" href="{{ route('dashboard.streams', [$form->form_id]) }}" class="btn stream_button_new table_btn text-white">Forms</a>
+                                                        @if($form->is_special != 1)
+                                                            <button data-toggle="modal" data-target="#editFormModal{{$form->form_id}}" class="btn table_btn update_btn text-white">Update</button>
+                                                            <button type="button" class="btn table_btn delete_btn text-white delete_form_modal" data-toggle="modal" data-deleteForm="{{route('dashboard.form.delete')}}{{'?ref='.encrypt($form->form_id)}}">Delete</button>
+                                                            <a type="button" href="{{ route('dashboard.streams', [$form->form_id]) }}" class="btn stream_button_new table_btn text-white">Forms</a>
+                                                        @endif
                                                     </div>
                                                     @include('forms.partials.update_form_modal')
                                                 </td>
