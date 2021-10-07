@@ -9,6 +9,7 @@ use App\Models\Stream;
 use App\Models\StreamAccess;
 use App\Models\StreamField;
 use App\Models\StreamFieldGrid;
+use App\Models\Vendor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Auth;
@@ -70,8 +71,9 @@ class HomeController extends Controller
 
             $row_show = $perPage;
             $periods = Period::all();
+            $vendors = Vendor::all();
 
-            return view('dashboard')->with(compact('active_user', 'row_show', 'streams', 'periods', 'current_period_id'));
+            return view('dashboard')->with(compact('active_user', 'row_show', 'streams', 'periods', 'current_period_id', 'vendors'));
         }else{
             if (!empty($request->period_id)){
                 $period_id = $request->period_id;
