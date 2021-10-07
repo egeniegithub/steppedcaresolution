@@ -51,6 +51,7 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
         Route::post('/store', [App\Http\Controllers\VendorController::class,'store'])->name('dashboard.vendor.store');
         Route::post('/update', [App\Http\Controllers\VendorController::class,'update'])->name('dashboard.vendor.update');
         Route::get('/vendor/{id?}', [App\Http\Controllers\VendorController::class,'delete'])->name('dashboard.vendor.delete');
+        Route::post('/special-form-post', [App\Http\Controllers\VendorController::class,'specialFormPost'])->name('dashboard.vendor.special_form_post');
     });
 
     Route::group(['prefix' => 'users',  'middleware' => 'auth'], function(){

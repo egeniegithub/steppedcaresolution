@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SpecialForm;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -110,5 +111,18 @@ class VendorController extends Controller
         $id = decrypt($request->ref);
         Vendor::where('id', $id)->delete();
         return back()->with('success', 'Vendor deleted successfully!');
+    }
+
+    public function specialFormPost(Request $request)
+    {
+        $input = $request->except('_token', 'submit');
+        if ($request->submit == 'Save Only'){
+            $input['status'] = 'In-progress';
+        }else{
+            $input['status'] = 'Published';
+        }
+
+        SpecialForm::create($input);
+        return back()->with('success','Data saved successfully!');
     }
 }

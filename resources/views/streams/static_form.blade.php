@@ -1,0 +1,171 @@
+@extends('layouts.app')
+
+@section('title', 'Update Data')
+
+@section('content')
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="container">
+                <div class="row blue-border-bottom">
+                    <div class="col-sm-6 col-md-4 col-lg-4 px-0 stream_update_title">
+                        <div class="top-header pt-2">
+                            <h3 class="margin-page-title">Special Form</h3>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-lg-4 px-0 update_stream_mid">
+                        <div class="top-header pt-2">
+                            <h3 class="margin-page-title">
+                                status : <span class="blue_span"></span>
+                            </h3>
+                        </div>
+                    </div>
+                    {{--<div class="col-sm-6 col-md-4 col-lg-4 px-0">
+                        <div class="top-header pt-2 update_stream_right_align">
+                            <a class="btn update_status_btn text-white" href="{{route('dashboard')}}">Go to Stream
+                                List</a>
+                        </div>
+                    </div>--}}
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="table_div_padding">
+                            @include('layouts.flash-message')
+                            <div class="card mb-0">
+                                <div class="card_header">
+                                    <h5 class="header_padding_adj">Enter Data</h5>
+                                </div>
+                                <form method="POST" action="{{ route('dashboard.vendor.special_form_post') }}"
+                                      class="update_stream_form" enctype="multipart/form-data" id="fields_form">
+                                    <div class="row">
+                                        @csrf
+
+                                        <input type="hidden" name="user_id" value="{{Auth::id()}}">
+                                        <input type="hidden" name="project_id" value="{{Auth::user()->project_id}}">
+                                        <input type="hidden" name="form_id" value="1">
+
+                                        <div class="col-lg-12 col-x-12 col-md-12 col-12">
+                                            <div class="mb-4">
+                                                <label for="summary" class="form-label">Narrative</label>
+                                                <textarea type="text" class="form-control ckeditor" id="summary" name="narrative" ></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-x-4 col-md-4 col-12">
+                                            <div class="mb-4">
+                                                <label for="period_id">What period you are reporting for ? *</label>
+                                                <select class="form-control form-select white_input" name="period_id" aria-label="Default select example" required>
+                                                    <option value="" selected>Select Period</option>
+                                                    @foreach($periods as $period)
+                                                        <option value="{{$period->id}}" {{(request()->get('period_id')) == $period->id ? "selected":""}}>{{$period->name}} ({{$period->start_date}} - {{$period->end_date}})</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        {{--<div class="col-lg-4 col-x-4 col-md-4 col-12">
+                                            <div class="mb-4">
+                                                <label for="vendor_id">Which organization you are reporting for ?</label>
+                                                <select class="form-control form-select white_input" name="vendor_id" aria-label="Default select example" required>
+                                                    <option value="" selected>Select Period</option>
+                                                    @foreach($vendors as $vendor)
+                                                        <option value="{{$vendor->id}}" {{(request()->get('vendor_id')) == $vendor->id ? "selected":""}}>{{$vendor->name}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>--}}
+
+                                        <div class="col-lg-4 col-x-4 col-md-4 col-12">
+                                            <div class="mb-4">
+                                                <label for="forum_participants">How many participants did you have in human led/moderated forums ?</label>
+                                                <input type="number" class="form-control white_input" name="forum_participants" value="">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-x-4 col-md-4 col-12">
+                                            <div class="mb-4">
+                                                <label for="unique_visitors">How many total registrations/unique visitors did you have for the period ?</label>
+                                                <input type="number" class="form-control white_input " name="unique_visitors" value="">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-x-4 col-md-4 col-12">
+                                            <div class="mb-4">
+                                                <label for="two_or_more_users">How many users accessed the application two or more times ?</label>
+                                                <input type="number" class="form-control white_input " name="two_or_more_users" value="">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-x-4 col-md-4 col-12">
+                                            <div class="mb-4">
+                                                <label for="three_or_more_users">How many users accessed the application three or more times ?</label>
+                                                <input type="number" class="form-control white_input " name="three_or_more_users" value="">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-x-4 col-md-4 col-12">
+                                            <div class="mb-4">
+                                                <label for="downloaded_resources">How many times were resources downloaded from your site or application ? (If applicable)</label>
+                                                <input type="number" class="form-control white_input " name="downloaded_resources" value="">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-x-4 col-md-4 col-12">
+                                            <div class="mb-4">
+                                                <label for="self_help_resources">How many times were self-help resources accessed on your site or application ? (If applicable)</label>
+                                                <input type="number" class="form-control white_input " name="self_help_resources" value="">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-x-4 col-md-4 col-12">
+                                            <div class="mb-4">
+                                                <label for="demographic_data">Please provide demographic data (gender, age and location) for the period and cumulative date.</label>
+                                                <input type="number" class="form-control white_input " name="demographic_data" value="">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-x-4 col-md-4 col-12">
+                                            <div class="mb-4">
+                                                <label for="user_satisfaction">What was the user satisfaction score for the period ?</label>
+                                                <input type="number" class="form-control white_input " name="user_satisfaction" value="">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-x-4 col-md-4 col-12">
+                                            <div class="mb-4">
+                                                <label for="outcomes_data">Is there any outcomes data for the period that you would like included in the report ?</label>
+                                                <input type="number" class="form-control white_input " name="outcomes_data" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row three_btn_margin">
+                                        <div class="col-sm-12">
+                                            <input type="submit" class="btn update_status_btn normal_btn text-white"
+                                                   name="submit"
+                                                   value="Save Only"/>
+                                            <input type="submit" class="btn normal_btn save_and_submit text-white"
+                                                   name="submit"
+                                                   value="Save and Submit"/>
+                                            {{--@if(Auth::user()->role=="User")
+                                                <a type="button" href="{{route('dashboard')}}" class="btn normal_btn cancel_modal_btn text-white">Cancel</a>
+                                            @else
+                                                <a type="button" href="{{route('dashboard.streams', 0)}}" class="btn normal_btn cancel_modal_btn text-white">Cancel</a>
+                                            @endif--}}
+
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @include('layouts.pagination')
+@endsection
+
+@section('scripts')
+    <script>
+    </script>
+@endsection
