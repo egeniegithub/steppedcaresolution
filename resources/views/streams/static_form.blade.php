@@ -35,23 +35,25 @@
                                 <div class="card_header">
                                     <h5 class="header_padding_adj">Enter Data</h5>
                                 </div>
-                                <form method="POST" action="{{ route('dashboard.vendor.special_form_post') }}"
+                                <form method="POST" action="{{ route('dashboard.stream.special_form_post') }}"
                                       class="update_stream_form" enctype="multipart/form-data" id="fields_form">
                                     <div class="row">
                                         @csrf
 
-                                        <input type="hidden" name="user_id" value="{{Auth::id()}}">
-                                        <input type="hidden" name="project_id" value="{{Auth::user()->project_id}}">
-                                        <input type="hidden" name="form_id" value="1">
+                                        <input type="hidden" name="id" value="{{$data ? $data['id'] : ''}}">
+                                        <input type="hidden" name="period_id" value="{{$data ? $data['period_id'] : ''}}">
+                                        <input type="hidden" name="project_id" value="{{$data ? $data['project_id'] : ''}}">
+                                        <input type="hidden" name="vendor_id" value="{{$data ? $data['vendor_id'] : ''}}">
+                                        <input type="hidden" name="user_id" value="{{$data ? $data['user_id'] : ''}}">
 
                                         <div class="col-lg-12 col-x-12 col-md-12 col-12">
                                             <div class="mb-4">
                                                 <label for="summary" class="form-label">Narrative</label>
-                                                <textarea type="text" class="form-control ckeditor" id="summary" name="narrative" ></textarea>
+                                                <textarea type="text" class="form-control ckeditor" id="summary" name="narrative">{{$data ? $data['narrative'] : ''}}</textarea>
                                             </div>
                                         </div>
 
-                                        <div class="col-lg-4 col-x-4 col-md-4 col-12">
+                                        {{--<div class="col-lg-4 col-x-4 col-md-4 col-12">
                                             <div class="mb-4">
                                                 <label for="period_id">What period you are reporting for ? *</label>
                                                 <select class="form-control form-select white_input" name="period_id" aria-label="Default select example" required>
@@ -61,80 +63,68 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                        </div>
-
-                                        {{--<div class="col-lg-4 col-x-4 col-md-4 col-12">
-                                            <div class="mb-4">
-                                                <label for="vendor_id">Which organization you are reporting for ?</label>
-                                                <select class="form-control form-select white_input" name="vendor_id" aria-label="Default select example" required>
-                                                    <option value="" selected>Select Period</option>
-                                                    @foreach($vendors as $vendor)
-                                                        <option value="{{$vendor->id}}" {{(request()->get('vendor_id')) == $vendor->id ? "selected":""}}>{{$vendor->name}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
                                         </div>--}}
 
                                         <div class="col-lg-4 col-x-4 col-md-4 col-12">
                                             <div class="mb-4">
                                                 <label for="forum_participants">How many participants did you have in human led/moderated forums ?</label>
-                                                <input type="number" class="form-control white_input" name="forum_participants" value="">
+                                                <input type="number" class="form-control white_input" name="forum_participants" value="{{$data ? $data['forum_participants'] : ''}}">
                                             </div>
                                         </div>
 
                                         <div class="col-lg-4 col-x-4 col-md-4 col-12">
                                             <div class="mb-4">
                                                 <label for="unique_visitors">How many total registrations/unique visitors did you have for the period ?</label>
-                                                <input type="number" class="form-control white_input " name="unique_visitors" value="">
+                                                <input type="number" class="form-control white_input " name="unique_visitors" value="{{$data ? $data['unique_visitors'] : ''}}">
                                             </div>
                                         </div>
 
                                         <div class="col-lg-4 col-x-4 col-md-4 col-12">
                                             <div class="mb-4">
                                                 <label for="two_or_more_users">How many users accessed the application two or more times ?</label>
-                                                <input type="number" class="form-control white_input " name="two_or_more_users" value="">
+                                                <input type="number" class="form-control white_input " name="two_or_more_users" value="{{$data ? $data['two_or_more_users'] : ''}}">
                                             </div>
                                         </div>
 
                                         <div class="col-lg-4 col-x-4 col-md-4 col-12">
                                             <div class="mb-4">
                                                 <label for="three_or_more_users">How many users accessed the application three or more times ?</label>
-                                                <input type="number" class="form-control white_input " name="three_or_more_users" value="">
+                                                <input type="number" class="form-control white_input " name="three_or_more_users" value="{{$data ? $data['three_or_more_users'] : ''}}">
                                             </div>
                                         </div>
 
                                         <div class="col-lg-4 col-x-4 col-md-4 col-12">
                                             <div class="mb-4">
                                                 <label for="downloaded_resources">How many times were resources downloaded from your site or application ? (If applicable)</label>
-                                                <input type="number" class="form-control white_input " name="downloaded_resources" value="">
+                                                <input type="number" class="form-control white_input " name="downloaded_resources" value="{{$data ? $data['downloaded_resources'] : ''}}">
                                             </div>
                                         </div>
 
                                         <div class="col-lg-4 col-x-4 col-md-4 col-12">
                                             <div class="mb-4">
                                                 <label for="self_help_resources">How many times were self-help resources accessed on your site or application ? (If applicable)</label>
-                                                <input type="number" class="form-control white_input " name="self_help_resources" value="">
+                                                <input type="number" class="form-control white_input " name="self_help_resources" value="{{$data ? $data['self_help_resources'] : ''}}">
                                             </div>
                                         </div>
 
                                         <div class="col-lg-4 col-x-4 col-md-4 col-12">
                                             <div class="mb-4">
                                                 <label for="demographic_data">Please provide demographic data (gender, age and location) for the period and cumulative date.</label>
-                                                <input type="number" class="form-control white_input " name="demographic_data" value="">
+                                                <input type="number" class="form-control white_input " name="demographic_data" value="{{$data ? $data['demographic_data'] : ''}}">
                                             </div>
                                         </div>
 
                                         <div class="col-lg-4 col-x-4 col-md-4 col-12">
                                             <div class="mb-4">
                                                 <label for="user_satisfaction">What was the user satisfaction score for the period ?</label>
-                                                <input type="number" class="form-control white_input " name="user_satisfaction" value="">
+                                                <input type="number" class="form-control white_input " name="user_satisfaction" value="{{$data ? $data['user_satisfaction'] : ''}}">
                                             </div>
                                         </div>
 
                                         <div class="col-lg-4 col-x-4 col-md-4 col-12">
                                             <div class="mb-4">
                                                 <label for="outcomes_data">Is there any outcomes data for the period that you would like included in the report ?</label>
-                                                <input type="number" class="form-control white_input " name="outcomes_data" value="">
+                                                <input type="number" class="form-control white_input " name="outcomes_data" value="{{$data ? $data['outcomes_data'] : ''}}">
                                             </div>
                                         </div>
                                     </div>

@@ -112,17 +112,4 @@ class VendorController extends Controller
         Vendor::where('id', $id)->delete();
         return back()->with('success', 'Vendor deleted successfully!');
     }
-
-    public function specialFormPost(Request $request)
-    {
-        $input = $request->except('_token', 'submit');
-        if ($request->submit == 'Save Only'){
-            $input['status'] = 'In-progress';
-        }else{
-            $input['status'] = 'Published';
-        }
-
-        SpecialForm::create($input);
-        return back()->with('success','Data saved successfully!');
-    }
 }

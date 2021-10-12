@@ -10244,6 +10244,13 @@ table.stream_data_table thead tr td:last-child {
 .rendered_table tbody tr td {
     white-space: normal !important;
 }
+.red_row td {
+    white-space: normal !important;
+}
+
+.white_space td {
+    white-space: normal !important;
+}
 .rendered_table tbody tr:last-child td {
     border-bottom: 1px solid #e2e5e8 !important;
 }

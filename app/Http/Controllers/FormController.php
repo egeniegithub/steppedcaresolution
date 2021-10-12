@@ -94,12 +94,12 @@ class FormController extends Controller
                 return back()->with('error', 'Add period which contains current date before adding stream!');
             }
 
-            if ($request->has('is_special')){
+            $input = $request->except('_token');
+            if ($request->exists('is_special')){
                 $input['is_special'] = 1;
             }else{
                 $input['is_special'] = null;
             }
-            $input = $request->except('_token');
 
             //previous order count
             $previous_order_count = Form::where('period_id', $period_id)->where('project_id', $input['project_id'])->max('order_count');
@@ -107,7 +107,13 @@ class FormController extends Controller
             $input['period_id'] = $period_id;
             $input['created_by'] = auth()->user()->id;
 
-            Form::create($input);
+            $check_is_special = Form::where('project_id', $input['project_id'])->where('period_id', $input['period_id'])->where('is_special', 1)->count();
+
+            if ($check_is_special > 0 && $input['is_special'] != null){
+                return back()->with('warning', 'Special Form is already exist for current period and project');
+            }else{
+                Form::create($input);
+            }
 
         } catch (\Exception $e) {
 

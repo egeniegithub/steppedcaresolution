@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Form;
+use App\Models\SpecialForm;
 use App\Models\Stream;
 use App\Models\StreamAnswer;
 use App\Models\StreamChangeLog;
@@ -465,6 +466,46 @@ class StreamController extends Controller
             return back()->with('error', $e->getMessage());
         }
         return back()->with('success', 'Status updated successfully!');
+    }
+
+    public function staticStream(Request $request){
+
+        $input = $request->except('_token');
+        $input['project_id'] = auth()->user()->project_id;
+        $input['vendor_id'] = auth()->user()->vendor_id;
+        $input['user_id'] = auth()->id();
+
+        $data = SpecialForm::where('period_id', $input['period_id'])
+            ->where('project_id', $input['project_id'])
+            ->where('vendor_id', $input['vendor_id'])
+            ->where('user_id', $input['user_id'])
+            ->first();
+
+        if (empty($data)){
+            $data = [];
+        }else{
+            $data = $data->toArray();
+        }
+
+        return view('streams.static_form')->with(compact('data'));
+    }
+
+    public function specialFormPost(Request $request)
+    {
+        $id = $request->input('id');
+        $input = $request->except('_token', 'submit', 'id');
+        if ($request->submit == 'Save Only'){
+            $input['status'] = 'In-progress';
+        }else{
+            $input['status'] = 'Published';
+        }
+
+        if (empty($id)){
+            SpecialForm::create($input);
+        }else{
+            SpecialForm::where('id', $id)->update($input);
+        }
+        return redirect()->route('dashboard')->with('success','Data saved successfully!');
     }
 
     public function streamField(Request $request)

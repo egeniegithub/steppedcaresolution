@@ -2,7 +2,7 @@
     @include('admin')
 @else
     @if(!empty(Auth::user()->vendor_id))
-        @include('streams.static_form')
+        @include('vendor_user_dashboard')
     @else
         @include('user_dashboard')
     @endif

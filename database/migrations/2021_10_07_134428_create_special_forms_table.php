@@ -19,7 +19,6 @@ class CreateSpecialFormsTable extends Migration
             $table->unsignedBigInteger('project_id');
             $table->unsignedBigInteger('vendor_id');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('form_id');
 
             $table->integer('forum_participants')->nullable();
             $table->integer('unique_visitors')->nullable();
