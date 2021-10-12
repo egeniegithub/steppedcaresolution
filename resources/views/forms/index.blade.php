@@ -111,7 +111,13 @@
                                         @forelse($forms as $form)
                                             <tr>
                                                 <td>{{$loop->iteration}}</td>
-                                                <td><a type="button" href="{{ route('dashboard.streams', [$form->form_id]) }}" >{{$form->form_name}}</a> {{$form->is_special == 1 ? "(Special)" : ""}}</td>
+                                                <td>
+                                                    @if($form->is_special != 1)
+                                                        <a type="button" href="{{ route('dashboard.streams', [$form->form_id]) }}" >{{$form->form_name}}</a>
+                                                    @else
+                                                        {{$form->form_name}} (Special)
+                                                    @endif
+                                                </td>
                                                 <td>{{$form->project_name}}</td>
                                                 <td>{{$form->period_name}}</td>
                                                 <td class="stream_editable_coloumn">
@@ -121,7 +127,9 @@
                                                     <div class="btn-group" role="group" aria-label="Basic example">
                                                         @if($form->is_special != 1)
                                                             <button data-toggle="modal" data-target="#editFormModal{{$form->form_id}}" class="btn table_btn update_btn text-white">Update</button>
+                                                        @endif
                                                             <button type="button" class="btn table_btn delete_btn text-white delete_form_modal" data-toggle="modal" data-deleteForm="{{route('dashboard.form.delete')}}{{'?ref='.encrypt($form->form_id)}}">Delete</button>
+                                                        @if($form->is_special != 1)
                                                             <a type="button" href="{{ route('dashboard.streams', [$form->form_id]) }}" class="btn stream_button_new table_btn text-white">Forms</a>
                                                         @endif
                                                     </div>

@@ -10,7 +10,7 @@
                 <div class="row blue-border-bottom">
                     <div class="col-sm-6 col-md-9 col-lg-10 px-0">
                         <div class="top-header pt-2">
-                            <h3 class="margin-page-title">Streams</h3>
+                            <h3 class="margin-page-title">Forms</h3>
                         </div>
                     </div>
                 </div>
@@ -87,48 +87,6 @@
                                     {{$streams->links('components.pagination')}}
                                 </div>
                             </div>
-
-                            {{--<div class="flex-columns flex-setting mob_margin_pagination">
-                                <div class="inline_block_adj show_rows_adj">
-                                    <label class="my-1 mr-2" for="inlineFormCustomSelectPref"
-                                    >Show Rows :</label
-                                    >
-                                    <select
-                                        class="my-1 show_rows_count"
-                                        id="inlineFormCustomSelectPref"
-                                    >
-                                        <option value="1">10</option>
-                                        <option value="2">20</option>
-                                        <option selected value="3">30</option>
-                                        <option value="4">40</option>
-                                        <option value="5">50</option>
-                                    </select>
-                                </div>
-                                <div class="show_rows_adj margin_top">
-                                    <nav aria-label="Page navigation example ">
-                                        <ul class="pagination">
-                                            <li class="page-item">
-                                                <a class="page-link active" href="#">Prev</a>
-                                            </li>
-                                            <li class="page-item active">
-                                                <a class="page-link" href="#">1</a>
-                                            </li>
-                                            <li class="page-item">
-                                                <a class="page-link" href="#">2</a>
-                                            </li>
-                                            <li class="page-item">
-                                                <a class="page-link" href="#">3</a>
-                                            </li>
-                                            <li class="page-item">
-                                                <a class="page-link" href="#">4</a>
-                                            </li>
-                                            <li class="page-item">
-                                                <a class="page-link" href="#">Next</a>
-                                            </li>
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </div>--}}
                         </div>
                     </div>
                 </div>

@@ -102,7 +102,7 @@ class ReportController extends Controller
     public function pdfProjectReport($period_id, $project_id)
     {
         $project = project::where('id', $project_id)->first();
-        $report_data = Form::where('period_id', $period_id)->where('project_id', $project_id)->with(['streams'])->get();
+        $report_data = Form::where('period_id', $period_id)->where('project_id', $project_id)->with(['streams'])->orderBy('order_count', 'ASC')->get();
         set_time_limit(300);
         $html_content = view('Reports.partials.project_pdf_report', compact('report_data', 'project'))->render();
 
@@ -121,7 +121,7 @@ class ReportController extends Controller
     public function docProjectReport($period_id, $project_id)
     {
         $project = project::where('id', $project_id)->first();
-        $report_data = Form::where('period_id', $period_id)->where('project_id', $project_id)->with(['streams'])->get();
+        $report_data = Form::where('period_id', $period_id)->where('project_id', $project_id)->with(['streams'])->orderBy('order_count', 'ASC')->get();
         $headers = array(
             "Content-type"=>"text/html",
             "Content-Disposition"=>"attachment;Filename=".$project->name.".doc"
@@ -219,38 +219,90 @@ class ReportController extends Controller
         return response()->stream($callback, 200, $headers);
     }
 
-    public function exportCsv(Request $request)
+    public function generateStaticCsv($form_id)
     {
-        $fileName = 'tasks.csv';
-        $tasks = Task::all();
+        dd($form_id);
+        $grid_name = StreamField::where('id', $form_id)->value('fieldName');
+        $tableData = StreamFieldGrid::where('stream_field_id', $field_id)->orderBy('type', 'ASC')->orderBy('order_count', 'ASC')->get();
+        $column_dropdown = array();
+        $table_options = array();
+        $columns_array = array();
+        $final_rows_array = array();
+
+        // grid data
+        $column_count = 0;
+        $loop_iteration_1 = 1;
+        foreach($tableData as $table){
+            if($table->type == 'column'){
+
+                if ($table->is_dropdown == 1){
+                    array_push($column_dropdown, $column_count);
+                    $table_options[$column_count] = explode(',',$table->field_options);
+                }
+                $column_count++;
+
+                $check_cumulative = StreamField::where('id', $table->stream_field_id)->value('isCumulative');
+                if($loop_iteration_1 == 1){
+                    array_push($columns_array, '');
+                }
+                array_push($columns_array, $table->name ?? "");
+
+                if($check_cumulative == 'yes'){
+                    array_push($columns_array, $table->name ? $table->name.' (Cumulative)' : "");
+                }
+            }
+            $loop_iteration_1++;
+        }
+
+        $loop_iteration_2 = 1;
+        foreach($tableData as $table){
+            $rows_array = array();
+            if($table->type == 'row'){
+                array_push($rows_array, $table->name ?? "");
+
+                for($i=0; $i<$column_count; $i++){
+
+                    $value = json_decode($table->value);
+
+                    if( in_array($i, $column_dropdown)){
+                        array_push($rows_array, $value ? $value[$i] : '');
+                    }else{
+                        array_push($rows_array, $value ? $value[$i] : '');
+                    }
+
+                    $check_cumulative = StreamField::where('id', $table->stream_field_id)->value('isCumulative');
+
+                    if($check_cumulative == 'yes'){
+                        $previous_cumulative_grid = \App\Models\StreamFieldGrid::where('id', $table->previous_id)->value('cumulative_value');
+                        array_push($rows_array, $previous_cumulative_grid ? json_decode($previous_cumulative_grid)[$i] : 0);
+                    }
+                }
+                $loop_iteration_2++;
+                array_push($final_rows_array, $rows_array);
+            }
+        }
+        //dd($columns_array, $final_rows_array);
+
+        $file_name = $grid_name.'.csv';
 
         $headers = array(
             "Content-type"        => "text/csv",
-            "Content-Disposition" => "attachment; filename=$fileName",
+            "Content-Disposition" => "attachment; filename=$file_name",
             "Pragma"              => "no-cache",
             "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
             "Expires"             => "0"
         );
 
-        $columns = array('Title', 'Assign', 'Description', 'Start Date', 'Due Date');
-
-        $callback = function() use($tasks, $columns) {
+        $callback = function() use($final_rows_array, $columns_array) {
             $file = fopen('php://output', 'w');
-            fputcsv($file, $columns);
-
-            foreach ($tasks as $task) {
-                $row['Title']  = $task->title;
-                $row['Assign']    = $task->assign->name;
-                $row['Description']    = $task->description;
-                $row['Start Date']  = $task->start_at;
-                $row['Due Date']  = $task->end_at;
-
-                fputcsv($file, array($row['Title'], $row['Assign'], $row['Description'], $row['Start Date'], $row['Due Date']));
+            fputcsv($file, $columns_array);
+            foreach ($final_rows_array as $row){
+                if (!empty($row)){
+                    fputcsv($file, $row);
+                }
             }
-
             fclose($file);
         };
-
         return response()->stream($callback, 200, $headers);
     }
 }

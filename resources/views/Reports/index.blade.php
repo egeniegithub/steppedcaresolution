@@ -86,8 +86,8 @@
                                                     data-target="#accordion_{{$loop->iteration}}"><img
                                                         class="forward_icon "
                                                         src="{{asset('assets/images/forward_icon.PNG')}}"/></td>
-                                                <td data-toggle="collapse"
-                                                    data-target="#accordion_{{$loop->iteration}}">{{$form->name}}
+                                                <td data-toggle="collapse" data-target="#accordion_{{$loop->iteration}}">
+                                                    {{$form->name}} {{$form->is_special == 1 ? "(Special)" : ""}}
                                                 </td>
                                                 <td data-toggle="collapse"
                                                     data-target="#accordion_{{$loop->iteration}}">{{formStatus($form->id)}}</td>

@@ -51,7 +51,6 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
         Route::post('/store', [App\Http\Controllers\VendorController::class,'store'])->name('dashboard.vendor.store');
         Route::post('/update', [App\Http\Controllers\VendorController::class,'update'])->name('dashboard.vendor.update');
         Route::get('/vendor/{id?}', [App\Http\Controllers\VendorController::class,'delete'])->name('dashboard.vendor.delete');
-        Route::post('/special-form-post', [App\Http\Controllers\VendorController::class,'specialFormPost'])->name('dashboard.vendor.special_form_post');
     });
 
     Route::group(['prefix' => 'users',  'middleware' => 'auth'], function(){
@@ -87,6 +86,9 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
         Route::post('/stream-post', [App\Http\Controllers\StreamController::class,'streamPost'])->name('dashboard.stream.stream_post');
         Route::post('/delete-field', [App\Http\Controllers\StreamController::class,'streamField'])->name('dashboard.stream.delete_field');
         Route::post('/delete-grid-field', [App\Http\Controllers\StreamController::class,'deleteGridField'])->name('dashboard.stream.delete_grid_field');
+
+        Route::post('/static-stream', [App\Http\Controllers\StreamController::class,'staticStream'])->name('dashboard.stream.static_stream');
+        Route::post('/special-form-post', [App\Http\Controllers\StreamController::class,'specialFormPost'])->name('dashboard.stream.special_form_post');
     });
 
     Route::group(['prefix' => 'periods',  'middleware' => 'auth'], function(){
@@ -108,6 +110,7 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
         Route::get('/stream/project-pdf-download/{period_id}/{project_id}', [App\Http\Controllers\ReportController::class,'pdfProjectReport'])->name('dashboard.reports.stream.project_pdf_download');
         Route::get('/stream/project-doc-download/{period_id}/{project_id}', [App\Http\Controllers\ReportController::class,'docProjectReport'])->name('dashboard.reports.stream.project_doc_download');
         Route::get('/stream/csv-download/{field_id}', [App\Http\Controllers\ReportController::class,'generateCsv'])->name('dashboard.reports.stream.csv_download');
+        Route::get('/stream/static-csv-download/{form_id}', [App\Http\Controllers\ReportController::class,'generateStaticCsv'])->name('dashboard.reports.stream.static_csv_download');
     });
 
     Route::group(['prefix' => 'permissions',  'middleware' => 'auth'], function(){
