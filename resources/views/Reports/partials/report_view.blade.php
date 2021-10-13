@@ -109,6 +109,7 @@
                                 </tr>
                                 </tbody>
                             </table>
+                            <a href="{{route('dashboard.reports.stream.static_csv_download', $form->id)}}" class="btn btn-primary fa-pull-right">CSV Download</a>
                         </div>
                     </div>
                 @else
