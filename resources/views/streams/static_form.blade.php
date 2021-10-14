@@ -43,10 +43,10 @@
                                         {{--{{dd($data['id'],$data['period_id'],$data['project_id'],$data['vendor_id'],$data['user_id'])}}--}}
 
                                         <input type="hidden" name="id" value="{{$data ? $data['id'] : ''}}">
-                                        <input type="hidden" name="period_id" value="{{$data ? $data['period_id'] : ''}}">
-                                        <input type="hidden" name="project_id" value="{{$data ? $data['project_id'] : ''}}">
-                                        <input type="hidden" name="vendor_id" value="{{$data ? $data['vendor_id'] : ''}}">
-                                        <input type="hidden" name="user_id" value="{{$data ? $data['user_id'] : ''}}">
+                                        <input type="hidden" name="period_id" value="{{$data ? $data['period_id'] : $input['period_id']}}">
+                                        <input type="hidden" name="project_id" value="{{$data ? $data['project_id'] : $input['project_id']}}">
+                                        <input type="hidden" name="vendor_id" value="{{$data ? $data['vendor_id'] : $input['vendor_id']}}">
+                                        <input type="hidden" name="user_id" value="{{$data ? $data['user_id'] : $input['user_id']}}">
 
                                         <div class="col-lg-12 col-x-12 col-md-12 col-12">
                                             <div class="mb-4">
