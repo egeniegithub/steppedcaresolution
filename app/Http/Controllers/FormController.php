@@ -70,7 +70,6 @@ class FormController extends Controller
         }
 
         try {
-
             $current_period = Period::all()->filter(function($item) {
                 if (Carbon::now()->between($item->start_date, $item->end_date)) {
                     return $item;
