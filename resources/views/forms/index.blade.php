@@ -76,7 +76,7 @@
                                                 <select class="form-control form-select" name="period_id" id="period_id" aria-label="Default select example" >
                                                     <option value="">Select Period</option>
                                                     @foreach($periods as $period)
-                                                        <option value="{{$period->id}}" {{request()->get('period_id') == $period->id ? "selected" : ""}}>{{$period->name}} ({{$period->start_date}} - {{$period->end_date}})</option>
+                                                        <option value="{{$period->id}}" {{request()->get('period_id') == $period->id ? "selected" : ""}}>{{$period->name}} ({{date('d-m-Y', strtotime($period->start_date))}} - {{date('d-m-Y', strtotime($period->end_date))}})</option>
                                                     @endforeach
                                                 </select>
                                             </div>

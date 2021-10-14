@@ -143,8 +143,8 @@
                         @foreach($records as $record)
                             @php
                                 $period_name = \App\Models\Period::where('id', $record->period_id)
-                                    ->select(DB::raw("CONCAT(name,' (',start_date, ' - ', end_date, ')') as period_name"))
-                                    ->first();
+                                            ->select(DB::raw("CONCAT(name,' (',DATE_FORMAT(start_date, '%d-%m-%Y'), ' - ', DATE_FORMAT(end_date, '%d-%m-%Y'), ')') as period_name"))
+                                            ->first();
 
                                 $forum_participants += $record->forum_participants;
                                 $unique_visitors += $record->unique_visitors;

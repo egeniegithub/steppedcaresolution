@@ -66,10 +66,12 @@ class PeriodController extends Controller
         }
 
         try {
-            $input = $request->except('_token');
+            $input = $request->except('_token', 'end_date');
+            $end_date = date('Y-m-d H:i:s', strtotime($request->end_date. '+1 day')-1);
+            $input['end_date'] = $end_date;
             $input['created_by'] = auth()->user()->id;
-            Period::create($input);
 
+            Period::create($input);
         } catch (\Exception $e) {
 
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
@@ -98,7 +100,9 @@ class PeriodController extends Controller
         }
 
         try {
-            $input = $request->except('_token');
+            $input = $request->except('_token', 'end_date');
+            $end_date = date('Y-m-d H:i:s', strtotime($request->end_date. '+1 day')-1);
+            $input['end_date'] = $end_date;
             $input['updated_by'] = auth()->user()->id;
 
             Period::where('id', $id)->update($input);
