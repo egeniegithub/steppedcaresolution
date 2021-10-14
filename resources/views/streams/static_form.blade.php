@@ -19,12 +19,6 @@
                             </h3>
                         </div>
                     </div>
-                    {{--<div class="col-sm-6 col-md-4 col-lg-4 px-0">
-                        <div class="top-header pt-2 update_stream_right_align">
-                            <a class="btn update_status_btn text-white" href="{{route('dashboard')}}">Go to Stream
-                                List</a>
-                        </div>
-                    </div>--}}
                 </div>
 
                 <div class="row">
@@ -33,15 +27,17 @@
                             @include('layouts.flash-message')
                             <div class="card mb-0">
                                 <div class="card_header">
-                                    <h5 class="header_padding_adj">Enter Data</h5>
+                                    @php
+                                        $period_name = \App\Models\Period::where('id', $data ? $data['period_id'] : $input['period_id'])
+                                            ->select(DB::raw("CONCAT(name,' (',DATE_FORMAT(start_date, '%d-%m-%Y'), ' - ', DATE_FORMAT(end_date, '%d-%m-%Y'), ')') as period_name"))
+                                            ->first();
+                                    @endphp
+                                    <h5 class="header_padding_adj">Selected Period: {{$period_name->period_name}}</h5>
                                 </div>
                                 <form method="POST" action="{{ route('dashboard.stream.special_form_post') }}"
                                       class="update_stream_form" enctype="multipart/form-data" id="fields_form">
                                     <div class="row">
                                         @csrf
-
-                                        {{--{{dd($data['id'],$data['period_id'],$data['project_id'],$data['vendor_id'],$data['user_id'])}}--}}
-
                                         <input type="hidden" name="id" value="{{$data ? $data['id'] : ''}}">
                                         <input type="hidden" name="period_id" value="{{$data ? $data['period_id'] : $input['period_id']}}">
                                         <input type="hidden" name="project_id" value="{{$data ? $data['project_id'] : $input['project_id']}}">

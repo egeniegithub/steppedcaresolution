@@ -94,6 +94,15 @@
                 ->where('project_id', $form->project_id)
                 ->get();
         @endphp
+        <div class="row">
+            <div class="col-sm-12 report_summary_col">
+                <b>Narratives:</b> </br>
+                @foreach($records as $record)
+                    <p>{!! $record->narrative !!}</p>
+                @endforeach
+            </div>
+        </div>
+
         <div class="col-sm-12 col-md-12">
             <div class="table-responsive">
                 <table class="table report_sub_table report_generated_table" style="border-collapse: collapse">
