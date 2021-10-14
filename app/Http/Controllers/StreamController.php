@@ -487,7 +487,7 @@ class StreamController extends Controller
             $data = $data->toArray();
         }
 
-        return view('streams.static_form')->with(compact('data'));
+        return view('streams.static_form')->with(compact('data', 'input'));
     }
 
     public function specialFormPost(Request $request)
