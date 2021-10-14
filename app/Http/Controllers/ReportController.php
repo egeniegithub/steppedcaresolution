@@ -50,6 +50,7 @@ class ReportController extends Controller
             $form_streams = Form::where('project_id', $active_user->project_id)
                 ->where('period_id', $period_id)
                 ->with(['streams'])
+                ->orderBy('order_count', 'ASC')
                 ->paginate($perPage);
         } else {
             $form_streams = Form::when($projects, function ($query, $index) {
@@ -57,6 +58,7 @@ class ReportController extends Controller
             })
                 ->where('period_id', $period_id)
                 ->with(['streams'])
+                ->orderBy('order_count', 'ASC')
                 ->paginate($perPage);
         }
         $row_show = $perPage;
@@ -65,6 +67,7 @@ class ReportController extends Controller
         $report_data = Form::where('period_id', $period_id)
             ->where('project_id', $project_id)
             ->with(['streams'])
+            ->orderBy('order_count', 'ASC')
             ->get();
         return view("Reports.index")
             ->with(compact('form_streams', 'row_show', 'projects', 'periods', 'active_user', 'period_id', 'project_id', 'report_data'));
