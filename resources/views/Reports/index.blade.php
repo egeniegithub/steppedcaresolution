@@ -99,11 +99,6 @@
                                                                 class="btn table_btn update_btn text-white">Add Summary
                                                         </button>
                                                         @include('Reports.partials.add_form_summary')
-                                                        {{--<button type="button"
-                                                                class="btn table_btn view_report_btn text-white"
-                                                                data-toggle="modal" data-target="#exampleModal"
-                                                                onclick="getReport({{$form->id}})">View Report
-                                                        </button>--}}
                                                         <button type="button" data-toggle="modal"
                                                                 data-target="#viewReport{{$form->id}}"
                                                                 class="btn table_btn view_report_btn text-white">View Report
@@ -232,8 +227,6 @@
     </div>
 
     @include('layouts.pagination')
-
-    {{--<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>--}}
     <script>
         $("tr_inner").find('td').css('border-bottom','0');
         var table = $('.report_table');
@@ -252,114 +245,5 @@
                 $(this).find('td').css('border-bottom','0');
             }
         });
-
-    </script>
-    <script>
-
-
-        function getReport(id) {
-            $('#report-model-data').html('<p>Loading data...</p>')
-            $.ajax({
-                url: "/dashboard/reports/stream/" + id,
-                method: 'GET',
-                success: function (data) {
-                    $('#model-footer').css('display', 'block')
-                    data = data.data
-                    let streams = data.streams
-                    $('#download_id').val(data.id);
-                    let html = '';
-
-                    html = '<div class="row">'
-                        + '<div class="col-sm-12 ">'
-                        + '<img src="' + data.project.image + '" />'
-                        + '</div>'
-                        + '<div class="col-sm-12 ">'
-                        + '<p>' + data.summary + '</p>'
-                        + '</div>';
-
-                    for (let i = 0; i < streams.length; i++) {
-
-                        let get_field_values = streams[i]?.get_field_values
-
-                        html += '<div class="col-sm-12 ">'
-                            + '<p class="report_modal_dark_font">' + streams[i].name + '</p>'
-                            + '<p>' + streams[i].summary + '</p>'
-                            + '</div>'
-                            + '</div>'
-                            + '<div class="row">'
-                            + '<div class="col-sm-12 col-md-12">'
-                            + '<p class="report_modal_dark_font">Fields</p>'
-
-                        for (let j = 0; j < get_field_values.length; j++) {
-                            if (get_field_values[j].field.fieldType == 'table') {
-                                //
-                            } else if (get_field_values[j].field.fieldType == 'file') {
-                                html += '<div class="row">' +
-                                    '<div class="col-sm-12">' +
-                                    '<span style="font-weight: bold">' + get_field_values[j]?.field?.fieldName + '</span>' +
-                                    '</div>' +
-                                    '<div class="col-sm-12">' +
-                                    '<img src="/stream_answer_image/'+get_field_values[j]?.value+'" style="width: 200px; height: 200px" />'+
-                                    '</div>' +
-                                    '</div>'
-                            } else {
-                                html += '<div class="row">' +
-                                    '<div class="col-sm-3">' +
-                                    '<span style="font-weight: bold">' + get_field_values[j]?.field?.fieldName + '</span>' +
-                                    '</div>' +
-                                    '<div class="col-sm-9">' +
-                                    get_field_values[j]?.value +
-                                    '</div>' +
-                                    '</div>'
-                            }
-
-                        }
-
-
-                        html += '</div><div class="col-sm-12 col-md-12">'
-                            // + '<div class="table-responsive">'
-                            // + '<table class="table report_sub_table table-bordered">'
-                            // + '<thead>'
-                            // + '<tr>'
-                            // + '<td></td>'
-                            // + '<td>Reporting Period</td>'
-                            // + '<td>Cumulative</td>'
-                            // + '</tr>'
-                            // + '</thead>'
-                            // + '<tbody>'
-                            // + '<tr class="red_row">'
-                            // + '<td class="text-white">item</td>'
-                            // + '<td class="text-white">Apr 15 - May 14,2021</td>'
-                            // + '<td class="text-white">Apr 15,2020 - May </br>14,2021</td>'
-                            // + '</tr>'
-                            // + '<tr>'
-                            // + '<td>Unique Site Visitors</td>'
-                            // + '<td>148,125</td>'
-                            // + '<td>1,336,831</td>'
-                            // + '</tr>'
-                            // + '<tr>'
-                            // + '<td>Percentage of users who </br> completed a self assessment</br>at sign-up</td>'
-                            // + '<td>6,401</td>'
-                            // + '<td>124,266</td>'
-                            // + '</tr>'
-                            // + '<tr>'
-                            // + '<td>Percentage of users who </br> accessed at least one</td>'
-                            // + '<td>6,401</td>'
-                            // + '<td>124,266</td>'
-                            // + '</tr>'
-                            // + '</tbody>'
-                            // + '</table>'
-                            // + '</div>'
-                            + '</div>'
-                            + '</div>';
-                    }
-                    $('#report-model-data').html(html)
-                },
-                error: function (error) {
-                    console.log('error', error)
-                }
-            })
-        }
-
     </script>
 @endsection
