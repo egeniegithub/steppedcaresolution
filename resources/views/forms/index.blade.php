@@ -93,19 +93,19 @@
                                 <div class="table-responsive">
                                     <table class="table   table_margin_adj">
                                         <thead>
-                                            <tr>
-                                                <td style="width: 10%">No</td>
-                                                <td>Stream</td>
-                                                <td>Project</td>
-                                                <td>Period</td>
-                                                <td >
-                                                    <p> Order &nbsp;&nbsp; <br><span class="edit_button stream_view_icons"><i class="fas fa-pen-square" style="color:#4A90CB"></i></span></p>
+                                        <tr>
+                                            <td style="width: 10%">No</td>
+                                            <td>Stream</td>
+                                            <td>Project</td>
+                                            <td>Period</td>
+                                            <td >
+                                                <p> Order &nbsp;&nbsp; <br><span class="edit_button stream_view_icons"><i class="fas fa-pen-square" style="color:#4A90CB"></i></span></p>
 
-                                                    {{--<span type="button" class="cancel_edit_button stream_view_icons"><i style="color:#bf1f28" class="fas fa-window-close"></i></span>
-                                                    <span type="button" class="add_more_button stream_view_icons"><i style="color:#1b9c53" class="fas fa-plus-square"></i></span>--}}
-                                                </td>
-                                                <td>Actions</td>
-                                            </tr>
+                                                {{--<span type="button" class="cancel_edit_button stream_view_icons"><i style="color:#bf1f28" class="fas fa-window-close"></i></span>
+                                                <span type="button" class="add_more_button stream_view_icons"><i style="color:#1b9c53" class="fas fa-plus-square"></i></span>--}}
+                                            </td>
+                                            <td>Actions</td>
+                                        </tr>
                                         </thead>
                                         <tbody>
                                         @forelse($forms as $form)
@@ -128,7 +128,7 @@
                                                         @if($form->is_special != 1)
                                                             <button data-toggle="modal" data-target="#editFormModal{{$form->form_id}}" class="btn table_btn update_btn text-white">Update</button>
                                                         @endif
-                                                            <button type="button" class="btn table_btn delete_btn text-white delete_form_modal" data-toggle="modal" data-deleteForm="{{route('dashboard.form.delete')}}{{'?ref='.encrypt($form->form_id)}}">Delete</button>
+                                                        <button type="button" class="btn table_btn delete_btn text-white delete_form_modal" data-toggle="modal" data-deleteForm="{{route('dashboard.form.delete')}}{{'?ref='.encrypt($form->form_id)}}">Delete</button>
                                                         @if($form->is_special != 1)
                                                             <a type="button" href="{{ route('dashboard.streams', [$form->form_id]) }}" class="btn stream_button_new table_btn text-white">Forms</a>
                                                         @endif
