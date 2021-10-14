@@ -40,6 +40,8 @@
                                     <div class="row">
                                         @csrf
 
+                                        {{--{{dd($data['id'],$data['period_id'],$data['project_id'],$data['vendor_id'],$data['user_id'])}}--}}
+
                                         <input type="hidden" name="id" value="{{$data ? $data['id'] : ''}}">
                                         <input type="hidden" name="period_id" value="{{$data ? $data['period_id'] : ''}}">
                                         <input type="hidden" name="project_id" value="{{$data ? $data['project_id'] : ''}}">
@@ -52,18 +54,6 @@
                                                 <textarea type="text" class="form-control ckeditor" id="summary" name="narrative">{{$data ? $data['narrative'] : ''}}</textarea>
                                             </div>
                                         </div>
-
-                                        {{--<div class="col-lg-4 col-x-4 col-md-4 col-12">
-                                            <div class="mb-4">
-                                                <label for="period_id">What period you are reporting for ? *</label>
-                                                <select class="form-control form-select white_input" name="period_id" aria-label="Default select example" required>
-                                                    <option value="" selected>Select Period</option>
-                                                    @foreach($periods as $period)
-                                                        <option value="{{$period->id}}" {{(request()->get('period_id')) == $period->id ? "selected":""}}>{{$period->name}} ({{$period->start_date}} - {{$period->end_date}})</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>--}}
 
                                         <div class="col-lg-4 col-x-4 col-md-4 col-12">
                                             <div class="mb-4">
