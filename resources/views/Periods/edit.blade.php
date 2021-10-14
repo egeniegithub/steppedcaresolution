@@ -41,13 +41,13 @@
                                             <div class="col-lg-6 col-x-6 col-md-6 col-12">
                                                 <div class="mb-4">
                                                     <label for="startdate" class="form-label">Start Date</label>
-                                                    <input type="date" class="form-control" id="startdate" placeholder="Month 1" name="start_date" value="{{$period->start_date}}" aria-describedby="startdate" required>
+                                                    <input type="date" class="form-control" id="startdate" placeholder="Month 1" name="start_date" value="{{date('Y-m-d', strtotime($period->start_date))}}" aria-describedby="startdate" required>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 col-x-6 col-md-6 col-12">
                                                 <div class="mb-4">
                                                     <label for="EndDate" class="form-label">End Date</label>
-                                                    <input type="date" class="form-control" id="EndDate" placeholder="Month 1" name="end_date" value="{{$period->end_date}}" aria-describedby="EndDate" required>
+                                                    <input type="date" class="form-control" id="EndDate" placeholder="Month 1" name="end_date" value="{{date('Y-m-d', strtotime($period->end_date))}}" aria-describedby="EndDate" required>
                                                 </div>
                                             </div>
                                         </div>

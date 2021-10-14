@@ -25,17 +25,6 @@ class FormController extends Controller
             $period_id = $request->period_id;
         }else{
             $period_id = null;
-            /*$current_period = Period::all()->filter(function($item) {
-                if (Carbon::now()->between($item->start_date, $item->end_date)) {
-                    return $item;
-                }
-            })->first();
-
-            if (!empty($current_period)){
-                $period_id = $current_period->id;
-            }else{
-                $period_id = null;
-            }*/
         }
 
         $forms = Form::when($search_keyword, function ($query, $value) {

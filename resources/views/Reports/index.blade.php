@@ -25,7 +25,7 @@
                                     @foreach($periods as $period)
                                         <option
                                             value="{{$period->id}}" {{$period_id == $period->id ? "selected" : ""}}>{{$period->name}}
-                                            ({{$period->start_date}} - {{$period->end_date}})
+                                            ({{date('d-m-Y', strtotime($period->start_date))}} - {{date('d-m-Y', strtotime($period->end_date))}})
                                         </option>
                                     @endforeach
                                 </select>
