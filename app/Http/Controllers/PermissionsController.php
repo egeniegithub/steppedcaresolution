@@ -135,7 +135,7 @@ class PermissionsController extends Controller
 
     public function getUsers($project_id)
     {
-        $users = User::where('project_id', $project_id)->whereNotIn('role', ['Admin'])->pluck("name","id");
+        $users = User::where('project_id', $project_id)->whereNull('vendor_id')->whereNotIn('role', ['Admin'])->pluck("name","id");
         return response()->json($users);
     }
 
