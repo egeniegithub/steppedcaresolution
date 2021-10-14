@@ -15,7 +15,7 @@
                     <div class="col-sm-6 col-md-4 col-lg-4 px-0 update_stream_mid">
                         <div class="top-header pt-2">
                             <h3 class="margin-page-title">
-                                status : <span class="blue_span"></span>
+                                status: <span class="blue_span">{{$data ? $data['status'] : 'Draft'}}</span>
                             </h3>
                         </div>
                     </div>
@@ -122,12 +122,11 @@
                                             <input type="submit" class="btn normal_btn save_and_submit text-white"
                                                    name="submit"
                                                    value="Save and Submit"/>
-                                            {{--@if(Auth::user()->role=="User")
+                                            @if(Auth::user()->role=="User")
                                                 <a type="button" href="{{route('dashboard')}}" class="btn normal_btn cancel_modal_btn text-white">Cancel</a>
                                             @else
                                                 <a type="button" href="{{route('dashboard.streams', 0)}}" class="btn normal_btn cancel_modal_btn text-white">Cancel</a>
-                                            @endif--}}
-
+                                            @endif
                                         </div>
                                     </div>
                                 </form>
