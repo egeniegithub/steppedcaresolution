@@ -128,7 +128,7 @@ class UserController extends Controller
             });
             return redirect()->route('dashboard.users')->with('success', 'Member created successfully!');
         } catch (Exception $e) {
-            return back()->with('error', 'Issue with the email, But do not worry Member created successfully');
+            return back()->with('warning', 'Issue with the email, But do not worry Member created successfully');
         }
     }
 
