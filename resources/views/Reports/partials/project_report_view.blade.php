@@ -107,15 +107,15 @@
                                     @endforeach
                                     <tr>
                                         <td colspan="2"></td>
-                                        <td>{{number_format($forum_participants, 2)}}</td>
-                                        <td>{{number_format($unique_visitors, 2)}}</td>
-                                        <td>{{number_format($two_or_more_users, 2)}}</td>
-                                        <td>{{number_format($three_or_more_users, 2)}}</td>
-                                        <td>{{number_format($downloaded_resources, 2)}}</td>
-                                        <td>{{number_format($self_help_resources, 2)}}</td>
-                                        <td>{{number_format($demographic_data, 2)}}</td>
-                                        <td>{{number_format($user_satisfaction, 2)}}</td>
-                                        <td>{{number_format($outcomes_data, 2)}}</td>
+                                        <td>{{$forum_participants}}</td>
+                                        <td>{{$unique_visitors}}</td>
+                                        <td>{{$two_or_more_users}}</td>
+                                        <td>{{$three_or_more_users}}</td>
+                                        <td>{{$downloaded_resources}}</td>
+                                        <td>{{$self_help_resources}}</td>
+                                        <td>{{$demographic_data}}</td>
+                                        <td>{{$user_satisfaction}}</td>
+                                        <td>{{$outcomes_data}}</td>
                                     </tr>
                                     </tbody>
                                 </table>
