@@ -17,7 +17,7 @@ if (!function_exists('users_roles')) {
     function users_roles()
     {
         //
-        $roles = ["Admin", "Manager", "User/Vendor"];
+        $roles = ["Admin", "Manager", "User"];
         //
         return  $roles;
     }
