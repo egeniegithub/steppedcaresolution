@@ -39,7 +39,7 @@
                         <div class="col-sm-12 report_summary_col">
                             <b>Narratives:</b> </br>
                             @foreach($records as $record)
-                                <p>{!! $record->narrative !!}</p>
+                                <span class="report_over_flow_fix">{!! $record->narrative !!}</span>
                             @endforeach
                         </div>
                     </div>
