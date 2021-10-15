@@ -67,7 +67,7 @@
                                     <table class="table  period_summary_table  table_margin_adj">
                                         <thead>
                                         <tr>
-                                            <td> Form</td>
+                                            <td> Stream</td>
                                             <td> Status</td>
                                         </tr>
                                         </thead>
