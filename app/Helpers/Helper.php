@@ -72,16 +72,32 @@ if (!function_exists('updated_BY')) {
 if (!function_exists('formStatus')) {
     function formStatus($form_id)
     {
-        $streams = \App\Models\Stream::where('form_id', $form_id)->groupBy('status')->get();
+        $form = \App\Models\Form::where('id', $form_id)->first();
+        if ($form->is_special == 1){
+            $statuses = \App\Models\SpecialForm::where('period_id', $form->period_id)->where('project_id', $form->project_id)->groupBy('status')->get();
 
-        if ($streams->count() == 1){
-            if ($streams[0]->status == 'Published'){
-                return 'Completed';
+            //dd($statuses);
+            if ($statuses->count() == 1){
+                if ($statuses[0]->status == 'Published'){
+                    return 'Completed';
+                }else{
+                    return 'In-progress';
+                }
             }else{
                 return 'In-progress';
             }
         }else{
-            return 'In-progress';
+            $streams = \App\Models\Stream::where('form_id', $form_id)->groupBy('status')->get();
+
+            if ($streams->count() == 1){
+                if ($streams[0]->status == 'Published'){
+                    return 'Completed';
+                }else{
+                    return 'In-progress';
+                }
+            }else{
+                return 'In-progress';
+            }
         }
     }
 }

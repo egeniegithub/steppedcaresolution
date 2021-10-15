@@ -82,10 +82,11 @@
                                         <tbody>
                                         @forelse($form_streams as $form)
                                             <tr class=" clickable collapsed">
-                                                <td data-toggle="collapse" class="clickable"
-                                                    data-target="#accordion_{{$loop->iteration}}"><img
-                                                        class="forward_icon "
-                                                        src="{{asset('assets/images/forward_icon.PNG')}}"/></td>
+                                                <td data-toggle="collapse" class="clickable" data-target="#accordion_{{$loop->iteration}}">
+                                                    @if($form->is_special != 1)
+                                                        <img class="forward_icon " src="{{asset('assets/images/forward_icon.PNG')}}"/>
+                                                    @endif
+                                                </td>
                                                 <td data-toggle="collapse" data-target="#accordion_{{$loop->iteration}}">
                                                     {{$form->name}} {{$form->is_special == 1 ? "(Special)" : ""}}
                                                 </td>
@@ -107,57 +108,59 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <td style="padding:0px"></td>
-                                                <td colspan="3" style="padding:0px  !important">
-                                                    <div id="accordion_{{$loop->iteration}}" class="collapse">
-                                                        <table class="table sub_table table_margin_adj">
-                                                            <thead style="background-color: #EFEFEF;">
-                                                            <tr>
-                                                                <td style="font-weight: 700;color:black  !important;width:39%">
-                                                                    Form
-                                                                </td>
-                                                                <td style="font-weight: 700;color:black !important">
-                                                                    Status
-                                                                </td>
-                                                                <td style="font-weight: 700;color:black !important">
-                                                                    Actions
-                                                                </td>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            @forelse($form->streams as $stream)
-                                                                <tr class="inner_tr">
-                                                                    <td>{{$stream->name}}</td>
-                                                                    <td>{{$stream->status}}</td>
-                                                                    <td>
-                                                                        <div class="btn-group" role="group"
-                                                                             aria-label="Basic example">
-                                                                            <button type="button" data-toggle="modal"
-                                                                                    data-target="#changeStatus{{$stream->id}}"
-                                                                                    class="btn update_status_btn table_btn text-white">
-                                                                                Update Status
-                                                                            </button>
-                                                                            <button type="button" data-toggle="modal"
-                                                                                    data-target="#addStreamSummary{{$stream->id}}"
-                                                                                    class="btn table_btn update_btn text-white">
-                                                                                Add Summary
-                                                                            </button>
-                                                                            @include('Reports.partials.add_stream_summary')
-                                                                            @include('Reports.partials.change_status')
-                                                                        </div>
+                                            @if($form->is_special != 1)
+                                                <tr>
+                                                    <td style="padding:0px"></td>
+                                                    <td colspan="3" style="padding:0px  !important">
+                                                        <div id="accordion_{{$loop->iteration}}" class="collapse">
+                                                            <table class="table sub_table table_margin_adj">
+                                                                <thead style="background-color: #EFEFEF;">
+                                                                <tr>
+                                                                    <td style="font-weight: 700;color:black  !important;width:39%">
+                                                                        Form
+                                                                    </td>
+                                                                    <td style="font-weight: 700;color:black !important">
+                                                                        Status
+                                                                    </td>
+                                                                    <td style="font-weight: 700;color:black !important">
+                                                                        Actions
                                                                     </td>
                                                                 </tr>
-                                                            @empty
-                                                                <tr>
-                                                                    <td colspan="3">No Form Added</td>
-                                                                </tr>
-                                                            @endforelse
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                @forelse($form->streams as $stream)
+                                                                    <tr class="inner_tr">
+                                                                        <td>{{$stream->name}}</td>
+                                                                        <td>{{$stream->status}}</td>
+                                                                        <td>
+                                                                            <div class="btn-group" role="group"
+                                                                                 aria-label="Basic example">
+                                                                                <button type="button" data-toggle="modal"
+                                                                                        data-target="#changeStatus{{$stream->id}}"
+                                                                                        class="btn update_status_btn table_btn text-white">
+                                                                                    Update Status
+                                                                                </button>
+                                                                                <button type="button" data-toggle="modal"
+                                                                                        data-target="#addStreamSummary{{$stream->id}}"
+                                                                                        class="btn table_btn update_btn text-white">
+                                                                                    Add Summary
+                                                                                </button>
+                                                                                @include('Reports.partials.add_stream_summary')
+                                                                                @include('Reports.partials.change_status')
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                @empty
+                                                                    <tr>
+                                                                        <td colspan="3">No Form Added</td>
+                                                                    </tr>
+                                                                @endforelse
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endif
                                         @empty
                                             <tr>
                                                 <td colspan="4">No Stream Added</td>
