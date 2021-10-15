@@ -137,7 +137,7 @@
                                             <div class="mb-4">
                                                 <label for="Type" class="form-label">Vendor</label>
                                                 <select class="form-control form-select" name="vendor_id" id="vendor_id" aria-label="Default select example">
-                                                    <option selected disabled>Select Vendor</option>
+                                                    <option value="">Select Vendor</option>
                                                     @foreach($vendors as $key=>$data)
                                                         <option value="{{$data->id}}" {{$user->vendor_id == $data->id ? "selected" :""}}>{{$data->name}}</option>
                                                     @endforeach

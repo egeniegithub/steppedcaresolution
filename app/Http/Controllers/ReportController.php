@@ -234,17 +234,17 @@ class ReportController extends Controller
         $records = SpecialForm::where('period_id', $form->period_id)->where('project_id', $form->project_id)->get();
 
         $columns_array = array(
-            'Which organization you are reporting for ?',
-            'What period you are reporting for ?',
-            'How many participants did you have in human led / moderated forums ?',
-            'How many total registrations / unique visitors did you have for the period ?',
-            'How many users accessed the application two or more times ?',
-            'How many users accessed the application three or more times ?',
-            'How many times were resources downloaded from yur site or application ? (If applicable)',
-            'How many times were self-help resources accessed on your site or application ? (If applicable)',
-            'Please provide demographic data (gender, age and location) for the period and cumulative date.',
-            'What was the user satisfaction score for the period ?',
-            'Is there any outcomes data for the period that you would like included in the report ?',
+            'Organization',
+            'Period',
+            'Moderated Forum Participants',
+            'Registrations / Unique Visitors',
+            'Users Accessing 2X or more',
+            'Users Accessing 3X or more',
+            'Resources Download',
+            'Self-Help Resources Accessed',
+            'Demographic Data',
+            'User Satisfaction',
+            'Outcomes Data',
         );
 
         $forum_participants = 0;
@@ -270,7 +270,7 @@ class ReportController extends Controller
             $outcomes_data += $record->outcomes_data;
 
             $period_name = \App\Models\Period::where('id', $record->period_id)
-                ->select(DB::raw("CONCAT(name,' (',start_date, ' - ', end_date, ')') as period_name"))
+                ->select(DB::raw("CONCAT(name,' (',DATE_FORMAT(start_date, '%d-%m-%Y'), ' - ', DATE_FORMAT(end_date, '%d-%m-%Y'), ')') as period_name"))
                 ->first();
 
             $single_array = array(

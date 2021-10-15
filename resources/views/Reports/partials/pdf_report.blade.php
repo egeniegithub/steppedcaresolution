@@ -108,17 +108,17 @@
                 <table class="table report_sub_table report_generated_table" style="border-collapse: collapse">
                     <thead>
                     <tr class="red_row">
-                        <td>Which organization you are reporting for ?</td>
-                        <td>What period you are reporting for ?</td>
-                        <td>How many participants did you have in human led / moderated forums ?</td>
-                        <td>How many total registrations / unique visitors did you have for the period ?</td>
-                        <td>How many users accessed the application two or more times ?</td>
-                        <td>How many users accessed the application three or more times ?</td>
-                        <td>How many times were resources downloaded from yur site or application ? (If applicable)</td>
-                        <td>How many times were self-help resources accessed on your site or application ? (If applicable)</td>
-                        <td>Please provide demographic data (gender, age and location) for the period and cumulative date.</td>
-                        <td>What was the user satisfaction score for the period ?</td>
-                        <td>Is there any outcomes data for the period that you would like included in the report ?</td>
+                        <td>Organization</td>
+                        <td>Period</td>
+                        <td>Moderated Forum Participants</td>
+                        <td>Registrations / Unique Visitors</td>
+                        <td>Users Accessing 2X or more</td>
+                        <td>Users Accessing 3X or more</td>
+                        <td>Resources Download</td>
+                        <td>Self-Help Resources Accessed</td>
+                        <td>Demographic Data</td>
+                        <td>User Satisfaction</td>
+                        <td>Outcomes Data</td>
                     </tr>
                     </thead>
                     <tbody>

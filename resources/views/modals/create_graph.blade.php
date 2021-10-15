@@ -22,7 +22,9 @@
                                 <select class="form-control white_input" id="start_period_id" name="start_period_id" required="required">
                                     <option value="">Select Period</option>
                                     @foreach($periods as $period)
-                                        <option value="{{$period->id}}">{{$period->name}} ({{$period->start_date}} - {{$period->end_date}})</option>
+                                        <option value="{{$period->id}}">{{$period->name}}
+                                            ({{date('d-m-Y', strtotime($period->start_date))}} - {{date('d-m-Y', strtotime($period->end_date))}})
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -42,9 +44,9 @@
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div class="form-group">
-                                <label for="add-forms">Form *</label>
+                                <label for="add-forms">Stream *</label>
                                 <select class="form-control white_input" id="form_id" onchange="getStreams(this.value)" name="form_id" required>
-                                    <option value="">Select Form</option>
+                                    <option value="">Select Stream</option>
                                 </select>
                             </div>
                         </div>
@@ -52,9 +54,9 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-6">
                             <div class="form-group">
-                                <label for="add-streams">Stream *</label>
+                                <label for="add-streams">Form *</label>
                                 <select class="form-control white_input" id="add-streams" onchange="getFields(this.value)" name="stream_id" required>
-                                    <option value="">Select Stream</option>
+                                    <option value="">Select Form</option>
                                 </select>
                             </div>
                         </div>
