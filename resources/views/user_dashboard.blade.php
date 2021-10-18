@@ -39,8 +39,8 @@
                                     <table class="table user-stream-table table_margin_adj">
                                         <thead>
                                         <tr>
-                                            <td>Stream Name</td>
                                             <td>Form</td>
+                                            <td>Stream</td>
                                             <td>Project</td>
                                             <td>Status</td>
                                             <td>Actions</td>

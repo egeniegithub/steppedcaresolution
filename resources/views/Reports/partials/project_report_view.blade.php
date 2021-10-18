@@ -106,7 +106,7 @@
                                         </tr>
                                     @endforeach
                                     <tr>
-                                        <td colspan="2"></td>
+                                        <td colspan="2">Total</td>
                                         <td>{{$forum_participants}}</td>
                                         <td>{{$unique_visitors}}</td>
                                         <td>{{$two_or_more_users}}</td>
