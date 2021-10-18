@@ -291,16 +291,16 @@ class ReportController extends Controller
 
         $summed_data = array(
             '',
-            '',
-            number_format($forum_participants, 2),
-            number_format($unique_visitors, 2),
-            number_format($two_or_more_users, 2),
-            number_format($three_or_more_users, 2),
-            number_format($downloaded_resources, 2),
-            number_format($self_help_resources, 2),
-            number_format($demographic_data, 2),
-            number_format($user_satisfaction, 2),
-            number_format($outcomes_data, 2)
+            'Total',
+            $forum_participants,
+            $unique_visitors,
+            $two_or_more_users,
+            $three_or_more_users,
+            $downloaded_resources,
+            $self_help_resources,
+            $demographic_data,
+            $user_satisfaction,
+            $outcomes_data
         );
         array_push($final_rows_array, $summed_data);
 
