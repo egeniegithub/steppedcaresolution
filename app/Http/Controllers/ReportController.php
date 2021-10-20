@@ -227,7 +227,6 @@ class ReportController extends Controller
 
     public function generateStaticCsv($form_id)
     {
-        //dd($form_id);
         $form = Form::where('id', $form_id)->first();
         $final_rows_array = array();
 

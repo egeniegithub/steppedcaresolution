@@ -18,6 +18,19 @@
                                 <label for="newform" class="form-label">Create New Stream *</label>
                                 <input type="text" class="form-control" id="newform" name="name" value="{{$form->form_name}}" required placeholder="Month 1" aria-describedby="newform">
                             </div>
+
+                            <div class="mb-4">
+                                <label for="FormGroup" class="form-label">Select Period *</label>
+                                <select class="form-control form-select" name="period_id" aria-label="Default select example" required>
+                                    <option value="">Select Period</option>
+                                    @foreach($periods as $period)
+                                        <option value="{{$period->id}}" {{$form->period_id == $period->id ? "selected" : ""}}>{{$period->name}}
+                                            ({{date('d-m-Y', strtotime($period->start_date))}} - {{date('d-m-Y', strtotime($period->end_date))}})
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                             @if($active_user->role != 'Admin')
                                 <input type="hidden" name="project_id" value="{{$active_user->project_id}}">
                             @else

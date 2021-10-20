@@ -6,7 +6,6 @@
 <div class="pcoded-wrapper">
     <div class="pcoded-content">
         <div class="container">
-
             <div class="row blue-border-bottom">
                 <div class="col-sm-12 col-md-12 px-0">
                     <div class="top-header pt-2 ">
@@ -17,7 +16,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="table_div_padding">
-                    @include('layouts.flash-message')
+                        @include('layouts.flash-message')
                         <form method="POST" action="{{ route('dashboard.user.update') }}" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="id" value="{{$user->id}}">
@@ -133,7 +132,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-lg-4 col-xs-12 col-md-4 col-12">
+                                        <div class="col-lg-4 col-xs-12 col-md-4 col-12 hide_show">
                                             <div class="mb-4">
                                                 <label for="Type" class="form-label">Vendor</label>
                                                 <select class="form-control form-select" name="vendor_id" id="vendor_id" aria-label="Default select example">
@@ -144,7 +143,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 col-x-6 col-md-6 col-12 stream_update_title">
+                                        <div class="col-lg-6 col-x-6 col-md-6 col-12 stream_update_title hide_show">
                                             <div>
                                                 <b data-toggle="modal" data-target="#exampleModal"><a class="add_icon" style="cursor:pointer"><span><i class="fas fa-plus-circle"></i></span><span> Add Vendor</span></a></b>
                                             </div>
@@ -173,11 +172,6 @@
                                         <p class="user_details_font"> Updated By: {{updated_BY($user->updatedBy)}}</p>
                                         </div>
                                     </div>
-                                    {{--<div class="row pt-4">
-                                        <div class="col-lg-2 col-xl-2 col-md-4 col-sm-6 col-12">
-                                            <p class="user_details_font">Last Login: {{\Carbon\Carbon::parse($user->last_login)}}</p>
-                                        </div>
-                                    </div>--}}
                                 </div>
                             </div>
                             <button class="btn btn-primary">Save</button>
@@ -190,5 +184,23 @@
         </div>
     </div>
 </div>
-</div>
+<script>
+    function createVendor(){
+        document.getElementById("js_add_vendor").submit(function(){
+
+        });
+    }
+
+    $('select#role').change(function(){
+        $(this).find("option:selected").each(function(){
+            var selected_option = $(this).attr("value");
+
+            if(selected_option === 'Vendor'){
+                $(".hide_show").show();
+            }else{
+                $(".hide_show").hide();
+            }
+        });
+    }).change();
+</script>
 @endsection

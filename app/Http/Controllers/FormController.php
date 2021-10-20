@@ -46,7 +46,7 @@ class FormController extends Controller
                 }
             })
 
-            ->select('forms.id AS form_id', 'forms.name as form_name', 'forms.order_count', 'p.name as project_name', 'p.id as project_id', 'pe.name as period_name', 'is_special')
+            ->select('forms.id AS form_id', 'forms.name as form_name', 'forms.order_count', 'p.name as project_name', 'p.id as project_id', 'forms.period_id as period_id', 'pe.name as period_name', 'is_special')
             ->orderBy('project_id', 'DESC')
             ->orderBy('order_count', 'ASC')
             ->paginate($perPage);
@@ -76,11 +76,11 @@ class FormController extends Controller
                 }
             })->first();
 
-            if (!empty($current_period)){
+            /*if (!empty($current_period)){
                 $period_id = $current_period->id;
             }else{
                 return back()->with('error', 'Add period which contains current date before adding stream!');
-            }
+            }*/
 
             $input = $request->except('_token');
             if ($request->exists('is_special')){
@@ -90,9 +90,9 @@ class FormController extends Controller
             }
 
             //previous order count
-            $previous_order_count = Form::where('period_id', $period_id)->where('project_id', $input['project_id'])->max('order_count');
+            $previous_order_count = Form::where('period_id', $input['period_id'])->where('project_id', $input['project_id'])->max('order_count');
             $input['order_count'] = $previous_order_count+1;
-            $input['period_id'] = $period_id;
+            $input['period_id'] = $input['period_id'] ?? $current_period;
             $input['created_by'] = auth()->user()->id;
 
             $check_is_special = Form::where('project_id', $input['project_id'])->where('period_id', $input['period_id'])->where('is_special', 1)->count();
@@ -111,8 +111,8 @@ class FormController extends Controller
         return back()->with('success', 'Stream created successfully!');
     }
 
-    public function update(Request $request){
-
+    public function update(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
         ]);
@@ -122,7 +122,7 @@ class FormController extends Controller
         }
 
         try {
-            $input = $request->only('name', 'project_id');
+            $input = $request->except('_token');
             $input['updated_by'] = auth()->user()->id;
 
             Form::where('id', $request->id)->update($input);
