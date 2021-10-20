@@ -250,11 +250,6 @@
                                                                             </tr>
                                                                         @endif
                                                                     @endforeach
-                                                                    {{--<tr>
-                                                                        <td colspan="{{$column_count}}">
-
-                                                                        </td>
-                                                                    </tr>--}}
                                                                     </tbody>
                                                                 </table>
                                                                 <a href="{{route('dashboard.reports.stream.csv_download', $field->id)}}" class="btn btn-primary fa-pull-right">CSV Download</a>
