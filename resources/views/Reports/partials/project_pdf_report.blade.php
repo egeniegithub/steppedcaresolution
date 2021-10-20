@@ -79,14 +79,15 @@
         text-align: center !important;
         font-size:10px !important;
     }
-
     .red_row {
         background-color: #BD2127;
         color: white;
     }
-
     .text-center {
         text-align: center;
+    }
+    .all_pdf_borders {
+        border: 2px solid black
     }
 </style>
 <div class="">
@@ -124,13 +125,13 @@
                     <table class="table report_sub_table report_generated_table" style="border-collapse: collapse">
                         <thead>
                         <tr class="red_row">
-                            <td></td>
-                            <td>Period</td>
-                            <td>Registrations</td>
-                            <td>Users Accessing 2X or more</td>
-                            <td>Users Accessing 3X or more</td>
-                            <td>Moderated Forum Participants</td>
-                            <td>Self-Help Resources Accessed</td>
+                            <td class="all_pdf_borders"></td>
+                            <td class="all_pdf_borders">Period</td>
+                            <td class="all_pdf_borders">Registrations</td>
+                            <td class="all_pdf_borders">Users Accessing 2X or more</td>
+                            <td class="all_pdf_borders">Users Accessing 3X or more</td>
+                            <td class="all_pdf_borders">Moderated Forum Participants</td>
+                            <td class="all_pdf_borders">Self-Help Resources Accessed</td>
                         </tr>
                         </thead>
                         <tbody>
@@ -154,22 +155,22 @@
                                 $self_help_resources += $record->self_help_resources;
                             @endphp
                             <tr class="white_space">
-                                <td>{{\App\Models\Vendor::where('id', $record->vendor_id)->value('name')}}</td>
-                                <td>{{$period_name->period_name}}</td>
-                                <td>{{$record->unique_visitors}}</td>
-                                <td>{{$record->two_or_more_users}}</td>
-                                <td>{{$record->three_or_more_users}}</td>
-                                <td>{{$record->forum_participants}}</td>
-                                <td>{{$record->self_help_resources}}</td>
+                                <td class="all_pdf_borders">{{\App\Models\Vendor::where('id', $record->vendor_id)->value('name')}}</td>
+                                <td class="all_pdf_borders">{{$period_name->period_name}}</td>
+                                <td class="all_pdf_borders">{{$record->unique_visitors}}</td>
+                                <td class="all_pdf_borders">{{$record->two_or_more_users}}</td>
+                                <td class="all_pdf_borders">{{$record->three_or_more_users}}</td>
+                                <td class="all_pdf_borders">{{$record->forum_participants}}</td>
+                                <td class="all_pdf_borders">{{$record->self_help_resources}}</td>
                             </tr>
                         @endforeach
                         <tr>
-                            <td colspan="2">Total</td>
-                            <td>{{$unique_visitors}}</td>
-                            <td>{{$two_or_more_users}}</td>
-                            <td>{{$three_or_more_users}}</td>
-                            <td>{{$forum_participants}}</td>
-                            <td>{{$self_help_resources}}</td>
+                            <td class="all_pdf_borders" colspan="2">Total</td>
+                            <td class="all_pdf_borders">{{$unique_visitors}}</td>
+                            <td class="all_pdf_borders">{{$two_or_more_users}}</td>
+                            <td class="all_pdf_borders">{{$three_or_more_users}}</td>
+                            <td class="all_pdf_borders">{{$forum_participants}}</td>
+                            <td class="all_pdf_borders">{{$self_help_resources}}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -269,14 +270,14 @@
                                                                         $check_cumulative = \App\Models\StreamField::where('id', $table->stream_field_id)->value('isCumulative');
                                                                     @endphp
                                                                     @if($loop->iteration == 1)
-                                                                        <td style="font-size:10px"></td>
+                                                                        <td class="all_pdf_borders" style="font-size:10px"></td>
                                                                     @endif
-                                                                    <td class="text-white;font-size:10px">
+                                                                    <td class="all_pdf_borders">
                                                                         {{$table->name ?? ''}}
                                                                     </td>
 
                                                                     @if($check_cumulative == 'yes')
-                                                                        <td class="text-white;font-size:10px">
+                                                                        <td class="all_pdf_borders">
                                                                             {{$table->name ?? ''}} (Cumulative)
                                                                         </td>
                                                                     @endif
@@ -290,14 +291,14 @@
                                                                 @if($loop->iteration == 1)
                                                                     <tr>
                                                                         @for($i=0; $i<$column_count; $i++)
-                                                                            <td></td>
+                                                                            <td class="all_pdf_borders"></td>
                                                                         @endfor
                                                                     </tr>
                                                                 @endif
                                                                 <tr>
-                                                                    <td>{{$table->name}}</td>
+                                                                    <td class="all_pdf_borders">{{$table->name}}</td>
                                                                     @for($i=0; $i<$column_count; $i++)
-                                                                        <td>
+                                                                        <td class="all_pdf_borders">
                                                                             @php
                                                                                 $value = json_decode($table->value);
                                                                             @endphp
@@ -314,7 +315,7 @@
                                                                             $check_cumulative = \App\Models\StreamField::where('id', $table->stream_field_id)->value('isCumulative');
                                                                         @endphp
                                                                         @if($check_cumulative == 'yes')
-                                                                            <td>
+                                                                            <td class="all_pdf_borders">
                                                                                 @php
                                                                                     $previous_cumulative_grid = \App\Models\StreamFieldGrid::where('id', $table->previous_id)->value('cumulative_value');
                                                                                 @endphp
