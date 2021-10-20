@@ -36,7 +36,7 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        if(Auth::user()->role=="User"){
+        if(Auth::user()->role == "User" || Auth::user()->role=="Vendor"){
             $active_user = User::where('id', auth()->user()->id)->first();
             $perPage = $request->show_rows ?? 10;
             $period_id = $request->period_id ?? '';

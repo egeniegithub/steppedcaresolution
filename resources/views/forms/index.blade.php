@@ -23,17 +23,31 @@
                                     <div class="container">
                                         <h4>Create Stream</h4>
                                         <div class="row report_row_top">
-                                            <div class="col-xl-4 col-lg-4 col-md-4 col-12">
+                                            <div class="col-xl-3 col-lg-3 col-md-3 col-12">
                                                 <div class="mb-3">
                                                     <label for="newform" class="form-label">Name *</label>
                                                     <input type="text" class="form-control" id="newform" name="name" value="{{ old('name') }}" required placeholder="Month 1" aria-describedby="newform">
                                                 </div>
                                             </div>
 
+                                            <div class="col-xl-3 col-lg-3 col-md-3 col-12">
+                                                <div class="mb-3">
+                                                    <label for="FormGroup" class="form-label">Select Period *</label>
+                                                    <select class="form-control form-select" name="period_id" id="period_id" aria-label="Default select example" required>
+                                                        <option value="">Select Period</option>
+                                                        @foreach($periods as $period)
+                                                            <option value="{{$period->id}}">{{$period->name}}
+                                                                ({{date('d-m-Y', strtotime($period->start_date))}} - {{date('d-m-Y', strtotime($period->end_date))}})
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
                                             @if($active_user->role != 'Admin')
                                                 <input type="hidden" name="project_id" value="{{$active_user->project_id}}">
                                             @else
-                                                <div class="col-xl-4 col-lg-4 col-md-4 col-12">
+                                                <div class="col-xl-3 col-lg-3 col-md-3 col-12">
                                                     <div class="mb-3">
                                                         <label for="FormGroup" class="form-label">Select Project *</label>
                                                         <select class="form-control form-select" name="project_id" id="project_id" aria-label="Default select example" required>
@@ -52,9 +66,8 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                            <div class="col-xl-2 col-lg-2 col-md-2 col-12">
-                                                <label for="newform" class="form-label hide-on-mobile" style="visibility: hidden;display: block;">Create New Stream</label>
-                                                <button class="btn btn-primary">Save</button>
+                                            <div class="col-xl-1 col-lg-1 col-md-1 col-12">
+                                                <button class="btn btn-primary" style="margin-top: 25px">Save</button>
                                             </div>
                                         </div>
                                     </div>

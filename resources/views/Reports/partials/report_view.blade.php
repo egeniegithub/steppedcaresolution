@@ -49,30 +49,22 @@
                             <table class="table report_sub_table report_generated_table table-bordered">
                                 <thead>
                                 <tr class="red_row">
-                                    <td>Organization</td>
+                                    <td></td>
                                     <td>Period</td>
-                                    <td>Moderated Forum Participants</td>
-                                    <td>Registrations / Unique Visitors</td>
+                                    <td>Registrations</td>
                                     <td>Users Accessing 2X or more</td>
                                     <td>Users Accessing 3X or more</td>
-                                    <td>Resources Download</td>
+                                    <td>Moderated Forum Participants</td>
                                     <td>Self-Help Resources Accessed</td>
-                                    <td>Demographic Data</td>
-                                    <td>User Satisfaction</td>
-                                    <td>Outcomes Data</td>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @php
-                                    $forum_participants = 0;
                                     $unique_visitors = 0;
                                     $two_or_more_users = 0;
                                     $three_or_more_users = 0;
-                                    $downloaded_resources = 0;
+                                    $forum_participants = 0;
                                     $self_help_resources = 0;
-                                    $demographic_data = 0;
-                                    $user_satisfaction = 0;
-                                    $outcomes_data = 0;
                                 @endphp
                                 @foreach($records as $record)
                                     @php
@@ -80,41 +72,29 @@
                                             ->select(DB::raw("CONCAT(name,' (',DATE_FORMAT(start_date, '%d-%m-%Y'), ' - ', DATE_FORMAT(end_date, '%d-%m-%Y'), ')') as period_name"))
                                             ->first();
 
-                                        $forum_participants += $record->forum_participants;
                                         $unique_visitors += $record->unique_visitors;
                                         $two_or_more_users += $record->two_or_more_users;
                                         $three_or_more_users += $record->three_or_more_users;
-                                        $downloaded_resources += $record->downloaded_resources;
+                                        $forum_participants += $record->forum_participants;
                                         $self_help_resources += $record->self_help_resources;
-                                        $demographic_data += $record->demographic_data;
-                                        $user_satisfaction += $record->user_satisfaction;
-                                        $outcomes_data += $record->outcomes_data;
                                     @endphp
                                     <tr class="white_space">
                                         <td>{{\App\Models\Vendor::where('id', $record->vendor_id)->value('name')}}</td>
                                         <td>{{$period_name->period_name}}</td>
-                                        <td>{{$record->forum_participants}}</td>
                                         <td>{{$record->unique_visitors}}</td>
                                         <td>{{$record->two_or_more_users}}</td>
                                         <td>{{$record->three_or_more_users}}</td>
-                                        <td>{{$record->downloaded_resources}}</td>
+                                        <td>{{$record->forum_participants}}</td>
                                         <td>{{$record->self_help_resources}}</td>
-                                        <td>{{$record->demographic_data}}</td>
-                                        <td>{{$record->user_satisfaction}}</td>
-                                        <td>{{$record->outcomes_data}}</td>
                                     </tr>
                                 @endforeach
                                 <tr>
                                     <td colspan="2">Total</td>
-                                    <td>{{$forum_participants}}</td>
                                     <td>{{$unique_visitors}}</td>
                                     <td>{{$two_or_more_users}}</td>
                                     <td>{{$three_or_more_users}}</td>
-                                    <td>{{$downloaded_resources}}</td>
+                                    <td>{{$forum_participants}}</td>
                                     <td>{{$self_help_resources}}</td>
-                                    <td>{{$demographic_data}}</td>
-                                    <td>{{$user_satisfaction}}</td>
-                                    <td>{{$outcomes_data}}</td>
                                 </tr>
                                 </tbody>
                             </table>

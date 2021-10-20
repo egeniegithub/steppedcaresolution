@@ -123,7 +123,7 @@
                                                     <select class="form-control form-select" id="role" name="role" aria-label="Default select example" required>
                                                         <option selected disabled>Select Type</option>
                                                         @foreach(users_roles() as $data)
-                                                        <option value="{{ $data}}" {{old('role')== $data ? "selected" :""}}>{{ $data}}</option>
+                                                            <option value="{{$data}}" {{old('role')== $data ? "selected" :""}}>{{ $data}}</option>
                                                         @endforeach
 
                                                     </select>
@@ -135,12 +135,12 @@
                                                     <select class="form-control form-select" name="status" id="status" aria-label="Default select example" required>
                                                         <option selected disabled>Select Status</option>
                                                         @foreach(user_status() as $data)
-                                                        <option value="{{ $data}}" {{old('status')== $data ? "selected" :""}}>{{ $data}}</option>
+                                                            <option value="{{ $data}}" {{old('status')== $data ? "selected" :""}}>{{ $data}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-4 col-xs-12 col-md-4 col-12">
+                                            <div class="col-lg-4 col-xs-12 col-md-4 col-12 hide_show">
                                                 <div class="mb-4">
                                                     <label for="Type" class="form-label">Vendor</label>
                                                     <select class="form-control form-select" name="vendor_id" id="vendor_id" aria-label="Default select example">
@@ -151,7 +151,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6 col-x-6 col-md-6 col-12 stream_update_title">
+                                            <div class="col-lg-6 col-x-6 col-md-6 col-12 stream_update_title hide_show">
                                                 <div>
                                                     <b data-toggle="modal" data-target="#exampleModal"><a class="add_icon" style="cursor:pointer"><span><i class="fas fa-plus-circle"></i></span><span> Add Vendor</span></a></b>
                                                 </div>
@@ -183,5 +183,17 @@
             var file = $('#file-upload')[0].files[0].name;
             $(this).prev('label').text(file);
         });
+
+        $('select#role').change(function(){
+            $(this).find("option:selected").each(function(){
+                var selected_option = $(this).attr("value");
+
+                if(selected_option === "Vendor"){
+                    $(".hide_show").show();
+                }else{
+                    $(".hide_show").hide();
+                }
+            });
+        }).change();
     </script>
 @endsection
