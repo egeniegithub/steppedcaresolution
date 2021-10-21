@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 class ProjectController extends Controller
 {
@@ -14,6 +15,10 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $search_keyword = $request->input('keyword') ?? null;
         $perPage = $request->show_rows ?? 10;
 
@@ -36,6 +41,10 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'image' => 'required|image|mimes:png,jpg,JPG,jpeg|max:2024',
@@ -68,6 +77,10 @@ class ProjectController extends Controller
      */
     public function update(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         //dd($request);
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
@@ -100,6 +113,10 @@ class ProjectController extends Controller
      */
     public function delete(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $id = decrypt($request->ref);
         project::where('id', $id)->delete();
         return back()->with('success', 'Project deleted successfully!');

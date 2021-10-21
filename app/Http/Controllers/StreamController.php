@@ -12,6 +12,7 @@ use App\Models\StreamFieldGrid;
 use App\Models\StreamFieldValue;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -25,6 +26,10 @@ class StreamController extends Controller
 
     public function index($form_id)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $streams = Stream::leftjoin('forms as f', 'f.id', '=', 'streams.form_id')
             ->leftjoin('projects as p', 'p.id', '=', 'f.project_id')
             ->where('form_id', $form_id)
@@ -46,6 +51,10 @@ class StreamController extends Controller
 
     public function create($form_id, $stream_id = null)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $stream = null;
         $fields = [];
         if (!empty($stream_id)) {
@@ -64,6 +73,10 @@ class StreamController extends Controller
 
     public function store(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         //dd($request);
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
@@ -172,6 +185,10 @@ class StreamController extends Controller
 
     public function edit($form_id, $stream_id = null)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $stream = null;
         $fields = [];
         if (!empty($stream_id)) {
@@ -191,6 +208,10 @@ class StreamController extends Controller
 
     public function update(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         //dd($request);
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
@@ -292,6 +313,10 @@ class StreamController extends Controller
 
     public function destroy(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $id = $request->id;
         try {
             StreamChangeLog::where('stream_id', $id)->delete();
@@ -306,6 +331,10 @@ class StreamController extends Controller
 
     public function addUpdateStreamSummary(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $validator = Validator::make($request->all(), [
             'summary' => ['required', 'string'],
         ]);

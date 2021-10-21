@@ -10,6 +10,7 @@ use App\Models\StreamField;
 use App\Models\StreamFieldGrid;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -22,6 +23,9 @@ class PeriodController extends Controller
      */
     public function index(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
         $search_keyword = $request->input('keyword') ?? null;
         $perPage = $request->show_rows ?? 10;
 
@@ -44,6 +48,9 @@ class PeriodController extends Controller
      */
     public function create()
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
         return view("Periods.create");
     }
 
@@ -55,6 +62,9 @@ class PeriodController extends Controller
      */
     public function store(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'start_date' => 'required',
@@ -82,13 +92,20 @@ class PeriodController extends Controller
 
     public function edit($id)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $period = Period::find(decrypt($id));
         return view('Periods.edit')->with(compact('period'));
     }
 
-
     public function update(Request $request, $id)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'start_date' => 'required',
@@ -118,6 +135,10 @@ class PeriodController extends Controller
 
     public function delete(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $id = decrypt($request->ref);
 
         try {
@@ -147,6 +168,10 @@ class PeriodController extends Controller
      */
     public function syncData(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         try {
             $current_period_id = $request->input('period_id');
             $current_period_start_date = Period::where('id', $current_period_id)->value('start_date');

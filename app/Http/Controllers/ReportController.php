@@ -13,6 +13,7 @@ use App\Models\Vendor;
 use Carbon\Carbon;
 use Dompdf\Dompdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
@@ -27,6 +28,10 @@ class ReportController extends Controller
 
     public function index(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $perPage = $request->show_rows ?? 10;
         $active_user = User::where('id', auth()->user()->id)->first();
         $project_id = $request->project_id ?? "";
@@ -75,6 +80,10 @@ class ReportController extends Controller
 
     public function pdfReport($form_id)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $form = Form::where('id', $form_id)->with(['streams'])->first();
         set_time_limit(300);
         $html_content = view('Reports.partials.pdf_report', compact('form'))->render();
@@ -93,6 +102,10 @@ class ReportController extends Controller
 
     public function generateWordDoc($form_id)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $form = Form::where('id', $form_id)->with(['streams'])->first();
         $headers = array(
             "Content-type" => "text/html",
@@ -107,6 +120,10 @@ class ReportController extends Controller
 
     public function pdfProjectReport($period_id, $project_id)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $project = project::where('id', $project_id)->first();
         $report_data = Form::where('period_id', $period_id)->where('project_id', $project_id)->with(['streams'])->orderBy('order_count', 'ASC')->get();
         set_time_limit(300);
@@ -126,6 +143,10 @@ class ReportController extends Controller
 
     public function docProjectReport($period_id, $project_id)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $project = project::where('id', $project_id)->first();
         $report_data = Form::where('period_id', $period_id)->where('project_id', $project_id)->with(['streams'])->orderBy('order_count', 'ASC')->get();
         $headers = array(
@@ -141,6 +162,10 @@ class ReportController extends Controller
 
     public function generateCsv($field_id)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $grid_name = StreamField::where('id', $field_id)->value('fieldName');
         $tableData = StreamFieldGrid::where('stream_field_id', $field_id)->orderBy('type', 'ASC')->orderBy('order_count', 'ASC')->get();
         $column_dropdown = array();
@@ -227,6 +252,10 @@ class ReportController extends Controller
 
     public function generateStaticCsv($form_id)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $form = Form::where('id', $form_id)->first();
         $final_rows_array = array();
 
