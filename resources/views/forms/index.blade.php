@@ -26,10 +26,9 @@
                                             <div class="col-xl-3 col-lg-3 col-md-3 col-12">
                                                 <div class="mb-3">
                                                     <label for="newform" class="form-label">Name *</label>
-                                                    <input type="text" class="form-control" id="newform" name="name" value="{{ old('name') }}" required placeholder="Month 1" aria-describedby="newform">
+                                                    <input type="text" class="form-control" id="newform" name="name" value="{{ old('name') }}" required placeholder="Name" aria-describedby="newform">
                                                 </div>
                                             </div>
-
                                             <div class="col-xl-3 col-lg-3 col-md-3 col-12">
                                                 <div class="mb-3">
                                                     <label for="FormGroup" class="form-label">Select Period *</label>
