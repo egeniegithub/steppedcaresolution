@@ -233,40 +233,28 @@ class ReportController extends Controller
         $records = SpecialForm::where('period_id', $form->period_id)->where('project_id', $form->project_id)->get();
 
         $columns_array = array(
-            'Organization',
+            '',
             'Period',
-            'Moderated Forum Participants',
-            'Registrations / Unique Visitors',
+            'Registrations',
             'Users Accessing 2X or more',
             'Users Accessing 3X or more',
-            'Resources Download',
-            'Self-Help Resources Accessed',
-            'Demographic Data',
-            'User Satisfaction',
-            'Outcomes Data',
+            'Moderated Forum Participants',
+            'Self-Help Resources Accessed'
         );
 
-        $forum_participants = 0;
         $unique_visitors = 0;
         $two_or_more_users = 0;
         $three_or_more_users = 0;
-        $downloaded_resources = 0;
+        $forum_participants = 0;
         $self_help_resources = 0;
-        $demographic_data = 0;
-        $user_satisfaction = 0;
-        $outcomes_data = 0;
 
         foreach ($records as $record) {
 
-            $forum_participants += $record->forum_participants;
             $unique_visitors += $record->unique_visitors;
             $two_or_more_users += $record->two_or_more_users;
             $three_or_more_users += $record->three_or_more_users;
-            $downloaded_resources += $record->downloaded_resources;
+            $forum_participants += $record->forum_participants;
             $self_help_resources += $record->self_help_resources;
-            $demographic_data += $record->demographic_data;
-            $user_satisfaction += $record->user_satisfaction;
-            $outcomes_data += $record->outcomes_data;
 
             $period_name = \App\Models\Period::where('id', $record->period_id)
                 ->select(DB::raw("CONCAT(name,' (',DATE_FORMAT(start_date, '%d-%m-%Y'), ' - ', DATE_FORMAT(end_date, '%d-%m-%Y'), ')') as period_name"))
@@ -275,15 +263,11 @@ class ReportController extends Controller
             $single_array = array(
                 Vendor::where('id', $record->vendor_id)->value('name'),
                 $period_name->period_name,
-                $record->forum_participants,
                 $record->unique_visitors,
                 $record->two_or_more_users,
                 $record->three_or_more_users,
-                $record->downloaded_resources,
+                $record->forum_participants,
                 $record->self_help_resources,
-                $record->demographic_data,
-                $record->user_satisfaction,
-                $record->outcomes_data
             );
             array_push($final_rows_array, $single_array);
         }
@@ -291,15 +275,11 @@ class ReportController extends Controller
         $summed_data = array(
             '',
             'Total',
-            $forum_participants,
             $unique_visitors,
             $two_or_more_users,
             $three_or_more_users,
-            $downloaded_resources,
-            $self_help_resources,
-            $demographic_data,
-            $user_satisfaction,
-            $outcomes_data
+            $forum_participants,
+            $self_help_resources
         );
         array_push($final_rows_array, $summed_data);
 
