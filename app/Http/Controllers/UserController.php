@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\project;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -25,6 +26,10 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $searchQuery = $request->keyword ?? null;
         $type = $request->type ?? "all";
         $project = $request->project_id ?? "all";
@@ -70,6 +75,10 @@ class UserController extends Controller
 
     public function create()
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $data = [];
         $data["projects"] = $this->projects_model->all_Projects();
         $data["countries"] = DB::table("countries")->get();
@@ -79,6 +88,10 @@ class UserController extends Controller
 
     public function store(Request  $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $validator = Validator::make($request->all(), [
             'firstname' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
@@ -134,6 +147,10 @@ class UserController extends Controller
 
     public function edit(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $data = [];
         $data["user"] = User::find(decrypt($request->ref));
         $data["projects"] = $this->projects_model->all_Projects();;
@@ -152,6 +169,10 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $validator = Validator::make($request->all(), [
             'firstname' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
@@ -189,6 +210,10 @@ class UserController extends Controller
 
      public function show(Request $request)
      {
+         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+             abort(403, 'Unauthorized access.');
+         }
+
          $data = [];
          $data["user"] = User::find(decrypt($request->ref));
          $data["projects"] = $this->projects_model->all_Projects();
@@ -199,6 +224,10 @@ class UserController extends Controller
 
     public function delete(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         try {
             User::find(decrypt($request->ref))->delete();
             return back()->with('success', 'Member deleted successfully!');

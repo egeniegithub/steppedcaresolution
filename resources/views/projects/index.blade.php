@@ -87,7 +87,7 @@
                                             <div class="col-xl-5 col-lg-5 col-md-5 col-12">
                                                 <div class="mb-3">
                                                     <label for="name" class="form-label">Name *</label>
-                                                    <input type="text" class="form-control" id="new_project" name="name" value="{{ old('name') }}" required placeholder="Month 1" aria-describedby="new_project">
+                                                    <input type="text" class="form-control" id="new_project" name="name" value="{{ old('name') }}" required placeholder="Name" aria-describedby="new_project">
                                                 </div>
                                             </div>
                                             <div class="col-xl-5 col-lg-5 col-md-5 col-12">

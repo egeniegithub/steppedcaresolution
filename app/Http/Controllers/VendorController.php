@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SpecialForm;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class VendorController extends Controller
@@ -37,6 +38,10 @@ class VendorController extends Controller
      */
     public function store(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255']
         ]);
@@ -83,6 +88,10 @@ class VendorController extends Controller
      */
     public function update(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         //dd($request);
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
@@ -108,6 +117,10 @@ class VendorController extends Controller
      */
     public function delete(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $id = decrypt($request->ref);
         Vendor::where('id', $id)->delete();
         return back()->with('success', 'Vendor deleted successfully!');

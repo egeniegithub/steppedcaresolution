@@ -59,7 +59,7 @@
                                                     </div>
                                                 </div>
                                             @endif
-                                            <div class="col-xl-2 col-lg-2 col-md-2 col-12">
+                                            <div class="col-xl-1 col-lg-1 col-md-1 col-12">
                                                 <div class="mb-3" style="margin-top: 40px">
                                                     <label for="newform" class="form-label">
                                                         <input type="checkbox" name="is_special" value="1"> <b>Is special form</b>

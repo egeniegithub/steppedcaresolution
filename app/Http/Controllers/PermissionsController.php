@@ -11,6 +11,7 @@ use App\Models\StreamAccess;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -19,6 +20,10 @@ class PermissionsController extends Controller
 
     public function create($stream_id)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $stream = Stream::where('id', $stream_id)->first();
         if ($stream){
             $form = Form::where('id', $stream->form_id)->first();
@@ -63,6 +68,10 @@ class PermissionsController extends Controller
      */
     public function store(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $validator = Validator::make($request->all(), [
             'period_id' => ['required'],
             'project_id' => ['required'],

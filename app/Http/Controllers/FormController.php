@@ -10,6 +10,7 @@ use App\Models\StreamField;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -17,6 +18,10 @@ class FormController extends Controller
 {
     public function index(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
         $search_keyword = $request->input('keyword') ?? null;
         $active_user = User::where('id', auth()->user()->id)->first();
         $perPage = $request->show_rows ?? 10;
@@ -60,6 +65,9 @@ class FormController extends Controller
 
     public function store(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
         //dd($request->input());
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
@@ -113,6 +121,9 @@ class FormController extends Controller
 
     public function update(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
         ]);
@@ -137,6 +148,9 @@ class FormController extends Controller
 
     public function delete(Request $request)
     {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
         try {
             $id = decrypt($request->ref);
             $stream_ids = Stream::where('form_id', $id)->pluck('id')->toArray();
@@ -155,8 +169,11 @@ class FormController extends Controller
         }
     }
 
-    public function addUpdateFormSummary(Request $request){
-
+    public function addUpdateFormSummary(Request $request)
+    {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
         $validator = Validator::make($request->all(), [
             'summary' => ['required', 'string'],
         ]);
