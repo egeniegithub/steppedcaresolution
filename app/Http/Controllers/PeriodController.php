@@ -190,10 +190,12 @@ class PeriodController extends Controller
                     foreach ($previous_period_forms as $form) {
                         $form_data = array(
                             'name' => $form->name,
+                            'order_count' => $form->order_count,
                             'project_id' => $form->project_id,
                             'period_id' => $current_period_id,
                             'created_by' => auth()->user()->id,
                             'updated_by' => auth()->user()->id,
+                            'is_special' => $form->is_special,
                             'previous_id' => $form->id
                         );
                         $stored_form = Form::create($form_data);
@@ -260,9 +262,11 @@ class PeriodController extends Controller
                     foreach ($previous_period_forms as $form) {
                         $form_data = array(
                             'name' => $form->name,
+                            'order_count' => $form->order_count,
                             'project_id' => $form->project_id,
                             'period_id' => $current_period_id,
                             'created_by' => auth()->user()->id,
+                            'is_special' => $form->is_special,
                             'previous_id' => $form->id,
                         );
                         $stored_form = Form::create($form_data);

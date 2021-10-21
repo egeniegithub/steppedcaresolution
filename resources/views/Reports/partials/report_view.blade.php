@@ -31,9 +31,28 @@
 
                 @if($form->is_special == 1)
                     @php
-                        $records = \App\Models\SpecialForm::where('period_id', $form->period_id)
-                            ->where('project_id', $form->project_id)
-                            ->get();
+                    $records = \App\Models\SpecialForm::where('period_id', $form->period_id)
+                        ->where('project_id', $form->project_id)
+                        ->orderBy('id', 'ASC')
+                        ->get();
+
+                    $current_period_start_date = \App\Models\Period::where('id', $form->period_id)->value('start_date');
+                    $period_ids = \App\Models\Period::where('start_date', '<=', $current_period_start_date)->pluck('id')->toArray();
+                    //dd($period_ids);
+
+                    $cumulative_records = \App\Models\SpecialForm::whereIn('period_id', $period_ids)
+                        ->where('project_id', $form->project_id)
+                        ->select('period_id', 'project_id', 'vendor_id', 'user_id',
+                            DB::raw('SUM(unique_visitors) as total_unique_visitors'),
+                            DB::raw('SUM(two_or_more_users) as total_two_or_more_users'),
+                            DB::raw('SUM(three_or_more_users) as total_three_or_more_users'),
+                            DB::raw('SUM(forum_participants) as total_forum_participants'),
+                            DB::raw('SUM(self_help_resources) as total_self_help_resources')
+                            )
+                        ->groupBy('user_id')
+                        ->orderBy('id', 'ASC')
+                        ->get();
+                    //dd($cumulative_records)
                     @endphp
                     <div class="row">
                         <div class="col-sm-12 report_summary_col">
@@ -95,6 +114,67 @@
                                     <td>{{$three_or_more_users}}</td>
                                     <td>{{$forum_participants}}</td>
                                     <td>{{$self_help_resources}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <a href="{{route('dashboard.reports.stream.static_csv_download', $form->id)}}" class="btn btn-primary fa-pull-right">CSV Download</a>
+                        </div>
+                    </div>
+                    <br>
+
+                    {{--cumulative table--}}
+                    <div class="col-sm-12 col-md-12">
+                        <div class="table-responsive">
+                            <b>Cumulative Data</b>
+                            <table class="table report_sub_table report_generated_table table-bordered">
+                                <thead>
+                                <tr class="red_row">
+                                    <td></td>
+                                    <td>Period</td>
+                                    <td>Cumulative Registrations</td>
+                                    <td>Cumulative Users Accessing 2X or more</td>
+                                    <td>Cumulative Users Accessing 3X or more</td>
+                                    <td>Cumulative Moderated Forum Participants</td>
+                                    <td>Cumulative Self-Help Resources Accessed</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @php
+                                    $total_unique_visitors = 0;
+                                    $total_two_or_more_users = 0;
+                                    $total_three_or_more_users = 0;
+                                    $total_forum_participants = 0;
+                                    $total_self_help_resources = 0;
+                                @endphp
+                                @foreach($cumulative_records as $cumulative_record)
+                                    @php
+                                        $period_name = \App\Models\Period::where('id', $cumulative_record->period_id)
+                                            ->select(DB::raw("CONCAT(name,' (',DATE_FORMAT(start_date, '%d-%m-%Y'), ' - ', DATE_FORMAT(end_date, '%d-%m-%Y'), ')') as period_name"))
+                                            ->first();
+
+                                        $total_unique_visitors += $cumulative_record->total_unique_visitors;
+                                        $total_two_or_more_users += $cumulative_record->total_two_or_more_users;
+                                        $total_three_or_more_users += $cumulative_record->total_three_or_more_users;
+                                        $total_forum_participants += $cumulative_record->total_forum_participants;
+                                        $total_self_help_resources += $cumulative_record->total_self_help_resources;
+                                    @endphp
+                                    <tr class="white_space">
+                                        <td>{{\App\Models\Vendor::where('id', $cumulative_record->vendor_id)->value('name')}}</td>
+                                        <td>{{$period_name->period_name}}</td>
+                                        <td>{{$cumulative_record->total_unique_visitors}}</td>
+                                        <td>{{$cumulative_record->total_two_or_more_users}}</td>
+                                        <td>{{$cumulative_record->total_three_or_more_users}}</td>
+                                        <td>{{$cumulative_record->total_forum_participants}}</td>
+                                        <td>{{$cumulative_record->total_self_help_resources}}</td>
+                                    </tr>
+                                @endforeach
+                                <tr>
+                                    <td colspan="2">Total</td>
+                                    <td>{{$total_unique_visitors}}</td>
+                                    <td>{{$total_two_or_more_users}}</td>
+                                    <td>{{$total_three_or_more_users}}</td>
+                                    <td>{{$total_forum_participants}}</td>
+                                    <td>{{$total_self_help_resources}}</td>
                                 </tr>
                                 </tbody>
                             </table>
