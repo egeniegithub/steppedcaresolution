@@ -334,4 +334,103 @@ class ReportController extends Controller
         };
         return response()->stream($callback, 200, $headers);
     }
+
+    public function generateStaticCumulativeCsv($form_id)
+    {
+        if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
+            abort(403, 'Unauthorized access.');
+        }
+
+        $form = Form::where('id', $form_id)->first();
+        $final_rows_array = array();
+
+        $current_period_start_date = Period::where('id', $form->period_id)->value('start_date');
+        $period_ids = Period::where('start_date', '<=', $current_period_start_date)->pluck('id')->toArray();
+
+        $cumulative_records = \App\Models\SpecialForm::whereIn('period_id', $period_ids)
+            ->where('project_id', $form->project_id)
+            ->select('period_id', 'project_id', 'vendor_id', 'user_id',
+                DB::raw('SUM(unique_visitors) as total_unique_visitors'),
+                DB::raw('SUM(two_or_more_users) as total_two_or_more_users'),
+                DB::raw('SUM(three_or_more_users) as total_three_or_more_users'),
+                DB::raw('SUM(forum_participants) as total_forum_participants'),
+                DB::raw('SUM(self_help_resources) as total_self_help_resources')
+            )
+            ->groupBy('user_id')
+            ->orderBy('id', 'ASC')
+            ->get();
+
+        $columns_array = array(
+            '',
+            'Period',
+            'Cumulative Registrations',
+            'Cumulative Users Accessing 2X or more',
+            'Cumulative Users Accessing 3X or more',
+            'Cumulative Moderated Forum Participants',
+            'Cumulative Self-Help Resources Accessed'
+        );
+
+        $total_unique_visitors = 0;
+        $total_two_or_more_users = 0;
+        $total_three_or_more_users = 0;
+        $total_forum_participants = 0;
+        $total_self_help_resources = 0;
+
+        foreach ($cumulative_records as $record) {
+
+            $total_unique_visitors += $record->total_unique_visitors;
+            $total_two_or_more_users += $record->total_two_or_more_users;
+            $total_three_or_more_users += $record->total_three_or_more_users;
+            $total_forum_participants += $record->total_forum_participants;
+            $total_self_help_resources += $record->total_self_help_resources;
+
+            $period_name = \App\Models\Period::where('id', $record->period_id)
+                ->select(DB::raw("CONCAT(name,' (',DATE_FORMAT(start_date, '%d-%m-%Y'), ' - ', DATE_FORMAT(end_date, '%d-%m-%Y'), ')') as period_name"))
+                ->first();
+
+            $single_array = array(
+                Vendor::where('id', $record->vendor_id)->value('name'),
+                $period_name->period_name,
+                $record->total_unique_visitors,
+                $record->total_two_or_more_users,
+                $record->total_three_or_more_users,
+                $record->total_forum_participants,
+                $record->total_self_help_resources,
+            );
+            array_push($final_rows_array, $single_array);
+        }
+
+        $summed_data = array(
+            '',
+            'Total',
+            $total_unique_visitors,
+            $total_two_or_more_users,
+            $total_three_or_more_users,
+            $total_forum_participants,
+            $total_self_help_resources
+        );
+        array_push($final_rows_array, $summed_data);
+
+        //dd($columns_array, $final_rows_array);
+
+        $headers = array(
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=static_form.csv",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        );
+
+        $callback = function () use ($final_rows_array, $columns_array) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns_array);
+            foreach ($final_rows_array as $row) {
+                if (!empty($row)) {
+                    fputcsv($file, $row);
+                }
+            }
+            fclose($file);
+        };
+        return response()->stream($callback, 200, $headers);
+    }
 }
