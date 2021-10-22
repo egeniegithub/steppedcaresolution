@@ -111,6 +111,7 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
         Route::get('/stream/project-doc-download/{period_id}/{project_id}', [App\Http\Controllers\ReportController::class,'docProjectReport'])->name('dashboard.reports.stream.project_doc_download');
         Route::get('/stream/csv-download/{field_id}', [App\Http\Controllers\ReportController::class,'generateCsv'])->name('dashboard.reports.stream.csv_download');
         Route::get('/stream/static-csv-download/{form_id}', [App\Http\Controllers\ReportController::class,'generateStaticCsv'])->name('dashboard.reports.stream.static_csv_download');
+        Route::get('/stream/static-cumulative-csv-download/{form_id}', [App\Http\Controllers\ReportController::class,'generateStaticCumulativeCsv'])->name('dashboard.reports.stream.static_cumulative_csv_download');
     });
 
     Route::group(['prefix' => 'permissions',  'middleware' => 'auth'], function(){
