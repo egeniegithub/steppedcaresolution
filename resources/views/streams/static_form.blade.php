@@ -122,7 +122,7 @@
                                             <input type="submit" class="btn normal_btn save_and_submit text-white"
                                                    name="submit"
                                                    value="Save and Submit"/>
-                                            @if(Auth::user()->role=="User")
+                                            @if(Auth::user()->role=="Vendor")
                                                 <a type="button" href="{{route('dashboard')}}" class="btn normal_btn cancel_modal_btn text-white">Cancel</a>
                                             @else
                                                 <a type="button" href="{{route('dashboard.streams', 0)}}" class="btn normal_btn cancel_modal_btn text-white">Cancel</a>
