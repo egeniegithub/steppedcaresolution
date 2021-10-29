@@ -144,7 +144,7 @@ class UserController extends Controller
                     ->subject($data['subject'])
                     ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
             });
-            return redirect()->route('dashboard.users')->with('success', 'Member created successfully!');
+            return redirect()->route('dashboard.users')->with('success', 'Member created successfully! check email to update password don\'t forget to check spam. ');
         } catch (Exception $e) {
             return back()->with('warning', 'Issue with the email, But do not worry Member created successfully');
         }
