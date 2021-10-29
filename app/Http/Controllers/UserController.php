@@ -11,8 +11,9 @@ use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-use Mail;
+//use Mail;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 class UserController extends Controller
@@ -135,9 +136,13 @@ class UserController extends Controller
             'created_at' => Carbon::now()
           ]);
 
+        //dd($data);
+
         try {
             Mail::send('emails.reset', $data, function($message) use ($data){
-                $message->to($data['email'])->from('ashakoor@egenienext.com', 'Stepped Care Solutions' )->subject($data['subject']);
+                $message->to($data['email'])
+                    ->subject($data['subject'])
+                    ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
             });
             return redirect()->route('dashboard.users')->with('success', 'Member created successfully!');
         } catch (Exception $e) {
