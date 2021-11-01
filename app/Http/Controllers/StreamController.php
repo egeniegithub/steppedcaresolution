@@ -455,7 +455,7 @@ class StreamController extends Controller
                             'username' => $user->firstname. ' '.$user->lastname,
                             'email' => $user->email,
                             'subject' => 'Update Form Notification',
-                            'text' => 'Form status has been changed to '.$status
+                            'text' => 'Form status has been changed to "'.$status.'"'
                         );
 
                         // fire email to notify users who have permission of this stream
@@ -569,7 +569,7 @@ class StreamController extends Controller
                             'username' => $user->firstname. ' '.$user->lastname,
                             'email' => $user->email,
                             'subject' => 'Update Form Notification',
-                            'text' => 'Form status has been changed to '.$input['status']
+                            'text' => 'Form status has been changed to "'.$input['status'].'"'
                         );
 
                         // fire email to notify users who have permission of this stream
