@@ -448,7 +448,7 @@ class StreamController extends Controller
                 foreach ($user_ids as $user_id) {
                     $user = User::where('id', $user_id)->first();
 
-                    dd($user);
+                    print_r($user);
                     $data = array(
                         'username' => $user->firstname. ' '.$user->lastname,
                         'email' => $user->email,
@@ -463,6 +463,7 @@ class StreamController extends Controller
                             ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
                     });
                 }
+                die();
             }
 
             // for field value
