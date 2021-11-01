@@ -448,6 +448,7 @@ class StreamController extends Controller
                 foreach ($user_ids as $user_id) {
                     $user = User::where('id', $user_id)->first();
 
+                    echo "<pre>";
                     print_r($user);
 
                 }
