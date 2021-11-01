@@ -136,8 +136,6 @@ class UserController extends Controller
             'created_at' => Carbon::now()
           ]);
 
-        //dd($data);
-
         try {
             Mail::send('emails.reset', $data, function($message) use ($data){
                 $message->to($data['email'])
