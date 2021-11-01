@@ -447,13 +447,14 @@ class StreamController extends Controller
             if (!empty($user_ids)){
                 foreach ($user_ids as $user_id) {
                     $user = User::where('id', $user_id)->first();
-                    dd($user);
-                    $data = array(
+
+                    print_r($user);
+                    /*$data = array(
                         'username' => $user->firstname. ' '.$user->lastname,
                         'email' => $user->email,
                         'subject' => 'Update Form Notification',
                         'text' => 'Stream status has been changed to '.$status
-                    );
+                    );*/
 
                     // fire email to notify users who have permission of this stream
                     Mail::send('emails.notify_stream_update', compact('data'), function($message) use ($data){
@@ -462,6 +463,7 @@ class StreamController extends Controller
                             ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
                     });
                 }
+                die();
             }
 
             // for field value
