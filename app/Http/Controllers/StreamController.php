@@ -238,7 +238,7 @@ class StreamController extends Controller
             );
 
             DB::beginTransaction();
-            Stream::where('id', $stream_id)->update($stream);
+            $updated_stream = Stream::where('id', $stream_id)->update($stream);
 
             $fields = [];
             foreach ($input['fields'] as $field) {
