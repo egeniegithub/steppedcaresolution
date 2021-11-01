@@ -319,7 +319,7 @@ class StreamController extends Controller
                 );
 
                 // fire email to notify users who have permission of this stream
-                Mail::send('emails.reset', compact('data'), function($message) use ($data){
+                Mail::send('emails.notify_stream_update', compact('data'), function($message) use ($data){
                     $message->to($data['email'])
                         ->subject($data['subject'])
                         ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
