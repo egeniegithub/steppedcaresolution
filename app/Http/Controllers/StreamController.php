@@ -309,21 +309,23 @@ class StreamController extends Controller
                 ->toArray();
 
             foreach ($user_ids as $user_id) {
-
                 $user = User::where('id', $user_id)->first();
-                $data = array(
-                    'username' => $user->firstname. ' '.$user->lastname,
-                    'email' => $user->email,
-                    'subject' => 'Update Form Notification',
-                    'text' => 'Admin Has updated the Form ('.$input['name'].') that you have been assigned'
-                );
 
-                // fire email to notify users who have permission of this stream
-                Mail::send('emails.notify_stream_update', compact('data'), function($message) use ($data){
-                    $message->to($data['email'])
-                        ->subject($data['subject'])
-                        ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
-                });
+                if (!empty($user)){
+                    $data = array(
+                        'username' => $user->firstname. ' '.$user->lastname,
+                        'email' => $user->email,
+                        'subject' => 'Update Form Notification',
+                        'text' => 'Admin Has updated the Form ('.$input['name'].') that you have been assigned'
+                    );
+
+                    // fire email to notify users who have permission of this stream
+                    Mail::send('emails.notify_stream_update', compact('data'), function($message) use ($data){
+                        $message->to($data['email'])
+                            ->subject($data['subject'])
+                            ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
+                    });
+                }
             }
 
             DB::commit();
@@ -447,19 +449,22 @@ class StreamController extends Controller
             if (!empty($user_ids)){
                 foreach ($user_ids as $user_id) {
                     $user = User::where('id', $user_id)->first();
-                    $data = array(
-                        'username' => $user->name ?? "",
-                        'email' => $user->email,
-                        'subject' => 'Update Form Notification',
-                        'text' => 'Form status has been changed to '.$status
-                    );
 
-                    // fire email to notify users who have permission of this stream
-                    Mail::send('emails.notify_stream_update', compact('data'), function($message) use ($data){
-                        $message->to($data['email'])
-                            ->subject($data['subject'])
-                            ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
-                    });
+                    if (!empty($user)){
+                        $data = array(
+                            'username' => $user->firstname. ' '.$user->lastname,
+                            'email' => $user->email,
+                            'subject' => 'Update Form Notification',
+                            'text' => 'Form status has been changed to '.$status
+                        );
+
+                        // fire email to notify users who have permission of this stream
+                        Mail::send('emails.notify_stream_update', compact('data'), function($message) use ($data){
+                            $message->to($data['email'])
+                                ->subject($data['subject'])
+                                ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
+                        });
+                    }
                 }
             }
 
@@ -558,19 +563,22 @@ class StreamController extends Controller
             if (!empty($user_ids)){
                 foreach ($user_ids as $user_id) {
                     $user = User::where('id', $user_id)->first();
-                    $data = array(
-                        'username' => $user->firstname. ' '.$user->lastname,
-                        'email' => $user->email,
-                        'subject' => 'Update Form Notification',
-                        'text' => 'Form status has been changed to '.$input['status']
-                    );
 
-                    // fire email to notify users who have permission of this stream
-                    Mail::send('emails.notify_stream_update', compact('data'), function($message) use ($data){
-                        $message->to($data['email'])
-                            ->subject($data['subject'])
-                            ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
-                    });
+                    if (!empty($user)){
+                        $data = array(
+                            'username' => $user->firstname. ' '.$user->lastname,
+                            'email' => $user->email,
+                            'subject' => 'Update Form Notification',
+                            'text' => 'Form status has been changed to '.$input['status']
+                        );
+
+                        // fire email to notify users who have permission of this stream
+                        Mail::send('emails.notify_stream_update', compact('data'), function($message) use ($data){
+                            $message->to($data['email'])
+                                ->subject($data['subject'])
+                                ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
+                        });
+                    }
                 }
             }
 
