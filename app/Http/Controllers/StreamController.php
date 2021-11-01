@@ -447,12 +447,13 @@ class StreamController extends Controller
             if (!empty($user_ids)){
                 foreach ($user_ids as $user_id) {
                     $user = User::where('id', $user_id)->first();
-
-                    echo "<pre>";
-                    print_r($user);
-
+                    $data = array(
+                        'username' => $user->firstname ?? "". ' '.$user->lastname ?? "",
+                        'email' => $user->email,
+                        'subject' => 'Update Form Notification',
+                        'text' => 'Stream status has been changed to '.$status
+                    );
                 }
-                die();
             }
 
             // for field value
