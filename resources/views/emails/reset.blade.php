@@ -37,7 +37,7 @@
         }
         #content-e{
             width: 100%;
-            font-size : 16px ; color : #212529 ; align-self : flex-start"
+            font-size : 16px ; color : #212529 ; align-self : flex-start
         }
     </style>
 </head>
@@ -47,7 +47,7 @@
         <div id="email-a">
             <div id="email-content">
                 <div id="content-e">
-                <p style="margin : 10px 0px"><h2>Hello! {{$username}}<h2></p><br>
+                <p style="margin : 10px 0px"><h2>Hello! {{$username}}</h2><br>
                     <p style="margin : 10px 0px">You account has been created successfully. Now please update your password to access the portal</p>
                     <p style="margin : 10px 0px">To update your password, Click on the button below.</p>
 

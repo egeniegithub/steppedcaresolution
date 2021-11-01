@@ -3,17 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Form;
+use App\Models\Permission;
 use App\Models\SpecialForm;
 use App\Models\Stream;
+use App\Models\StreamAccess;
 use App\Models\StreamAnswer;
 use App\Models\StreamChangeLog;
 use App\Models\StreamField;
 use App\Models\StreamFieldGrid;
 use App\Models\StreamFieldValue;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class StreamController extends Controller
@@ -234,7 +238,7 @@ class StreamController extends Controller
             );
 
             DB::beginTransaction();
-            Stream::where('id', $stream_id)->update($stream);
+            $updated_stream = Stream::where('id', $stream_id)->update($stream);
 
             $fields = [];
             foreach ($input['fields'] as $field) {
@@ -295,6 +299,33 @@ class StreamController extends Controller
                     }
                 }
             }
+
+            $permission_ids = Permission::where('stream_id', $stream_id)->pluck('id')->toArray();
+
+            $user_ids = StreamAccess::whereIn('permission_id', $permission_ids)
+                ->whereNotNull('assigned_user_id')
+                ->groupBy('assigned_user_id')
+                ->pluck('assigned_user_id')
+                ->toArray();
+
+            foreach ($user_ids as $user_id) {
+
+                $user = User::where('id', $user_id)->first();
+                $data = array(
+                    'stream_name' => $updated_stream->name,
+                    'username' => $user->firstname. ' '.$user->lastname,
+                    'email' => $user->email,
+                    'subject' => 'Update Form Notification',
+                );
+
+                // fire email to notify users who have permission of this stream
+                Mail::send('emails.reset', compact('data'), function($message) use ($data){
+                    $message->to($data['email'])
+                        ->subject($data['subject'])
+                        ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
+                });
+            }
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
