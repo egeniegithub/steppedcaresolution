@@ -448,7 +448,7 @@ class StreamController extends Controller
                 foreach ($user_ids as $user_id) {
                     $user = User::where('id', $user_id)->first();
                     $data = array(
-                        'username' => $user->firstname ?? "". ' '.$user->lastname ?? "",
+                        'username' => $user->name ?? "",
                         'email' => $user->email,
                         'subject' => 'Update Form Notification',
                         'text' => 'Stream status has been changed to '.$status
