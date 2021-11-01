@@ -453,13 +453,6 @@ class StreamController extends Controller
                         'subject' => 'Update Form Notification',
                         'text' => 'Stream status has been changed to '.$status
                     );
-
-                    // fire email to notify users who have permission of this stream
-                    Mail::send('emails.notify_stream_update', compact('data'), function($message) use ($data){
-                        $message->to($data['email'])
-                            ->subject($data['subject'])
-                            ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
-                    });
                 }
             }
 
