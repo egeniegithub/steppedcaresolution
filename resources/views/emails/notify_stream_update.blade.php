@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width" , initial-scale="1.0">
-    <title>Stream Update</title>
+    <title>{{$data['subject']}}</title>
     <style>
         * {
             font-family: Arial, Helvetica, sans-serif;
@@ -53,7 +53,7 @@
             <div id="content-e">
                 <p style="margin : 10px 0px">
                 <h2>Hello! {{$data['username']}}</h2><br>
-                <p style="margin : 10px 0px">Admin Has updated the Form ({{$data['stream_name']}}) that you have been assigned</p>
+                <p style="margin : 10px 0px">{{$data['text']}}</p>
                 <p style="margin : 10px 0px">Regards,</p>
                 <p style="margin : 10px 0px">SCS Team</p>
             </div>

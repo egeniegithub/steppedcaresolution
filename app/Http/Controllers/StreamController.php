@@ -312,10 +312,10 @@ class StreamController extends Controller
 
                 $user = User::where('id', $user_id)->first();
                 $data = array(
-                    'stream_name' => $input['name'],
                     'username' => $user->firstname. ' '.$user->lastname,
                     'email' => $user->email,
                     'subject' => 'Update Form Notification',
+                    'text' => 'Admin Has updated the Form ('.$input['name'].') that you have been assigned'
                 );
 
                 // fire email to notify users who have permission of this stream
@@ -431,9 +431,35 @@ class StreamController extends Controller
                 }
             }
 
+            $status = $request->submit == 'Save Only' ? 'In-progress' : 'Published';
+
             Stream::whereId($stream_id)->update([
-                'status' => $request->submit == 'Save Only' ? 'In-progress' : 'Published'
+                'status' => $status
             ]);
+
+            $permission_ids = Permission::where('stream_id', $stream_id)->pluck('id')->toArray();
+            $user_ids = StreamAccess::whereIn('permission_id', $permission_ids)
+                ->whereNotNull('assigned_user_id')
+                ->groupBy('assigned_user_id')
+                ->pluck('assigned_user_id')
+                ->toArray();
+
+            foreach ($user_ids as $user_id) {
+                $user = User::where('id', $user_id)->first();
+                $data = array(
+                    'username' => $user->firstname. ' '.$user->lastname,
+                    'email' => $user->email,
+                    'subject' => 'Update Form Notification',
+                    'text' => 'Stream status has been changed to '.$status
+                );
+
+                // fire email to notify users who have permission of this stream
+                Mail::send('emails.notify_stream_update', compact('data'), function($message) use ($data){
+                    $message->to($data['email'])
+                        ->subject($data['subject'])
+                        ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
+                });
+            }
 
             // for field value
             if ($request->field) {
@@ -519,6 +545,30 @@ class StreamController extends Controller
 
             $stream = Stream::find($request->id);
             $stream->update($input);
+
+            $permission_ids = Permission::where('stream_id', $request->id)->pluck('id')->toArray();
+            $user_ids = StreamAccess::whereIn('permission_id', $permission_ids)
+                ->whereNotNull('assigned_user_id')
+                ->groupBy('assigned_user_id')
+                ->pluck('assigned_user_id')
+                ->toArray();
+
+            foreach ($user_ids as $user_id) {
+                $user = User::where('id', $user_id)->first();
+                $data = array(
+                    'username' => $user->firstname. ' '.$user->lastname,
+                    'email' => $user->email,
+                    'subject' => 'Update Form Notification',
+                    'text' => 'Stream status has been changed to '.$input['status']
+                );
+
+                // fire email to notify users who have permission of this stream
+                Mail::send('emails.notify_stream_update', compact('data'), function($message) use ($data){
+                    $message->to($data['email'])
+                        ->subject($data['subject'])
+                        ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
+                });
+            }
 
         } catch (\Exception $e) {
 
