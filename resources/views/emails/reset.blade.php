@@ -46,14 +46,13 @@
                 <p style="margin : 10px 0px"><h2>Hello! {{$username}}</h2><br>
                     <p style="margin : 10px 0px">You account has been created successfully. Now please update your password to access the portal</p>
                     <p style="margin : 10px 0px">To update your password, Click on the button below.</p>
-
                     <p style="margin : 10px 0px">Regards,</p>
                     <p style="margin : 10px 0px">SCS Team</p>
+                    <br>
+                    <br>
+                    <br>
+                    <a href="{{$url}}" target="_blank" style="padding : 10px ; align-self : flex-start ; background-color : #4492DA ; color : #ffffff ; border-radius : 5px ; width : 125px ; text-align : center; text-decoration: none;">Update Password </a>
                 </div>
-                <br>
-                <br>
-                <a href="{{$url}}" target="_blank"
-                    style="padding : 10px ; align-self : flex-start ; background-color : #4492DA ; color : #ffffff ; border-radius : 5px ; width : 125px ; text-align : center; text-decoration: none;">Update Password </a>
             </div>
         </div>
     </div>
