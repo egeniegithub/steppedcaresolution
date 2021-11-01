@@ -447,6 +447,8 @@ class StreamController extends Controller
             if (!empty($user_ids)){
                 foreach ($user_ids as $user_id) {
                     $user = User::where('id', $user_id)->first();
+
+                    dd($user);
                     $data = array(
                         'username' => $user->firstname. ' '.$user->lastname,
                         'email' => $user->email,
