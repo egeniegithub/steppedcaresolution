@@ -451,8 +451,15 @@ class StreamController extends Controller
                         'username' => $user->name ?? "",
                         'email' => $user->email,
                         'subject' => 'Update Form Notification',
-                        'text' => 'Stream status has been changed to '.$status
+                        'text' => 'Form status has been changed to '.$status
                     );
+
+                    // fire email to notify users who have permission of this stream
+                    Mail::send('emails.notify_stream_update', compact('data'), function($message) use ($data){
+                        $message->to($data['email'])
+                            ->subject($data['subject'])
+                            ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
+                    });
                 }
             }
 
@@ -555,7 +562,7 @@ class StreamController extends Controller
                         'username' => $user->firstname. ' '.$user->lastname,
                         'email' => $user->email,
                         'subject' => 'Update Form Notification',
-                        'text' => 'Stream status has been changed to '.$input['status']
+                        'text' => 'Form status has been changed to '.$input['status']
                     );
 
                     // fire email to notify users who have permission of this stream
