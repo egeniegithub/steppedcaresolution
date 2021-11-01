@@ -444,21 +444,23 @@ class StreamController extends Controller
                 ->pluck('assigned_user_id')
                 ->toArray();
 
-            foreach ($user_ids as $user_id) {
-                $user = User::where('id', $user_id)->first();
-                $data = array(
-                    'username' => $user->firstname. ' '.$user->lastname,
-                    'email' => $user->email,
-                    'subject' => 'Update Form Notification',
-                    'text' => 'Stream status has been changed to '.$status
-                );
+            if (!empty($user_ids)){
+                foreach ($user_ids as $user_id) {
+                    $user = User::where('id', $user_id)->first();
+                    $data = array(
+                        'username' => $user->firstname. ' '.$user->lastname,
+                        'email' => $user->email,
+                        'subject' => 'Update Form Notification',
+                        'text' => 'Stream status has been changed to '.$status
+                    );
 
-                // fire email to notify users who have permission of this stream
-                Mail::send('emails.notify_stream_update', compact('data'), function($message) use ($data){
-                    $message->to($data['email'])
-                        ->subject($data['subject'])
-                        ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
-                });
+                    // fire email to notify users who have permission of this stream
+                    Mail::send('emails.notify_stream_update', compact('data'), function($message) use ($data){
+                        $message->to($data['email'])
+                            ->subject($data['subject'])
+                            ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
+                    });
+                }
             }
 
             // for field value
@@ -553,21 +555,23 @@ class StreamController extends Controller
                 ->pluck('assigned_user_id')
                 ->toArray();
 
-            foreach ($user_ids as $user_id) {
-                $user = User::where('id', $user_id)->first();
-                $data = array(
-                    'username' => $user->firstname. ' '.$user->lastname,
-                    'email' => $user->email,
-                    'subject' => 'Update Form Notification',
-                    'text' => 'Stream status has been changed to '.$input['status']
-                );
+            if (!empty($user_ids)){
+                foreach ($user_ids as $user_id) {
+                    $user = User::where('id', $user_id)->first();
+                    $data = array(
+                        'username' => $user->firstname. ' '.$user->lastname,
+                        'email' => $user->email,
+                        'subject' => 'Update Form Notification',
+                        'text' => 'Stream status has been changed to '.$input['status']
+                    );
 
-                // fire email to notify users who have permission of this stream
-                Mail::send('emails.notify_stream_update', compact('data'), function($message) use ($data){
-                    $message->to($data['email'])
-                        ->subject($data['subject'])
-                        ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
-                });
+                    // fire email to notify users who have permission of this stream
+                    Mail::send('emails.notify_stream_update', compact('data'), function($message) use ($data){
+                        $message->to($data['email'])
+                            ->subject($data['subject'])
+                            ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
+                    });
+                }
             }
 
         } catch (\Exception $e) {
