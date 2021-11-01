@@ -238,7 +238,7 @@ class StreamController extends Controller
             );
 
             DB::beginTransaction();
-            $updated_stream = Stream::where('id', $stream_id)->update($stream);
+            Stream::where('id', $stream_id)->update($stream);
 
             $fields = [];
             foreach ($input['fields'] as $field) {
@@ -312,7 +312,7 @@ class StreamController extends Controller
 
                 $user = User::where('id', $user_id)->first();
                 $data = array(
-                    'stream_name' => $updated_stream->name,
+                    'stream_name' => $input['name'],
                     'username' => $user->firstname. ' '.$user->lastname,
                     'email' => $user->email,
                     'subject' => 'Update Form Notification',
