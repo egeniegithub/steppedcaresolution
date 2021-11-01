@@ -312,7 +312,7 @@ class StreamController extends Controller
 
                 $user = User::where('id', $user_id)->first();
                 $data = array(
-                    'stream_name' => $updated_stream->name,
+                    'stream_name' => $input['name'],
                     'username' => $user->firstname. ' '.$user->lastname,
                     'email' => $user->email,
                     'subject' => 'Update Form Notification',
