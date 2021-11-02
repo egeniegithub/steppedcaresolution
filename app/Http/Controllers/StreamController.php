@@ -316,7 +316,7 @@ class StreamController extends Controller
                         'username' => $user->firstname. ' '.$user->lastname,
                         'email' => $user->email,
                         'subject' => 'Update Form Notification',
-                        'text' => 'Admin Has updated the Form ('.$input['name'].') that you have been assigned'
+                        'text' => 'Admin has updated the Form "'.$input['name'].'" that you have been assigned'
                     );
 
                     // fire email to notify users who have permission of this stream
@@ -399,11 +399,10 @@ class StreamController extends Controller
 
     public function streamPost(Request $request)
     {
-        //dd($request);
         $user = auth()->user();
         $stream_id = $request->stream_id;
 
-        $form_id = Stream::where('id', $stream_id)->value('form_id');
+        $stream = Stream::where('id', $stream_id)->first();
 
         try {
             DB::beginTransaction();
@@ -455,7 +454,7 @@ class StreamController extends Controller
                             'username' => $user->firstname. ' '.$user->lastname,
                             'email' => $user->email,
                             'subject' => 'Update Form Notification',
-                            'text' => 'Form status has been changed to "'.$status.'"'
+                            'text' => 'Form "'.$stream->name.'" status has been changed to "'.$status.'"'
                         );
 
                         // fire email to notify users who have permission of this stream
@@ -531,7 +530,7 @@ class StreamController extends Controller
         if ($user->role == 'User'){
             return redirect()->route('dashboard')->with('success', 'Data saved successfully!');
         }else{
-            return redirect()->route('dashboard.streams', [$form_id])->with('success', 'Data saved successfully!');
+            return redirect()->route('dashboard.streams', [$stream->form_id])->with('success', 'Data saved successfully!');
         }
     }
 
@@ -569,7 +568,7 @@ class StreamController extends Controller
                             'username' => $user->firstname. ' '.$user->lastname,
                             'email' => $user->email,
                             'subject' => 'Update Form Notification',
-                            'text' => 'Form status has been changed to "'.$input['status'].'"'
+                            'text' => 'Form "'.$stream->name.'" status has been changed to "'.$input['status'].'"'
                         );
 
                         // fire email to notify users who have permission of this stream
