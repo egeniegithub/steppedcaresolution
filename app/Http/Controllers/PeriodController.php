@@ -24,7 +24,7 @@ class PeriodController extends Controller
     public function index(Request $request)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
         $search_keyword = $request->input('keyword') ?? null;
         $perPage = $request->show_rows ?? 10;
@@ -49,7 +49,7 @@ class PeriodController extends Controller
     public function create()
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
         return view("Periods.create");
     }
@@ -63,7 +63,7 @@ class PeriodController extends Controller
     public function store(Request $request)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
@@ -93,7 +93,7 @@ class PeriodController extends Controller
     public function edit($id)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $period = Period::find(decrypt($id));
@@ -103,7 +103,7 @@ class PeriodController extends Controller
     public function update(Request $request, $id)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $validator = Validator::make($request->all(), [
@@ -136,7 +136,7 @@ class PeriodController extends Controller
     public function delete(Request $request)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $id = decrypt($request->ref);
@@ -169,7 +169,7 @@ class PeriodController extends Controller
     public function syncData(Request $request)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         try {
