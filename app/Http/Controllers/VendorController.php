@@ -92,7 +92,6 @@ class VendorController extends Controller
             return redirect()->route('dashboard');
         }
 
-        //dd($request);
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
         ]);
