@@ -16,7 +16,7 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $search_keyword = $request->input('keyword') ?? null;
@@ -42,7 +42,7 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $validator = Validator::make($request->all(), [
@@ -78,7 +78,7 @@ class ProjectController extends Controller
     public function update(Request $request)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         //dd($request);
@@ -114,7 +114,7 @@ class ProjectController extends Controller
     public function delete(Request $request)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $id = decrypt($request->ref);

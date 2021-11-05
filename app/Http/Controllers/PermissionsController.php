@@ -21,7 +21,7 @@ class PermissionsController extends Controller
     public function create($stream_id)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $stream = Stream::where('id', $stream_id)->first();
@@ -69,7 +69,7 @@ class PermissionsController extends Controller
     public function store(Request $request)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $validator = Validator::make($request->all(), [

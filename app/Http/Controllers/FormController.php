@@ -19,7 +19,7 @@ class FormController extends Controller
     public function index(Request $request)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $search_keyword = $request->input('keyword') ?? null;
@@ -66,7 +66,7 @@ class FormController extends Controller
     public function store(Request $request)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
         //dd($request->input());
         $validator = Validator::make($request->all(), [
@@ -122,7 +122,7 @@ class FormController extends Controller
     public function update(Request $request)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
@@ -149,7 +149,7 @@ class FormController extends Controller
     public function delete(Request $request)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
         try {
             $id = decrypt($request->ref);
@@ -172,7 +172,7 @@ class FormController extends Controller
     public function addUpdateFormSummary(Request $request)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
         $validator = Validator::make($request->all(), [
             'summary' => ['required', 'string'],

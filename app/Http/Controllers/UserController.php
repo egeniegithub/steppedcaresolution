@@ -28,7 +28,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $searchQuery = $request->keyword ?? null;
@@ -77,7 +77,7 @@ class UserController extends Controller
     public function create()
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $data = [];
@@ -90,7 +90,7 @@ class UserController extends Controller
     public function store(Request  $request)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $validator = Validator::make($request->all(), [
@@ -151,7 +151,7 @@ class UserController extends Controller
     public function edit(Request $request)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $data = [];
@@ -173,7 +173,7 @@ class UserController extends Controller
     public function update(Request $request)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $validator = Validator::make($request->all(), [
@@ -214,7 +214,7 @@ class UserController extends Controller
      public function show(Request $request)
      {
          if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-             abort(403, 'Unauthorized access.');
+             return redirect()->route('dashboard');
          }
 
          $data = [];
@@ -228,7 +228,7 @@ class UserController extends Controller
     public function delete(Request $request)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         try {

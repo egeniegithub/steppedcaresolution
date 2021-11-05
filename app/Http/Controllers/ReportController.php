@@ -29,7 +29,7 @@ class ReportController extends Controller
     public function index(Request $request)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $perPage = $request->show_rows ?? 10;
@@ -81,7 +81,7 @@ class ReportController extends Controller
     public function pdfReport($form_id)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $form = Form::where('id', $form_id)->with(['streams'])->first();
@@ -103,7 +103,7 @@ class ReportController extends Controller
     public function generateWordDoc($form_id)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $form = Form::where('id', $form_id)->with(['streams'])->first();
@@ -121,7 +121,7 @@ class ReportController extends Controller
     public function pdfProjectReport($period_id, $project_id)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $project = project::where('id', $project_id)->first();
@@ -144,7 +144,7 @@ class ReportController extends Controller
     public function docProjectReport($period_id, $project_id)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $project = project::where('id', $project_id)->first();
@@ -163,7 +163,7 @@ class ReportController extends Controller
     public function generateCsv($field_id)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $grid_name = StreamField::where('id', $field_id)->value('fieldName');
@@ -253,7 +253,7 @@ class ReportController extends Controller
     public function generateStaticCsv($form_id)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $form = Form::where('id', $form_id)->first();
@@ -338,7 +338,7 @@ class ReportController extends Controller
     public function generateStaticCumulativeCsv($form_id)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $form = Form::where('id', $form_id)->first();

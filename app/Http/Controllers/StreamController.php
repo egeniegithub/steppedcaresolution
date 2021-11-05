@@ -31,7 +31,7 @@ class StreamController extends Controller
     public function index($form_id)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $streams = Stream::leftjoin('forms as f', 'f.id', '=', 'streams.form_id')
@@ -56,7 +56,7 @@ class StreamController extends Controller
     public function create($form_id, $stream_id = null)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $stream = null;
@@ -78,7 +78,7 @@ class StreamController extends Controller
     public function store(Request $request)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         //dd($request);
@@ -190,7 +190,7 @@ class StreamController extends Controller
     public function edit($form_id, $stream_id = null)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $stream = null;
@@ -213,7 +213,7 @@ class StreamController extends Controller
     public function update(Request $request)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         //dd($request);
@@ -347,7 +347,7 @@ class StreamController extends Controller
     public function destroy(Request $request)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $id = $request->id;
@@ -365,7 +365,7 @@ class StreamController extends Controller
     public function addUpdateStreamSummary(Request $request)
     {
         if (Auth::user()->role=="User" || Auth::user()->role=="Vendor"){
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('dashboard');
         }
 
         $validator = Validator::make($request->all(), [
