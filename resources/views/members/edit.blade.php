@@ -51,7 +51,7 @@
 
                                         <div class="col-lg-6 col-x-6 col-md-6 col-12">
                                             <div class="mb-4">
-                                                <label for="phone" class="form-label">Phone *</label>
+                                                <label for="phone" class="form-label">Phone</label>
                                                 <input type="tel"  class="form-control" id="phone" name="phone" placeholder="Month 1" aria-describedby="phone" value="{{$user->phone??null}}">
                                             </div>
                                         </div>

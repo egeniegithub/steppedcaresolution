@@ -24,7 +24,7 @@
                         </a>
                     </li>
                 @endif
-                @if(Auth::user()->role=="Admin" || Auth::user()->role=="Manager")
+                @if(Auth::user()->role=="Admin")
                     <li class="nav-item pcoded-hasmenu">
                         <a href="{{route('dashboard.periods')}}" class="nav-link">
                             <span class="pcoded-micon">
@@ -39,7 +39,7 @@
                         </a>
                     </li>
                 @endif
-                @if(Auth::user()->role=="Admin" || Auth::user()->role=="Manager")
+                @if(Auth::user()->role=="Admin")
                     <li class="nav-item pcoded-hasmenu">
                         <a href="{{route('dashboard.projects')}}" class="nav-link">
                             <span class="pcoded-micon">

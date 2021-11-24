@@ -143,7 +143,7 @@
                                             <tr>
                                                 <td style="width: 10%">No</td>
                                                 <td>Name</td>
-                                                <td>image</td>
+                                                <td>Image</td>
                                                 <td>Actions</td>
                                             </tr>
                                         </thead>

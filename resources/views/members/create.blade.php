@@ -59,8 +59,8 @@
                                             </div>
                                             <div class="col-lg-6 col-x-6 col-md-6 col-12">
                                                 <div class="mb-4">
-                                                    <label for="phone" class="form-label">Phone *</label>
-                                                    <input type="tel" class="form-control" name="phone" id="phone" placeholder="Phone" aria-describedby="phone" value="{{ old('phone') }}" required>
+                                                    <label for="phone" class="form-label">Phone</label>
+                                                    <input type="tel" class="form-control" name="phone" id="phone" placeholder="Phone" aria-describedby="phone" value="{{ old('phone') }}">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 col-x-6 col-md-6 col-12">
