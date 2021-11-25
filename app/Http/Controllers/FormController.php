@@ -32,15 +32,23 @@ class FormController extends Controller
             $period_id = null;
         }
 
+        if (!empty($request->project_id)){
+            $project_id = $request->project_id;
+        }else{
+            $project_id = null;
+        }
+
         $forms = Form::when($search_keyword, function ($query, $value) {
             $query->where('forms.name', 'like', '%' . $value . '%')
                 ->orWhere('p.name', 'like', '%' . $value . '%');
         })
             ->leftjoin('projects as p', 'p.id', '=', 'forms.project_id')
             ->leftjoin('periods as pe', 'pe.id', '=', 'forms.period_id')
-            ->where(function ($q) use($active_user) {
+            ->where(function ($q) use($project_id, $active_user) {
                 if ($active_user->role == 'Admin') {
-
+                    if ($project_id) {
+                        $q->where('p.id', $project_id);
+                    }
                 }else{
                     $q->where('p.id', $active_user->project_id);
                 }
