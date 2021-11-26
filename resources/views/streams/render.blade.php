@@ -155,7 +155,7 @@
                                                                                             {{$table->name}}
                                                                                         </td>
 
-                                                                                        @if($check_cumulative == 'yes')
+                                                                                        @if($check_cumulative == 'yes' && empty($column_dropdown))
                                                                                             <td>
                                                                                                 {{$table->name}} (Cumulative)
                                                                                             </td>
@@ -197,7 +197,7 @@
                                                                                             @php
                                                                                                 $check_cumulative = \App\Models\StreamField::where('id', $table->stream_field_id)->value('isCumulative');
                                                                                             @endphp
-                                                                                            @if($check_cumulative == 'yes')
+                                                                                            @if($check_cumulative == 'yes' && empty($dropdowns))
                                                                                                 <td>
                                                                                                     @php
                                                                                                         $previous_cumulative_grid = \App\Models\StreamFieldGrid::where('id', $table->previous_id)->value('cumulative_value');
