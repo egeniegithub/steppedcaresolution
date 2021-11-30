@@ -158,7 +158,7 @@
                                                                                             {{$table->name}}
                                                                                         </td>
 
-                                                                                        @if($check_cumulative == 'yes' && $column_position != $loop->iteration)
+                                                                                        @if($check_cumulative == 'yes' && !$column_position)
                                                                                             <td>
                                                                                                 {{$table->name}} (Cumulative)
                                                                                             </td>
