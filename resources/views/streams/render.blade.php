@@ -141,8 +141,11 @@
                                                                                     @if($table->type == 'column')
                                                                                         @php
                                                                                             if ($table->is_dropdown == 1){
+                                                                                                $column_position = true;
                                                                                                 array_push($column_dropdown, $column_count);
                                                                                                 $table_options[$column_count] = explode(',',$table->field_options);
+                                                                                            }else{
+                                                                                                $column_position = false;
                                                                                             }
                                                                                             $column_count++;
 
@@ -155,10 +158,14 @@
                                                                                             {{$table->name}}
                                                                                         </td>
 
-                                                                                        @if($check_cumulative == 'yes' && empty($column_dropdown))
+                                                                                        @if($check_cumulative == 'yes' && $column_position != $loop->iteration)
                                                                                             <td>
                                                                                                 {{$table->name}} (Cumulative)
                                                                                             </td>
+                                                                                        @else
+                                                                                            @php
+                                                                                                $column_position = false;
+                                                                                            @endphp
                                                                                         @endif
                                                                                     @endif
                                                                                 @endforeach
@@ -183,6 +190,7 @@
                                                                                                 @endphp
                                                                                                 @if( in_array($i, $column_dropdown))
                                                                                                     @php
+                                                                                                        $column_position_in_field = true;
                                                                                                         $dropdowns = $table_options[$i];
                                                                                                     @endphp
                                                                                                     <select class="form-control editable_table_coloumn new_target" name="table_value[{{$table->id}}][{{$i}}]" id="">
@@ -191,20 +199,27 @@
                                                                                                         @endforeach
                                                                                                     </select>
                                                                                                 @else
+                                                                                                    @php
+                                                                                                        $column_position_in_field = false;
+                                                                                                    @endphp
                                                                                                     <input type="text" id="current_value_{{$loop->iteration.$i}}" class="form-control editable_table_coloumn target_{{$loop->iteration}} new_target" num="{{$loop->iteration.$i}}" name="table_value[{{$table->id}}][{{$i}}]" value="{{$value ? $value[$i] : null}}">
                                                                                                 @endif
                                                                                             </td>
                                                                                             @php
                                                                                                 $check_cumulative = \App\Models\StreamField::where('id', $table->stream_field_id)->value('isCumulative');
                                                                                             @endphp
-                                                                                            @if($check_cumulative == 'yes' && empty($dropdowns))
+                                                                                            @if($check_cumulative == 'yes' && !$column_position_in_field)
                                                                                                 <td>
                                                                                                     @php
                                                                                                         $previous_cumulative_grid = \App\Models\StreamFieldGrid::where('id', $table->previous_id)->value('cumulative_value');
                                                                                                     @endphp
                                                                                                     <input type="hidden" id="for_sum{{$loop->iteration.$i}}" class="for_sum" readonly value="{{$previous_cumulative_grid ? json_decode($previous_cumulative_grid)[$i] : 0}}">
-                                                                                                    <input type="text" id="cumulative_{{$loop->iteration.$i}}" class="form-control editable_table_coloumn" name="cumulative_table_value[{{$table->id}}][{{$i}}]" readonly value="{{$previous_cumulative_grid ? json_decode($previous_cumulative_grid)[$i] : ($table->cumulative_value ? json_decode($table->cumulative_value)[$i] : 0)}}">
+                                                                                                    <input type="text" id="cumulative_{{$loop->iteration.$i}}" class="form-control editable_table_coloumn" name="cumulative_table_value[{{$table->id}}][{{$i}}]" readonly value="{{$previous_cumulative_grid ? json_decode($previous_cumulative_grid, true)[$i] : ($table->cumulative_value ? json_decode($table->cumulative_value, true)[$i] : 0)}}">
                                                                                                 </td>
+                                                                                            @else
+                                                                                                @php
+                                                                                                    $column_position_in_field = false;
+                                                                                                @endphp
                                                                                             @endif
                                                                                         @endfor
                                                                                     </tr>
