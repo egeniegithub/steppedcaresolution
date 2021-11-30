@@ -148,7 +148,6 @@
                                                                                                 $column_position = false;
                                                                                             }
                                                                                             $column_count++;
-
                                                                                             $check_cumulative = \App\Models\StreamField::where('id', $table->stream_field_id)->value('isCumulative');
                                                                                         @endphp
                                                                                         @if($loop->iteration == 1)
