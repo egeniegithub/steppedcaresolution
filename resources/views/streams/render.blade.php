@@ -41,6 +41,9 @@
                                         <input type="hidden" name="stream_id" value="{{$stream->id}}">
 
                                         @if($stream->getFields)
+                                            @php
+                                            $counter = 1;
+                                            @endphp
                                             @foreach($stream->getFields as $fieldKey => $field)
                                                 <div class="row">
                                                     <div class="col-sm-12">
@@ -202,7 +205,7 @@
                                                                                                     @php
                                                                                                         $column_position_in_field = false;
                                                                                                     @endphp
-                                                                                                    <input type="text" id="current_value_{{$loop->iteration.$i}}" class="form-control editable_table_coloumn target_{{$loop->iteration}} new_target" num="{{$loop->iteration.$i}}" name="table_value[{{$table->id}}][{{$i}}]" value="{{$value ? $value[$i] : null}}">
+                                                                                                    <input type="text" id="current_value_{{$loop->iteration.$i.$counter}}" class="form-control editable_table_coloumn target_{{$loop->iteration}} new_target" num="{{$loop->iteration.$i.$counter}}" name="table_value[{{$table->id}}][{{$i}}]" value="{{$value ? $value[$i] : null}}">
                                                                                                 @endif
                                                                                             </td>
                                                                                             @php
@@ -213,8 +216,8 @@
                                                                                                     @php
                                                                                                         $previous_cumulative_grid = \App\Models\StreamFieldGrid::where('id', $table->previous_id)->value('cumulative_value');
                                                                                                     @endphp
-                                                                                                    <input type="hidden" id="for_sum{{$loop->iteration.$i}}" class="for_sum" readonly value="{{$previous_cumulative_grid ? json_decode($previous_cumulative_grid)[$i] : 0}}">
-                                                                                                    <input type="text" id="cumulative_{{$loop->iteration.$i}}" class="form-control editable_table_coloumn" name="cumulative_table_value[{{$table->id}}][{{$i}}]" readonly value="{{$previous_cumulative_grid ? json_decode($previous_cumulative_grid, true)[$i] : ($table->cumulative_value ? json_decode($table->cumulative_value, true)[$i] : 0)}}">
+                                                                                                    <input type="hidden" id="for_sum{{$loop->iteration.$i.$counter}}" class="for_sum" readonly value="{{$previous_cumulative_grid ? json_decode($previous_cumulative_grid)[$i] : 0}}">
+                                                                                                    <input type="text" id="cumulative_{{$loop->iteration.$i.$counter}}" class="form-control editable_table_coloumn" name="cumulative_table_value[{{$table->id}}][{{$i}}]" readonly value="{{$previous_cumulative_grid ? json_decode($previous_cumulative_grid, true)[$i] : ($table->cumulative_value ? json_decode($table->cumulative_value, true)[$i] : 0)}}">
                                                                                                 </td>
                                                                                             @else
                                                                                                 @php
@@ -236,6 +239,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                @php
+                                                    $counter++;
+                                                @endphp
                                             @endforeach
                                         @endif
                                     </div>
@@ -311,8 +317,6 @@
 
             });
         });
-
-        // set cumulative for table
 
         // set cumulative for table
         $(".editable_table_coloumn").focusout(function (e) {
