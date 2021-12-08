@@ -312,7 +312,7 @@
                     }else{
                         $("#cumulative_"+num_value).val(total);
                     }
-                    num_value = +num_value+10;
+                    num_value = +num_value+100;
                 }
 
             });
