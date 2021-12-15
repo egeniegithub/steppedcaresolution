@@ -96,7 +96,7 @@
                                         <div class="col-lg-4 col-x-4 col-md-4 col-12">
                                             <div class="mb-4">
                                                 <label for="demographic_data">Please provide demographic data (gender, age and location) for the period and cumulative date.</label>
-                                                <input type="number" class="form-control white_input " name="demographic_data" value="{{$data ? $data['demographic_data'] : ''}}">
+                                                <input type="text" class="form-control white_input " name="demographic_data" value="{{$data ? $data['demographic_data'] : ''}}">
                                             </div>
                                         </div>
 
@@ -110,7 +110,7 @@
                                         <div class="col-lg-4 col-x-4 col-md-4 col-12">
                                             <div class="mb-4">
                                                 <label for="outcomes_data">Is there any outcomes data for the period that you would like included in the report ?</label>
-                                                <input type="number" class="form-control white_input " name="outcomes_data" value="{{$data ? $data['outcomes_data'] : ''}}">
+                                                <input type="text" class="form-control white_input " name="outcomes_data" value="{{$data ? $data['outcomes_data'] : ''}}">
                                             </div>
                                         </div>
                                     </div>
