@@ -304,8 +304,8 @@
             new_myArr.forEach((value, key) => {
                 if(value !=""){
                     $("#current_value_"+ num_value +" ").val(value);
-                    var value = parseInt($("#current_value_"+num_value).val());
-                    var cumulative = parseInt($("#for_sum"+num_value).val());
+                    var value = parseFloat($("#current_value_"+num_value).val());
+                    var cumulative = parseFloat($("#for_sum"+num_value).val());
                     var total = value+cumulative;
                     if(isNaN(total)){
                         $("#cumulative_"+num_value).val(cumulative);
@@ -321,9 +321,9 @@
         // set cumulative for table
         $(".editable_table_coloumn").focusout(function (e) {
             var number = $(this).attr("num");
-            //var number_plus = parseInt($(this).attr("num"))+1;
-            var value = parseInt($("#current_value_"+number).val());
-            var cumulative = parseInt($("#for_sum"+number).val());
+            //var number_plus = parseFloat($(this).attr("num"))+1;
+            var value = parseFloat($("#current_value_"+number).val());
+            var cumulative = parseFloat($("#for_sum"+number).val());
             var total = value+cumulative;
 
             if(isNaN(total)){
@@ -336,8 +336,8 @@
         // set cumulative for field
         $(".cumulative-class").focusout(function (e) {
             var number = $(this).attr("data-cumulative");
-            var value = parseInt($("#field"+number).val());
-            var cumulative_hidden = parseInt($("#cumulative_field_hidden"+number).val());
+            var value = parseFloat($("#field"+number).val());
+            var cumulative_hidden = parseFloat($("#cumulative_field_hidden"+number).val());
             var total = value+cumulative_hidden;
 
             if(isNaN(total)){
