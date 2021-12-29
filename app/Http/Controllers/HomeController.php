@@ -66,7 +66,7 @@ class HomeController extends Controller
                 })
                 ->select('streams.id AS stream_id', 'streams.name as stream_name', 'f.name as form_name', 'f.project_id as project_id',
                     'streams.status as stream_status')
-                ->orderBy('stream_id', 'DESC')
+                //->orderBy('stream_id', 'DESC')
                 ->paginate($perPage);
 
             $row_show = $perPage;
