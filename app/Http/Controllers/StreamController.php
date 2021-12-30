@@ -281,9 +281,10 @@ class StreamController extends Controller
                     if (!empty($field['tableData'])){
                         $grid_data = json_decode(urldecode($field['tableData']));
                         foreach ($grid_data as $grid) {
+                            $formatted_name =  str_replace('+', ' ',$grid->name);
                             $table_fields = array(
                                 'id' => !empty($grid->id) ? $grid->id : null,
-                                'name' => $grid->name,
+                                'name' => $formatted_name,
                                 'type' => $grid->type,
                                 'is_dropdown' => $grid->is_dropdown == 'no' ? 0 : 1,
                                 'field_options' => $grid->field_options,
