@@ -810,6 +810,8 @@
                     }
                     if(obj.tableFieldData){
                         var decodevalue= decodeURIComponent(obj.tableFieldData);
+                        console.log('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk')
+                        console.log(decodevalue);
                     }
                     console.log("decode value",decodevalue);
                     var tablevalues=JSON.parse(decodevalue);
