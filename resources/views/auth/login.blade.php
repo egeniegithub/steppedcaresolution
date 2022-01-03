@@ -13,7 +13,7 @@
                             @csrf
                             <div class="row">
                                 <div class="col-sm-12 text-center pr-0">
-                                    <img src="../assets/images/logo_new.png" alt="" class="logo header_logo images" />
+                                    <img src="{{asset('assets/images/logo_new.png')}}" alt="" class="logo header_logo images" />
                                 </div>
                             </div>
                             <div class="row">
@@ -69,7 +69,7 @@
         <div class="login-container">
             <div class="login_image">
                 <div class="img-div">
-                    <img class="login_image_width" src="../assets/images/login.PNG" />
+                    <img class="login_image_width" src="{{asset('assets/images/login.PNG')}}" />
                 </div>
             </div>
         </div>
