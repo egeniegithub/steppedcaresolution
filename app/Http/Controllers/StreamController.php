@@ -320,12 +320,16 @@ class StreamController extends Controller
                         'text' => 'Admin has updated the Form "'.$input['name'].'" that you have been assigned'
                     );
 
-                    // fire email to notify users who have permission of this stream
-                    Mail::send('emails.notify_stream_update', compact('data'), function($message) use ($data){
-                        $message->to($data['email'])
-                            ->subject($data['subject'])
-                            ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
-                    });
+                    try {
+                        // fire email to notify users who have permission of this stream
+                        Mail::send('emails.notify_stream_update', compact('data'), function($message) use ($data){
+                            $message->to($data['email'])
+                                ->subject($data['subject'])
+                                ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
+                        });
+                    } catch (Exception $e) {
+                        return back()->with('warning', 'Email configuration error');
+                    }
                 }
             }
 
@@ -458,12 +462,16 @@ class StreamController extends Controller
                             'text' => 'Form "'.$stream->name.'" status has been changed to "'.$status.'"'
                         );
 
-                        // fire email to notify users who have permission of this stream
-                        Mail::send('emails.notify_stream_update', compact('data'), function($message) use ($data){
-                            $message->to($data['email'])
-                                ->subject($data['subject'])
-                                ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
-                        });
+                        try {
+                            // fire email to notify users who have permission of this stream
+                            Mail::send('emails.notify_stream_update', compact('data'), function($message) use ($data){
+                                $message->to($data['email'])
+                                    ->subject($data['subject'])
+                                    ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
+                            });
+                        } catch (Exception $e) {
+                            return back()->with('warning', 'Email configuration error');
+                        }
                     }
                 }
             }
@@ -572,12 +580,17 @@ class StreamController extends Controller
                             'text' => 'Form "'.$stream->name.'" status has been changed to "'.$input['status'].'"'
                         );
 
-                        // fire email to notify users who have permission of this stream
-                        Mail::send('emails.notify_stream_update', compact('data'), function($message) use ($data){
-                            $message->to($data['email'])
-                                ->subject($data['subject'])
-                                ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
-                        });
+                        try {
+                            // fire email to notify users who have permission of this stream
+                            Mail::send('emails.notify_stream_update', compact('data'), function($message) use ($data){
+                                $message->to($data['email'])
+                                    ->subject($data['subject'])
+                                    ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
+                            });
+                        } catch (Exception $e) {
+                            return back()->with('warning', 'Email configuration error');
+                        }
+
                     }
                 }
             }
