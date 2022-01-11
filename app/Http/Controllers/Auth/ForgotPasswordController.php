@@ -52,7 +52,7 @@ class ForgotPasswordController extends Controller
             $data['username']  = $user->firstname . ' ' . $user->lastname;
             try {
                 Mail::send('emails.forgotpassword', $data, function ($message) use ($data) {
-                    $message->to($data['email'])->from('ashakoor@egenienext.com', 'Stepped Care Solutions')->subject($data['subject']);
+                    $message->to($data['email'])->from('do-not-reply@steppedcaresolutions.com', 'SCS Team')->subject($data['subject']);
                 });
                 return back()->with('success', 'We have e-mailed your password reset link!');
             } catch (Exception $e) {
