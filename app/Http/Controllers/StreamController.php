@@ -469,7 +469,9 @@ class StreamController extends Controller
                                     ->subject($data['subject'])
                                     ->from('do-not-reply@steppedcaresolutions.com', 'SCS Team');
                             });
+                            \Log::info('in try');
                         } catch (Exception $e) {
+                            \Log::info($e->getMessage());
                             return back()->with('warning', 'Email configuration error');
                         }
                     }
