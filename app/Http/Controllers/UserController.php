@@ -142,8 +142,10 @@ class UserController extends Controller
                     ->subject($data['subject'])
                     ->from('do-not-reply@steppedcaresolutions.com', 'SCS Team');
             });
+            \Log::info('in try');
             return redirect()->route('dashboard.users')->with('success', 'Member created successfully! check email to update password don\'t forget to check spam. ');
         } catch (Exception $e) {
+            \Log::info($e->getMessage());
             return back()->with('warning', 'Issue with the email, But do not worry Member created successfully');
         }
     }
