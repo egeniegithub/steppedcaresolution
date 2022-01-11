@@ -140,7 +140,7 @@ class UserController extends Controller
             Mail::send('emails.reset', $data, function($message) use ($data){
                 $message->to($data['email'])
                     ->subject($data['subject'])
-                    ->from('ashakoor@egenienext.com', 'Stepped Care Solutions' );
+                    ->from('do-not-reply@steppedcaresolutions.com', 'SCS Team');
             });
             return redirect()->route('dashboard.users')->with('success', 'Member created successfully! check email to update password don\'t forget to check spam. ');
         } catch (Exception $e) {
