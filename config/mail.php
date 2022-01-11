@@ -41,6 +41,8 @@ return [
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
             'username' => env('MAIL_USERNAME'),
             'password' => env('MAIL_PASSWORD'),
+            'mail_from_address' => 'do-not-reply@steppedcaresolutions.com',
+            'mail_from_name' => 'SCS Team',
             'timeout' => null,
             'auth_mode' => null,
         ],
