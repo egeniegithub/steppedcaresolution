@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Form;
+use App\Models\Graph;
+use App\Models\Period;
 use App\Models\Permission;
 use App\Models\SpecialForm;
 use App\Models\Stream;
@@ -648,9 +650,21 @@ class StreamController extends Controller
     public function streamField(Request $request)
     {
         $id = $request->id;
-        StreamFieldGrid::where('stream_field_id',$id)->delete();
-        StreamField::where('id',$id)->delete();
-        return back()->with('success','Field deleted successfully.');
+        try {
+            $stream_fields_ids = StreamField::whereIn('stream_id', $id)->pluck('id')->toArray();
+
+            DB::beginTransaction();
+            // delete all previous data
+            Graph::whereIn('field_id', $stream_fields_ids)->delete();
+            StreamFieldGrid::whereIn('stream_field_id', $stream_fields_ids)->delete();
+            StreamField::whereIn('id', $id)->delete();
+            DB::commit();
+
+            return back()->with('success', 'Field deleted successfully!');
+        } catch (Exception $e) {
+            DB::rollBack();
+            return back()->with('error', $e->getMessage());
+        }
     }
 
     public function deleteGridField(Request $request)

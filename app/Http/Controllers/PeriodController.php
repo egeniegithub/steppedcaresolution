@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Form;
+use App\Models\Graph;
 use App\Models\Period;
 use App\Models\Stream;
 use App\Models\StreamChangeLog;
@@ -144,9 +145,12 @@ class PeriodController extends Controller
         try {
             $form_ids = Form::where('period_id', $id)->pluck('id')->toArray();
             $stream_ids = Stream::whereIn('form_id', $form_ids)->pluck('id')->toArray();
+            $stream_fields_ids = StreamField::whereIn('stream_id', $stream_ids)->pluck('id')->toArray();
 
             DB::beginTransaction();
             // delete all previous data
+            Graph::whereIn('stream_id', $stream_fields_ids)->delete();
+            StreamFieldGrid::whereIn('stream_id', $stream_fields_ids)->delete();
             StreamField::whereIn('stream_id', $stream_ids)->delete();
             Stream::whereIn('id', $stream_ids)->delete();
             Form::whereIn('id', $form_ids)->delete();
@@ -234,7 +238,7 @@ class PeriodController extends Controller
                                 'previous_id' => $stream->id
                             );
                             $stored_stream = Stream::create($stream_data);
-                            $stream_fields = StreamField::where('stream_id', $stream->id)->orderBy('id', 'ASC')->get();
+                            $stream_fields = StreamField::where('stream_id', $stream->id)->orderBy('orderCount', 'ASC')->get();
 
 
                             foreach ($stream_fields as $field) {
@@ -255,7 +259,7 @@ class PeriodController extends Controller
                                     'previous_id' => $field->id
                                 );
                                 $stream_field = StreamField::create($field_data);
-                                $stream_field_grids = StreamFieldGrid::where('stream_field_id', $field->id)->orderBy('id', 'ASC')->get();
+                                $stream_field_grids = StreamFieldGrid::where('stream_field_id', $field->id)->orderBy('order_count', 'ASC')->get();
 
                                 foreach ($stream_field_grids as $grid) {
 
@@ -305,7 +309,7 @@ class PeriodController extends Controller
                                 'previous_id' => $stream->id,
                             );
                             $stored_stream = Stream::create($stream_data);
-                            $stream_fields = StreamField::where('stream_id', $stream->id)->orderBy('id', 'ASC')->get();
+                            $stream_fields = StreamField::where('stream_id', $stream->id)->orderBy('orderCount', 'ASC')->get();
 
                             foreach ($stream_fields as $field) {
                                 $field_data = array(
@@ -325,7 +329,7 @@ class PeriodController extends Controller
                                     'previous_id' => $field->id
                                 );
                                 $stream_field = StreamField::create($field_data);
-                                $stream_field_grids = StreamFieldGrid::where('stream_field_id', $stream_field->id)->orderBy('id', 'ASC')->get();
+                                $stream_field_grids = StreamFieldGrid::where('stream_field_id', $field->id)->orderBy('order_count', 'ASC')->get();
 
                                 foreach ($stream_field_grids as $grid) {
                                     $grid_data = array(
@@ -336,7 +340,7 @@ class PeriodController extends Controller
                                         'order_count' => $grid->order_count,
                                         'stream_field_id' => $stream_field->id,
                                         'value' => null,
-                                        'cumulative_value' => $field->cumulative_value,
+                                        'cumulative_value' => $grid->cumulative_value,
                                         'previous_id' => $grid->id
                                     );
                                     StreamFieldGrid::create($grid_data);

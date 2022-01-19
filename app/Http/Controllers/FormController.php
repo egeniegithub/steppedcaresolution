@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Form;
+use App\Models\Graph;
 use App\Models\Period;
 use App\Models\project;
 use App\Models\Stream;
 use App\Models\StreamField;
+use App\Models\StreamFieldGrid;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -162,9 +164,12 @@ class FormController extends Controller
         try {
             $id = decrypt($request->ref);
             $stream_ids = Stream::where('form_id', $id)->pluck('id')->toArray();
+            $stream_fields_ids = StreamField::whereIn('stream_id', $stream_ids)->pluck('id')->toArray();
 
             DB::beginTransaction();
             // delete all previous data
+            Graph::whereIn('stream_id', $stream_fields_ids)->delete();
+            StreamFieldGrid::whereIn('stream_id', $stream_fields_ids)->delete();
             StreamField::whereIn('stream_id', $stream_ids)->delete();
             Stream::whereIn('id', $stream_ids)->delete();
             Form::where('id', $id)->delete();

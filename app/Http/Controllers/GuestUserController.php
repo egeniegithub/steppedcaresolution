@@ -19,24 +19,16 @@ class GuestUserController extends Controller
         $this->LoginController = new LoginController();
     }
 
-    public function index(){
-    }
-   
-
-    public function create(Request $request){
-    }
-
     public  function registration_complete(){
         return view('emails.registration_complete');
     }
 
-
     public function activate_user_account($id)
-        {     
+        {
             try {
             $email = decrypt($id);
 
-            } 
+            }
             catch (\RuntimeException $e) {
             return redirect('login');
         }
@@ -49,7 +41,7 @@ class GuestUserController extends Controller
                 $user->save();
                 Flash::success('Email Verified Successfully.');
                 if($user->type=="client"){
-                    
+
                     Session::put('username',$user->first_name.' '.$user->last_name);
                     Session::put('type',$user->type);
                     return redirect('registration-complete');
@@ -57,9 +49,9 @@ class GuestUserController extends Controller
                 }else{
                  return redirect('login');
                 }
-               
+
             }else{
             return redirect('login');
-        } 
-    } 
+        }
+    }
 }

@@ -148,8 +148,6 @@ class HomeController extends Controller
 
                 }
             }
-
-            //dd($non_cumulative_graph);
             //end non cumulative graphs
 
             //start cumulative graphs
@@ -164,7 +162,6 @@ class HomeController extends Controller
                 $column_array = array();
 
                 $check_field = StreamField::where('id', $grid_value_cumulative->field_id)->first();
-                //dd($check_field);
 
                 if ($check_field->fieldType == 'table'){
 
@@ -203,13 +200,11 @@ class HomeController extends Controller
                             array_push($cumulative_single_table_array, $cumulative_grid_current_graph);
                         }
                     }
-                    //dd($cumulative_single_table_array);
                     $graphs_array_cumulative['data'] = $cumulative_single_table_array;
                     array_push($cumulative_graph, $graphs_array_cumulative);
 
                 }
             }
-            //dd($cumulative_graph);
             //end cumulative graphs
 
             $forms = Form::where('period_id', $period_id)->with('streams')->orderBy('id', 'DESC')->get();
@@ -249,7 +244,6 @@ class HomeController extends Controller
 
     public function saveGraph(Request $request)
     {
-        //dd($request->all());
         Graph::create($request->all());
         return back()->with('success','New Graph has been successfully added.');
     }

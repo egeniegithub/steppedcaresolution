@@ -2,9 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Form;
+use App\Models\Graph;
+use App\Models\Period;
 use App\Models\project;
+use App\Models\Stream;
+use App\Models\StreamField;
+use App\Models\StreamFieldGrid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 class ProjectController extends Controller
 {
@@ -118,7 +125,25 @@ class ProjectController extends Controller
         }
 
         $id = decrypt($request->ref);
-        project::where('id', $id)->delete();
-        return back()->with('success', 'Project deleted successfully!');
+        try {
+            $form_ids = Form::where('project_id', $id)->pluck('id')->toArray();
+            $stream_ids = Stream::whereIn('form_id', $form_ids)->pluck('id')->toArray();
+            $stream_fields_ids = StreamField::whereIn('stream_id', $stream_ids)->pluck('id')->toArray();
+
+            DB::beginTransaction();
+            // delete all previous data
+            Graph::whereIn('stream_id', $stream_fields_ids)->delete();
+            StreamFieldGrid::whereIn('stream_id', $stream_fields_ids)->delete();
+            StreamField::whereIn('stream_id', $stream_ids)->delete();
+            Stream::whereIn('id', $stream_ids)->delete();
+            Form::whereIn('id', $form_ids)->delete();
+            project::where('id', $id)->delete();
+            DB::commit();
+
+            return back()->with('success', 'Project deleted successfully!');
+        } catch (Exception $e) {
+            DB::rollBack();
+            return back()->with('error', $e->getMessage());
+        }
     }
 }
