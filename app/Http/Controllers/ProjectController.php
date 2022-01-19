@@ -7,6 +7,7 @@ use App\Models\Graph;
 use App\Models\Period;
 use App\Models\project;
 use App\Models\Stream;
+use App\Models\StreamChangeLog;
 use App\Models\StreamField;
 use App\Models\StreamFieldGrid;
 use Illuminate\Http\Request;
@@ -133,8 +134,9 @@ class ProjectController extends Controller
             DB::beginTransaction();
             // delete all previous data
             Graph::whereIn('stream_id', $stream_fields_ids)->delete();
-            StreamFieldGrid::whereIn('stream_id', $stream_fields_ids)->delete();
+            StreamFieldGrid::whereIn('stream_field_id', $stream_fields_ids)->delete();
             StreamField::whereIn('stream_id', $stream_ids)->delete();
+            StreamChangeLog::whereIn('stream_id', $stream_ids)->delete();
             Stream::whereIn('id', $stream_ids)->delete();
             Form::whereIn('id', $form_ids)->delete();
             project::where('id', $id)->delete();

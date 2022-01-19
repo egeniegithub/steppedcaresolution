@@ -150,8 +150,9 @@ class PeriodController extends Controller
             DB::beginTransaction();
             // delete all previous data
             Graph::whereIn('stream_id', $stream_fields_ids)->delete();
-            StreamFieldGrid::whereIn('stream_id', $stream_fields_ids)->delete();
+            StreamFieldGrid::whereIn('stream_field_id', $stream_fields_ids)->delete();
             StreamField::whereIn('stream_id', $stream_ids)->delete();
+            StreamChangeLog::whereIn('stream_id', $stream_ids)->delete();
             Stream::whereIn('id', $stream_ids)->delete();
             Form::whereIn('id', $form_ids)->delete();
             Period::find($id)->delete();

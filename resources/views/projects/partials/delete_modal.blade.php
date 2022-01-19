@@ -10,7 +10,8 @@
             </div>
             <div class="modal-body">
                 <p> Are you sure you want to delete ?</p>
-                <p> Remember this action will not be reversible .</p>
+                <p> All related Streams and forms will be deleted</p>
+                    <p>Remember this action will not be reversible .</p>
             </div>
             <input type="hidden" id="target_row_project">
             <div class="modal-footer users_modal_footer">
