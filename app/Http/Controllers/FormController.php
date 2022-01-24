@@ -63,6 +63,7 @@ class FormController extends Controller
             })
 
             ->select('forms.id AS form_id', 'forms.name as form_name', 'forms.order_count', 'p.name as project_name', 'p.id as project_id', 'forms.period_id as period_id', 'pe.name as period_name', 'is_special')
+            ->orderBy('period_id', 'DESC')
             ->orderBy('project_id', 'DESC')
             ->orderBy('order_count', 'ASC')
             ->paginate($perPage);
