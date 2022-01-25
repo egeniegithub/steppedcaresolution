@@ -36,6 +36,24 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
+        $str = "Oct 15 – Nov 14, 2021";
+        $start = "Apr 15, 2020";
+        $field_name = $str;
+        if (str_contains($str, '-')){
+            $exploded_value = explode('-', $str);
+            $last = $exploded_value[1];
+
+            $field_name = $start." - ".trim($last);
+        }
+        if (str_contains($str, '–')){
+            $exploded_value = explode('–', $str);
+            $last = $exploded_value[1];
+            $field_name = $start." - ".trim($last);
+        }
+
+        echo
+        die();
+
         if(Auth::user()->role == "User" || Auth::user()->role=="Vendor"){
             $active_user = User::where('id', auth()->user()->id)->first();
             $perPage = $request->show_rows ?? 10;

@@ -163,7 +163,21 @@
 
                                                                                         @if($check_cumulative == 'yes' && !$column_position)
                                                                                             <td>
-                                                                                                {{$table->name}} (Cumulative)
+                                                                                                @php
+                                                                                                    $field_name = $table->name;
+                                                                                                    $start = "Apr 15, 2020";
+                                                                                                    if (str_contains($table->name, '-')){
+                                                                                                        $exploded_value = explode('-', $table->name);
+                                                                                                        $last = $exploded_value[1];
+                                                                                                        $field_name = $start." - ".trim($last);
+                                                                                                    }
+                                                                                                    if (str_contains($table->name, '–')){
+                                                                                                        $exploded_value = explode('–', $table->name);
+                                                                                                        $last = $exploded_value[1];
+                                                                                                        $field_name = $start." - ".trim($last);
+                                                                                                    }
+                                                                                                @endphp
+                                                                                                {{$field_name}}
                                                                                             </td>
                                                                                         @else
                                                                                             @php
