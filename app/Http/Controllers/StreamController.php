@@ -651,13 +651,11 @@ class StreamController extends Controller
     {
         $id = $request->id;
         try {
-            $stream_fields_ids = StreamField::whereIn('stream_id', $id)->pluck('id')->toArray();
-
             DB::beginTransaction();
             // delete all previous data
-            Graph::whereIn('field_id', $stream_fields_ids)->delete();
-            StreamFieldGrid::whereIn('stream_field_id', $stream_fields_ids)->delete();
-            StreamField::whereIn('id', $id)->delete();
+            Graph::where('field_id', $id)->delete();
+            StreamFieldGrid::where('stream_field_id', $id)->delete();
+            StreamField::where('id', $id)->delete();
             DB::commit();
 
             return back()->with('success', 'Field deleted successfully!');
