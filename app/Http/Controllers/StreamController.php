@@ -218,7 +218,7 @@ class StreamController extends Controller
             return redirect()->route('dashboard');
         }
 
-        //dd($request);
+        //dd($request->input());
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
         ]);
@@ -260,8 +260,10 @@ class StreamController extends Controller
                     'tableData' => $field['tableData'] ?? '',
                 ];
             }
+            $manual_order_count = 1;
             foreach ($fields as $field) {
                 if ($field['id'] == "null"){
+                    $field['orderCount'] = $manual_order_count;
                     $stream_field = StreamField::create($field);
                     if (!empty($field['tableData'])){
 
@@ -279,6 +281,7 @@ class StreamController extends Controller
                         }
                     }
                 }else{
+                    $field['orderCount'] = $manual_order_count;
                     StreamField::where('id',$field['id'])->update($field);
                     if (!empty($field['tableData'])){
                         $grid_data = json_decode(urldecode($field['tableData']));
@@ -301,6 +304,7 @@ class StreamController extends Controller
                         }
                     }
                 }
+                $manual_order_count++;
             }
             DB::commit();
 
