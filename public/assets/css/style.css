@@ -9797,6 +9797,8 @@ table.sub_table td:last-child {
     color: #9f9f9f !important;
 }
 
+
+
 .forward_icon_td {
     width: 5%;
     transition: .5s all;
@@ -10198,9 +10200,10 @@ table.stream_data_table thead tr td:last-child {
 .user_table_layout thead tr th{
     border-right: 1px solid #e2e5e8 ;
 }
-/* .stream_primary_table thead tr td:first-child{
-    border-right:unset !important;
-} */
+.stream_primary_table tbody tr td:first-child{
+    white-space: break-spaces;
+    word-break: break-word;
+}
 /* .stream_primary_table td{
     border:unset !important;
 } */

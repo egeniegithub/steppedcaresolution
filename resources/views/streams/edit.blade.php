@@ -739,9 +739,6 @@
             }
         }
         function updateValues(obj , cityName) {
-            console.log("updateValues function");
-            console.log("obj",obj);
-            console.log(cityName);
             switch (cityName) {
                 case 'text':
                     $("#field_name").val(obj.fieldName);
@@ -804,23 +801,20 @@
                     $("input[name=table_cumulative_value][value="+obj.isCumulative+"]").prop("checked",true);
                     $(".tablehiddenfield").val(obj.orderCount);
                     $(".table_id_from_db").val(obj.id);
-                    console.log("I am in table ");
                     if(obj.tableData){
                         var decodevalue= decodeURIComponent(obj.tableData);
+                        console.log("decode value from obj.tableData",decodevalue);
                     }
                     if(obj.tableFieldData){
-                        var decodevalue= decodeURIComponent(obj.tableFieldData);
-                        console.log('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk')
-                        console.log(decodevalue);
+                        var decodevalue= decodeURIComponent(obj.tableFieldData)
+                        console.log("decode value from obj.tableFieldData",decodevalue);
                     }
-                    console.log("decode value",decodevalue);
                     var tablevalues=JSON.parse(decodevalue);
                     // var tablevalues=JSON.parse(decodevalue.trim().replace(/"$/, '').replace(/^"/,''));
-                    console.log("tablevalues",tablevalues);
                     var table_name=$("#table_name").val();
-                    if(!table_name){
-                        $("#table_name").val(obj.fieldName);
-                    }
+                    // if(!table_name){
+                    $("#table_name").val(obj.fieldName);
+                    // }
                     tablevalues.forEach((value,key)=>{
                         console.log("value",value);
                         let db_id = "";
@@ -1197,23 +1191,16 @@
             $(".text_db_id").val('');
             $(".dropdown_db_id").val('');
             $(".table_id_from_db").val('');
-            console.log("updateFieldFromList function");
-            console.log('record', record);
-            console.log('record data', recordData);
             let selected = recordData[record - 1];
-            console.log("selected",selected);
             updateValues(selected,selected.fieldType);
             if (selected.fieldType=="table") {
-                console.log("a gya ");
-                console.log('selected',selected);
                 //  if(selected.tableData){
                 //     let ff = decodeURIComponent(selected.tableData);
                 //  }
-                console.log("selected.tableFieldData",selected.tableFieldData);
                 let ff = decodeURIComponent(selected.tableFieldData);
                 ff = JSON.parse(ff);
                 tableData = ff;
-                console.log("tableData",tableData);
+                console.log("tableData at last ",tableData);
             }
             openCity(null,selected.fieldType);
             // $("#field_name").val(selected.fieldName);
