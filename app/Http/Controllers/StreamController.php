@@ -302,6 +302,7 @@ class StreamController extends Controller
                     }
                 }
             }
+            DB::commit();
 
             $permission_ids = Permission::where('stream_id', $stream_id)->pluck('id')->toArray();
 
@@ -359,9 +360,14 @@ class StreamController extends Controller
 
         $id = $request->id;
         try {
+            $stream_fields_ids = StreamField::where('stream_id', $id)->pluck('id')->toArray();
+
+            Graph::whereIn('stream_id', $stream_fields_ids)->delete();
+            StreamFieldGrid::whereIn('stream_field_id', $stream_fields_ids)->delete();
             StreamChangeLog::where('stream_id', $id)->delete();
             StreamField::where('stream_id', $id)->delete();
             Stream::where('id', $id)->delete();
+
             return back()->with('success', "Form has deleted successfully ");
         } catch (\Exception $e) {
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
@@ -549,7 +555,6 @@ class StreamController extends Controller
 
     public function UpdateStatus(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'status' => ['required'],
         ]);
@@ -652,6 +657,21 @@ class StreamController extends Controller
         $id = $request->id;
         try {
             DB::beginTransaction();
+            // get current field
+            $field = StreamField::where('id', $id)->first();
+            // get all next fields
+            $next_fields = StreamField::where('stream_id', $field->stream_id)->where('orderCount', '>', $field->orderCount)->get();
+            // if next fields
+            if ($next_fields){
+                // current index
+                $current_index = $field->orderCount;
+                // loop to change the order count of next fields
+                foreach ($next_fields as $next_field) {
+                    $next_field->orderCount = $current_index;
+                    $next_field->save();
+                    $current_index++;
+                }
+            }
             // delete all previous data
             Graph::where('field_id', $id)->delete();
             StreamFieldGrid::where('stream_field_id', $id)->delete();
@@ -668,6 +688,21 @@ class StreamController extends Controller
     public function deleteGridField(Request $request)
     {
         $id = $request->id;
+        // get current field
+        $grid_field = StreamFieldGrid::where('id', $id)->first();
+        // get all next fields
+        $next_fields = StreamFieldGrid::where('stream_field_id', $grid_field->stream_field_id)->where('order_count', '>', $grid_field->order_count)->get();
+        // if next fields
+        if ($next_fields){
+            // current index
+            $current_index = $grid_field->order_count;
+            // loop to change the order count of next fields
+            foreach ($next_fields as $next_field) {
+                $next_field->order_count = $current_index;
+                $next_field->save();
+                $current_index++;
+            }
+        }
         StreamFieldGrid::where('id',$id)->delete();
         return back()->with('success','Grid field deleted successfully.');
     }
