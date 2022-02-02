@@ -1102,7 +1102,7 @@
             console.log("addTableField function");
             console.log("data in addTableField",tableData);
             let table_name     =    $("#table_name").val();
-            let cumulative_value = $("input[name=table_cumulative_value]").val();
+            //let cumulative_value = $("input[name=table_cumulative_value]").val();
             let type = $('input[name=tableFieldType]:checked').val()
             let name = $("#table-field-name").val();
             let is_dropdown = $('input[name=tableDropdown]:checked').val()
@@ -1214,13 +1214,12 @@
             console.log("table data in updateTableField",tableData);
             let data = tableData[selector];
             console.log("table-data",data);
-            console.log("stop here");
-            console.log(data.cumulative_value);
-            if(data.cumulative_value==null){
+
+            /*if(data.cumulative_value==null){
                 data.cumulative_value="no";
             }
             // $("#table_name").val(data.table_name);
-            $("input[name=table_cumulative_value][value="+data.cumulative_value+"]").prop("checked",true);
+            $("input[name=table_cumulative_value][value="+data.cumulative_value+"]").prop("checked",true);*/
             $("#table-field-name").val(data.name.replace(/[+]/g," "));
             $("#table_field_options").val(data.field_options);
             $("#table_data_db_id").val(data.id);
@@ -1305,7 +1304,7 @@
             $(".table_id_from_db").val('');
             $("#table_name").val('');
             $(".tablehiddenfield").val('');
-            $("input[name=table_cumulative_value][value=no]").prop('checked',true);
+            //$("input[name=table_cumulative_value][value=no]").prop('checked',true);
             $("input[name=tableFieldType][value=column]").prop('checked',true);
             $("input[name=tableDropdown][value=no]").prop('checked',true);
             $("#table-field-name").val('');
