@@ -1214,6 +1214,8 @@
             console.log("table data in updateTableField",tableData);
             let data = tableData[selector];
             console.log("table-data",data);
+            console.log("stop here");
+            console.log(data.cumulative_value);
             if(data.cumulative_value==null){
                 data.cumulative_value="no";
             }
