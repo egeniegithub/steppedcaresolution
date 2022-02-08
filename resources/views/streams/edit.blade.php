@@ -863,7 +863,7 @@
         var fixHelperModified = function (e, tr) {
                 var $originals = tr.children();
                 var $helper = tr.clone();
-
+                console.log("tr",tr)
                 $helper.children().each(function (index) {
                     $(this).width($originals.eq(index).width())
                 });
@@ -873,8 +873,10 @@
                 console.log(ui);
                 $('td.index', ui.item.parent()).each(function (i) {
                     $(this).html(i + 1);
+                    console.log('in html', $(this).html());
                 });
                 $('input[type=text]', ui.item.parent()).each(function (i) {
+                    console.log('in value', $(this).val());
                     $(this).val(i + 1);
                 });
             };

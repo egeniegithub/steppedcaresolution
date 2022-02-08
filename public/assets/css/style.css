@@ -10188,6 +10188,10 @@ table.table_margin_adj thead tr td:last-child{
 table.stream_data_table thead tr td:last-child {
     width: 43% !important;
 }
+.stream_data_table tbody tr td:first-child{
+    white-space: break-spaces;
+    word-break: break-word;
+}
 .stream_primary_table thead tr td:nth-child(5){
     width:12%;
 }
@@ -10204,6 +10208,7 @@ table.stream_data_table thead tr td:last-child {
     white-space: break-spaces;
     word-break: break-word;
 }
+
 /* .stream_primary_table td{
     border:unset !important;
 } */
