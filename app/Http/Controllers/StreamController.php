@@ -718,4 +718,42 @@ class StreamController extends Controller
         Stream::where('id',$id)->update(['order_count' => $request->value]);
         return back()->with('success','Order Saved successfully.');
     }
+
+    public function syncFormCumulative(Request $request)
+    {
+        if (Auth::user()->role == "User" || Auth::user()->role == "Vendor") {
+            return redirect()->route('dashboard');
+        }
+
+        $stream_name = Stream::where('id', $request->stream_id)->value('name');
+        $stream_fields = StreamField::where('stream_id', $request->stream_id)->get();
+
+        foreach ($stream_fields as $stream_field) {
+            if (!empty($stream_field->previous_id) && $stream_field->fieldType == 'number'){
+                $previous_cumulative_value = StreamField::where('id', $stream_field->previous_id)->value('cumulative_value');
+                $updated_value = $previous_cumulative_value+$stream_field->value;
+                $stream_field->update(['cumulative_value' => $updated_value]);
+            }
+            //
+            if (!empty($stream_field->previous_id) && $stream_field->fieldType == 'table'){
+                $grid_fields = StreamFieldGrid::where('stream_field_id', $stream_field->id)->get();
+
+                foreach ($grid_fields as $grid_field) {
+                    if (!empty($grid_field->previous_id) && $grid_field->type == 'row'){
+                        $current_grid_values = json_decode($grid_field->value);
+                        $current_grid_cumulative_values = json_decode($grid_field->value);
+                        $previous_grid_value = json_decode(StreamFieldGrid::where('id', $grid_field->previous_id)->value('cumulative_value'));
+                        //
+                        foreach ($previous_grid_value as $key => $item) {
+                            $current_grid_cumulative_values[$key] = $item+$current_grid_values[$key];
+                        }
+                        $grid_field->update(['cumulative_value' => json_encode($current_grid_cumulative_values)]);
+                    }
+                }
+            }
+        }
+        return back()->with('success','Cumulative data for "'.$stream_name.'" synced successfully.');
+
+        dd('done');
+    }
 }

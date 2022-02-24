@@ -89,6 +89,8 @@ Route::group(['prefix' => 'dashboard',  'middleware' => 'auth'], function(){
 
         Route::post('/static-stream', [App\Http\Controllers\StreamController::class,'staticStream'])->name('dashboard.stream.static_stream');
         Route::post('/special-form-post', [App\Http\Controllers\StreamController::class,'specialFormPost'])->name('dashboard.stream.special_form_post');
+
+        Route::post('/sync-form-cumulative', [App\Http\Controllers\StreamController::class,'syncFormCumulative'])->name('dashboard.streams.sync_form_cumulative');
     });
 
     Route::group(['prefix' => 'periods',  'middleware' => 'auth'], function(){
