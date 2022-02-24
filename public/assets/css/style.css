@@ -7664,6 +7664,7 @@ table.dataTable tbody>tr>.selected th.select-checkbox:after {
 .btn-group .btn,
 .btn-group-vertical .btn {
     margin-bottom: 0;
+    /*margin-right: 0;*/
 }
 
 
